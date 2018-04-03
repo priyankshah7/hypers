@@ -1,0 +1,2 @@
+class HyperanalysisError(Exception):
+    pass

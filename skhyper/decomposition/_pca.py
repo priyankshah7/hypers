@@ -6,8 +6,10 @@ from skhyper.utils import HyperanalysisError
 from skhyper.process import data_shape, data_tranform2d, data_back_transform
 from skhyper.decomposition._anscombe import anscombe_transform, inverse_anscombe_transform
 from skhyper.utils._data_checks import _data_checks
+from skhyper.utils._plot import _plot_decomposition
 
 
+# TODO Add the other PCA methods and attributes
 class PCA:
     def __init__(self, n_components=None, copy=True, whiten=False, svd_solver='auto', tol=0.0,
                  iterated_power='auto', random_state=None):
@@ -62,26 +64,7 @@ class PCA:
         if self.data is None:
             raise HyperanalysisError('fit() must be caussed first prior to viewing a plot of the components.')
 
-        if not isinstance(plot_range, tuple):
-            raise HyperanalysisError('range must be a tuple containing two elements e.g. range=(0, 5)')
-
-        if not len(plot_range) == 2:
-            raise HyperanalysisError('range must be a tuple containing two elements e.g. range=(0, 5)')
-
-        plt.figure(facecolor='white')
-        comps_required = plot_range[1] - plot_range[0]
-        for component in range(plot_range[0], plot_range[1]):
-            plt.subplot(comps_required, 2, (2 * component) + 1)
-            if self._dimensions == 3:
-                plt.imshow(self.images[:, :, component])
-                plt.colorbar()
-            # NOTE this will only display the first z layer for now
-            elif self._dimensions == 4:
-                plt.imshow(self.images[:, :, 0, component])
-            plt.subplot(comps_required, 2, (2 * component) + 2)
-            plt.plot(self.spectra[:, component])
-        plt.tight_layout()
-        plt.show()
+        _plot_decomposition(plot_range=plot_range, images=self.images, spectra=self.spectra, dim=self._dimensions)
 
     # TODO Need to figure out what's going in when performing anscombe transformation
     def inverse_transform(self, n_components, perform_anscombe=True):

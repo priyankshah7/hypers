@@ -4,4 +4,5 @@ pages:
   - Cluster: cluster.md
   - Decomposition: decomposition.md
   - Hyperspectral Viewer: view.md
+  - Index: list.md
 theme: readthedocs

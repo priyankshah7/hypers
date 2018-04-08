@@ -49,3 +49,4 @@ random_data = np.random.rand(100, 100, 10, 1024)
 # Opening the hyperspectral viewer
 hsiPlot(random_data)
 ```
+![HyperspectralViewer](/docs/images/hyp_view.png?raw=true)

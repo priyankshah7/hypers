@@ -9,7 +9,7 @@ from skhyper.utils._data_checks import _data_checks
 from skhyper.utils._plot import _plot_decomposition
 
 
-# TODO Add the other PCA methods and attributes
+# TODO Need to change HyperanalysisError name
 class PCA:
     def __init__(self, n_components=None, copy=True, whiten=False, svd_solver='auto', tol=0.0,
                  iterated_power='auto', random_state=None):
@@ -18,10 +18,19 @@ class PCA:
         self._dimensions = None
 
         # decomposition outputs
-        self.data_variance = None
         self.data_denoised = None
         self.images = None
         self.spectra = None
+
+        # sklearn PCA model
+        self.mdl = None
+
+        # sklearn PCA outputs
+        self.explained_variance_ = None
+        self.explained_variance_ratio_ = None
+        self.singular_values_ = None
+        self.mean_ = None
+        self.noise_variance_ = None
 
         # sklearn optional PCA arguments
         self.n_components = n_components
@@ -31,6 +40,53 @@ class PCA:
         self.tol = tol
         self.iterated_power = iterated_power
         self.random_state = random_state
+
+    def _check_is_fitted(self):
+        if self.data is None:
+            raise HyperanalysisError('Data has not yet been fitted with fit()')
+
+    def plot_statistics(self):
+        self._check_is_fitted()
+
+        plt.figure(facecolor='white')
+        plt.subplot(2, 2, 1)
+        plt.plot(self.explained_variance_)
+        plt.xlabel('Principle compoenent no.')
+        plt.ylabel('Variance')
+        plt.title('Explained variance')
+        plt.subplot(2, 2, 2)
+        plt.plot(self.explained_variance_ratio_)
+        plt.xlabel('Principle compoenent no.')
+        plt.ylabel('Variance ratio')
+        plt.title('Explained variance ratio')
+        plt.subplot(2, 2, 3)
+        plt.plot(self.singular_values_)
+        plt.xlabel('Principle compoenent no.')
+        plt.ylabel('Singular values')
+        plt.title('Singular values')
+        plt.subplot(2, 2, 4)
+        plt.plot(self.mean_)
+        plt.xlabel('Spectrum')
+        plt.ylabel('Intensity')
+        plt.title('Empirical mean')
+        plt.tight_layout()
+        plt.show()
+
+        plt.figure(facecolor='white')
+        plt.subplot(1, 2, 1)
+        im = plt.imshow(self.mdl.get_covariance())
+        plt.colorbar(im, fraction=0.046, pad=0.04)
+        plt.title('Estimated covariance')
+        plt.subplot(1, 2, 2)
+        im = plt.imshow(self.mdl.get_precision())
+        plt.colorbar(im, fraction=0.046, pad=0.04)
+        plt.title('Estimated precision')
+        plt.tight_layout()
+        plt.show()
+
+    def plot_components(self, plot_range=(0, 2)):
+        self._check_is_fitted()
+        _plot_decomposition(plot_range=plot_range, images=self.images, spectra=self.spectra, dim=self._dimensions)
 
     def fit(self, data):
         self.data = data
@@ -43,33 +99,20 @@ class PCA:
                                  random_state=self.random_state)
         w_matrix = pca_model.fit_transform(data2d)
         h_matrix = pca_model.components_
-        data_variance = pca_model.explained_variance_ratio_
+
+        self.mdl = pca_model
+        self.explained_variance_ = pca_model.explained_variance_
+        self.explained_variance_ratio_ = pca_model.explained_variance_ratio_
+        self.singular_values_ = pca_model.singular_values_
+        self.mean_ = pca_model.mean_
+        self.noise_variance_ = pca_model.noise_variance_
 
         self.images = np.reshape(w_matrix, self._shape)
         self.spectra = h_matrix.T
-        self.data_variance = data_variance
-
-    def plot_variance(self):
-        if self.data is None:
-            raise HyperanalysisError('fit() must be called first prior to viewing the skree plot.')
-
-        plt.figure(facecolor='white')
-        plt.plot(self.data_variance)
-        plt.xlabel('Principle compoenent no.')
-        plt.ylabel('Variance contribution (0-1)')
-        plt.title('Variance contribution of each principle component')
-        plt.show()
-
-    def plot_components(self, plot_range=(0, 2)):
-        if self.data is None:
-            raise HyperanalysisError('fit() must be caussed first prior to viewing a plot of the components.')
-
-        _plot_decomposition(plot_range=plot_range, images=self.images, spectra=self.spectra, dim=self._dimensions)
 
     # TODO Need to figure out what's going in when performing anscombe transformation
     def inverse_transform(self, n_components, perform_anscombe=True):
-        if self.data is None:
-            raise HyperanalysisError('fit() must be called first prior to performing inverse_transform().')
+        self._check_is_fitted()
 
         shape, dimensions = data_shape(self.data)
 
@@ -90,3 +133,23 @@ class PCA:
             data_denoised = inverse_anscombe_transform(data_denoised, gauss_std=0, gauss_mean=0, poisson_multi=1)
 
         self.data_denoised = data_denoised
+
+    def get_covariance(self):
+        self._check_is_fitted()
+        return self.mdl.get_covariance()
+
+    def get_params(self, deep=True):
+        self._check_is_fitted()
+        return self.mdl.get_params(deep=deep)
+
+    def get_precision(self):
+        self._check_is_fitted()
+        return self.mdl.get_precision()
+
+    def score(self):
+        self._check_is_fitted()
+        return self.mdl.score(data_tranform2d(self.data))
+
+    def score_samples(self):
+        self._check_is_fitted()
+        return np.reshape(self.mdl.score_samples(data_tranform2d(self.data)), self._shape[:-1])

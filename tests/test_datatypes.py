@@ -1,7 +1,6 @@
 import pytest
 import numpy as np
 
-from skhyper.utils import HyperanalysisError
 from skhyper.cluster import KMeans, AgglomerativeClustering, SpectralClustering
 from skhyper.decomposition import PCA
 
@@ -14,26 +13,26 @@ class TestDataTypes:
 
         # clustering techniques
         mdl_kmeans = KMeans(2)
-        mdl_agglomerative = KMeans(2)
-        mdl_spectral = KMeans(2)
+        mdl_agglomerative = AgglomerativeClustering(2)
+        mdl_spectral = SpectralClustering(2)
 
         # decomposition techniques
         mdl_pca = PCA()
 
         # ensure error occurs with a list instead of a numpy array
-        with pytest.raises(HyperanalysisError): mdl_kmeans.fit(data_empty_list)
-        with pytest.raises(HyperanalysisError): mdl_agglomerative.fit(data_empty_list)
-        with pytest.raises(HyperanalysisError): mdl_spectral.fit(data_empty_list)
-        with pytest.raises(HyperanalysisError): mdl_pca.fit(data_empty_list)
+        with pytest.raises(TypeError): mdl_kmeans.fit(data_empty_list)
+        with pytest.raises(TypeError): mdl_agglomerative.fit(data_empty_list)
+        with pytest.raises(TypeError): mdl_spectral.fit(data_empty_list)
+        with pytest.raises(TypeError): mdl_pca.fit(data_empty_list)
 
         # ensure error occurs with 1-dimensional array
-        with pytest.raises(HyperanalysisError): mdl_kmeans.fit(data_1d)
-        with pytest.raises(HyperanalysisError): mdl_agglomerative.fit(data_1d)
-        with pytest.raises(HyperanalysisError): mdl_spectral.fit(data_1d)
-        with pytest.raises(HyperanalysisError): mdl_pca.fit(data_1d)
+        with pytest.raises(TypeError): mdl_kmeans.fit(data_1d)
+        with pytest.raises(TypeError): mdl_agglomerative.fit(data_1d)
+        with pytest.raises(TypeError): mdl_spectral.fit(data_1d)
+        with pytest.raises(TypeError): mdl_pca.fit(data_1d)
 
         # ensure error occurs with 2-dimensional array
-        with pytest.raises(HyperanalysisError): mdl_kmeans.fit(data_2d)
-        with pytest.raises(HyperanalysisError): mdl_agglomerative.fit(data_2d)
-        with pytest.raises(HyperanalysisError): mdl_spectral.fit(data_2d)
-        with pytest.raises(HyperanalysisError): mdl_pca.fit(data_2d)
+        with pytest.raises(TypeError): mdl_kmeans.fit(data_2d)
+        with pytest.raises(TypeError): mdl_agglomerative.fit(data_2d)
+        with pytest.raises(TypeError): mdl_spectral.fit(data_2d)
+        with pytest.raises(TypeError): mdl_pca.fit(data_2d)

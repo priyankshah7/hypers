@@ -6,8 +6,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QMainWindow, QApplication, QStyleFactory
 
 from skhyper.view.hsi.form import mainwindow
-from skhyper.process.properties import data_shape
-from skhyper.utils._exception import HyperanalysisError
+from skhyper.process._properties import data_shape
 
 
 class HSIDialog(QMainWindow, mainwindow.Ui_MainWindow):
@@ -43,7 +42,7 @@ class HSIDialog(QMainWindow, mainwindow.Ui_MainWindow):
             self.slider.setEnabled(False)
 
         elif type(self.data) != np.ndarray:
-            raise HyperanalysisError('Data must be a numpy array.')
+            raise TypeError('Data must be a numpy array.')
 
         else:
             shape, dimensions = data_shape(self.data)
@@ -52,7 +51,7 @@ class HSIDialog(QMainWindow, mainwindow.Ui_MainWindow):
             # self.slider.setMaximum(self.shape[2]-1)
 
             if dimensions != 3 and dimensions != 4:
-                raise HyperanalysisError('Expected data to have dimensions of 3 or 4 only.')
+                raise TypeError('Expected data to have dimensions of 3 or 4 only.')
 
             if dimensions == 3:
                 self.slider.setEnabled(False)

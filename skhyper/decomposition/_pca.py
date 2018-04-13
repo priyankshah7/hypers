@@ -2,7 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA as _sklearn_pca
 
-from skhyper.utils import HyperanalysisError
 from skhyper.process import data_shape, data_tranform2d, data_back_transform
 from skhyper.decomposition._anscombe import anscombe_transform, inverse_anscombe_transform
 from skhyper.utils._data_checks import _data_checks
@@ -41,9 +40,18 @@ class PCA:
         self.iterated_power = iterated_power
         self.random_state = random_state
 
+    def _check_features_samples(self):
+        if self._dimensions == 3:
+            if not (self._shape[0] * self._shape[1]) > self._shape[2]:
+                raise TypeError('The number of samples must be greater than the number of features')
+
+        elif self._dimensions == 4:
+            if not (self._shape[0] * self._shape[1] * self._shape[2]) > self._shape[3]:
+                raise TypeError('The number of samples must be greater than the number of features')
+
     def _check_is_fitted(self):
         if self.data is None:
-            raise HyperanalysisError('Data has not yet been fitted with fit()')
+            raise AttributeError('Data has not yet been fitted with fit()')
 
     def plot_statistics(self):
         self._check_is_fitted()
@@ -88,9 +96,11 @@ class PCA:
         self._check_is_fitted()
         _plot_decomposition(plot_range=plot_range, images=self.images, spectra=self.spectra, dim=self._dimensions)
 
+    # NOTE This will not work if n_samples < n_features (i.e. is x*y*[z] < spectral_points)
     def fit(self, data):
         self.data = data
         self._shape, self._dimensions = _data_checks(self.data)
+        self._check_features_samples()
 
         data2d = data_tranform2d(self.data)
 

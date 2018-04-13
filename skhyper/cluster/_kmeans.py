@@ -1,7 +1,6 @@
 import numpy as np
 from sklearn.cluster import KMeans as _sklearn_kmeans
 
-from skhyper.utils import HyperanalysisError
 from skhyper.process import data_tranform2d
 from skhyper.utils._data_checks import _data_checks
 from skhyper.utils._plot import _plot_cluster
@@ -63,14 +62,14 @@ class KMeans:
                         self.data[:, :, :, spectral_pixel], np.where(labels == cluster + 1, labels, 0) / (cluster + 1))
 
         else:
-            raise HyperanalysisError('Error in the size of the data array.')
+            raise TypeError('Error in the size of the data array.')
 
         self.labels = labels
         self.data_clusters = data_clusters
 
     def plot(self):
         if self.data is None:
-            raise HyperanalysisError('fit() must be called first prior to called plot().')
+            raise AttributeError('fit() must be called first prior to called plot().')
 
         if self._dimensions == 3:
             _plot_cluster(self.data_clusters, 3)
@@ -79,4 +78,4 @@ class KMeans:
             _plot_cluster(self.data_clusters, 4)
 
         else:
-            raise HyperanalysisError('Data must be fitted with fit() prior to calling plot()')
+            raise AttributeError('Data must be fitted with fit() prior to calling plot()')

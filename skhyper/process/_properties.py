@@ -1,7 +1,5 @@
 import numpy as np
 
-from skhyper.utils import HyperanalysisError
-
 
 # TODO consider creating a class containing the functions
 def data_shape(data):
@@ -12,7 +10,7 @@ def data_shape(data):
     Returns the shape and dimensions of the data array
     """
     if type(data) != np.ndarray:
-        raise HyperanalysisError('Data must be a numpy array.')
+        raise TypeError('Data must be a numpy array.')
 
     shape = data.shape
     dimensions = len(shape)
@@ -30,7 +28,7 @@ def data_tranform2d(data):
     shape, dimensions = data_shape(data)
 
     if dimensions == 1:
-        raise HyperanalysisError('Data must have dimensions between 2 and 4')
+        raise TypeError('Data must have dimensions between 2 and 4')
 
     elif dimensions == 2:
         return data
@@ -42,7 +40,7 @@ def data_tranform2d(data):
         return np.reshape(data, (shape[0]*shape[1]*shape[2], shape[3]))
 
     else:
-        raise HyperanalysisError('Error when reshaping data array into 2-dimensions')
+        raise TypeError('Data must have dimensions between 2 and 4')
 
 
 def data_back_transform(data2d, shape, dimensions):

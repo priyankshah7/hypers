@@ -1,7 +1,6 @@
 import numpy as np
 
 from skhyper.process import data_shape
-from skhyper.utils import HyperanalysisError
 
 
 def spectral_normalisation(data, spectrum):
@@ -9,11 +8,11 @@ def spectral_normalisation(data, spectrum):
     spectrum_shape, spectrum_dimensions = data_shape(spectrum)
 
     if spectrum_dimensions != 1:
-        raise HyperanalysisError('Spectrum to normalize by must be 1-dimensional')
+        raise TypeError('Spectrum to normalize by must be 1-dimensional')
 
     if dimensions == 3:
         if shape[2] != spectrum_shape[0]:
-            raise HyperanalysisError('The number of spectral points must be the same for both the data and spectrum')
+            raise ValueError('The number of spectral points must be the same for both the data and spectrum')
 
         normalized_data = np.zeros((shape[0], shape[1], shape[2]))
 
@@ -23,7 +22,7 @@ def spectral_normalisation(data, spectrum):
 
     elif dimensions == 4:
         if shape[3] != spectrum_shape[0]:
-            raise HyperanalysisError('The number of spectral points must be the same for both the data and spectrum')
+            raise ValueError('The number of spectral points must be the same for both the data and spectrum')
 
         normalized_data = np.zeros((shape[0], shape[1], shape[2], shape[3]))
 
@@ -33,6 +32,6 @@ def spectral_normalisation(data, spectrum):
                     normalized_data[x, y, z, :] = data[x, y, z, :] / spectrum
 
     else:
-        raise HyperanalysisError('Data must be 3- or 4-dimensional.')
+        raise TypeError('Data must be 3- or 4-dimensional.')
 
     return normalized_data

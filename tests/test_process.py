@@ -1,8 +1,6 @@
 import pytest
 import numpy as np
 
-from skhyper.utils import HyperanalysisError
-
 
 class TestProcess:
     def test_savgol(self):

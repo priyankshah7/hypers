@@ -7,7 +7,7 @@ from sklearn.decomposition import PCA as _sklearn_pca
 
 from skhyper.process import data_shape, data_tranform2d, data_back_transform
 from skhyper.decomposition._anscombe import anscombe_transform, inverse_anscombe_transform
-from skhyper.utils._data_checks import _data_checks
+from skhyper.utils._data_checks import _data_checks, _check_features_samples
 from skhyper.utils._plot import _plot_decomposition
 
 
@@ -66,11 +66,12 @@ class PCA:
 
     Attributes
     ----------
-    data_denoised : array
+    X_denoised_ : array, shape (n_samples, n_features)
+                  Returns denoised data when inverse_transform() is called
 
-    images : array
+    X_image_components_ : array
 
-    spectra : array
+    X_spec_components_ : array
 
     explained_variance_ : array, shape (n_components,)
                           The amount of variance explained by each of the selected components. Equal
@@ -99,19 +100,19 @@ class PCA:
     """
     def __init__(self, n_components=None, copy=True, whiten=False, svd_solver='auto', tol=0.0,
                  iterated_power='auto', random_state=None):
-        self.data = None
+        self.X = None
         self._shape = None
         self._dimensions = None
-
-        # decomposition outputs
-        self.data_denoised = None
-        self.images = None
-        self.spectra = None
 
         # sklearn PCA model
         self.mdl = None
 
-        # sklearn PCA outputs
+        # custom decomposition attributes
+        self.X_denoised_ = None
+        self.X_image_components_ = None
+        self.X_spec_components_ = None
+
+        # sklearn PCA attributes
         self.explained_variance_ = None
         self.explained_variance_ratio_ = None
         self.singular_values_ = None
@@ -127,23 +128,11 @@ class PCA:
         self.iterated_power = iterated_power
         self.random_state = random_state
 
-    def _check_features_samples(self):
-        """
-        Performs a check to ensure that the number of samples are greater than the number of features.
-        """
-        if self._dimensions == 3:
-            if not (self._shape[0] * self._shape[1]) > self._shape[2]:
-                raise TypeError('The number of samples must be greater than the number of features')
-
-        elif self._dimensions == 4:
-            if not (self._shape[0] * self._shape[1] * self._shape[2]) > self._shape[3]:
-                raise TypeError('The number of samples must be greater than the number of features')
-
     def _check_is_fitted(self):
         """
         Performs a check to see if self.data is empty. If it is, then fit() has not been called yet.
         """
-        if self.data is None:
+        if self.X is None:
             raise AttributeError('Data has not yet been fitted with fit()')
 
     def plot_statistics(self):
@@ -202,15 +191,21 @@ class PCA:
                      must be between 0 and max(n_features)
         """
         self._check_is_fitted()
+        if not isinstance(plot_range, tuple):
+            raise TypeError('plot_range must be a tuple with 2 elements specifying min and max components')
+
+        if not len(plot_range) == 2:
+            raise TypeError('plot_range must be a tuple with 2 elements specifying min and max components')
+
         try:
-            assert plot_range[0] > 0
+            assert plot_range[0] >= 0
             assert plot_range[0] < self._shape[-1]
             assert plot_range[1] > 0
-            assert plot_range < self._shape[-1]
+            assert plot_range[1] < self._shape[-1]
         except:
             raise ValueError('plot_range values must be between 0 and n_features')
         else:
-            _plot_decomposition(plot_range=plot_range, images=self.images, spectra=self.spectra, dim=self._dimensions)
+            _plot_decomposition(plot_range=plot_range, images=self.X_image_components_, spectra=self.X_spec_components_, dim=self._dimensions)
 
     # NOTE This will not work if n_samples < n_features (i.e. is x*y[*z] < spectral_points)
     def fit(self, data):
@@ -227,7 +222,7 @@ class PCA:
         self : object
                Returns the instance itself
         """
-        self.data = data
+        self.X = data
         self._fit()
         return self
 
@@ -235,15 +230,15 @@ class PCA:
         """
         Fits the model with data
         """
-        self._shape, self._dimensions = _data_checks(self.data)
-        self._check_features_samples()
+        self._shape, self._dimensions = _data_checks(self.X)
+        _check_features_samples(self.X)
 
-        data2d = data_tranform2d(self.data)
+        X_2d = data_tranform2d(self.X)
 
         pca_model = _sklearn_pca(n_components=self.n_components, copy=self.copy, whiten=self.whiten,
                                  svd_solver=self.svd_solver, tol=self.tol, iterated_power=self.iterated_power,
                                  random_state=self.random_state)
-        w_matrix = pca_model.fit_transform(data2d)
+        w_matrix = pca_model.fit_transform(X_2d)
         h_matrix = pca_model.components_
 
         self.mdl = pca_model
@@ -253,8 +248,8 @@ class PCA:
         self.mean_ = pca_model.mean_
         self.noise_variance_ = pca_model.noise_variance_
 
-        self.images = np.reshape(w_matrix, self._shape)
-        self.spectra = h_matrix.T
+        self.X_image_components_ = np.reshape(w_matrix, self._shape)
+        self.X_spec_components_ = h_matrix.T
 
     # TODO Need to figure out what's going in when performing anscombe transformation
     def inverse_transform(self, n_components, perform_anscombe=False, gauss_std=0, gauss_mean=0,
@@ -281,11 +276,11 @@ class PCA:
         """
         self._check_is_fitted()
 
-        shape, dimensions = data_shape(self.data)
+        shape, dimensions = data_shape(self.X)
 
-        data = self.data
+        data = self.X
         if perform_anscombe:
-            data = anscombe_transform(self.data, gauss_std=gauss_std, gauss_mean=gauss_mean,
+            data = anscombe_transform(self.X, gauss_std=gauss_std, gauss_mean=gauss_mean,
                                       poisson_multi=poisson_multi)
 
         data2d = data_tranform2d(data)
@@ -300,7 +295,7 @@ class PCA:
         if perform_anscombe:
             data_denoised = inverse_anscombe_transform(data_denoised, gauss_std=0, gauss_mean=0, poisson_multi=1)
 
-        self.data_denoised = data_denoised
+        self.X_denoised_ = data_denoised
 
     def get_covariance(self):
         """
@@ -354,7 +349,7 @@ class PCA:
                  Average log-likelihood of the samples under the current model
         """
         self._check_is_fitted()
-        return self.mdl.score(data_tranform2d(self.data))
+        return self.mdl.score(data_tranform2d(self.X))
 
     def score_samples(self):
         """
@@ -366,4 +361,4 @@ class PCA:
                          Log-likelihood of each sample under the current model
         """
         self._check_is_fitted()
-        return np.reshape(self.mdl.score_samples(data_tranform2d(self.data)), self._shape[:-1])
+        return np.reshape(self.mdl.score_samples(data_tranform2d(self.X)), self._shape[:-1])

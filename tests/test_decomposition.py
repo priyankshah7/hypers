@@ -18,8 +18,8 @@ class TestDecomposition:
 
         # 3-dimensional data
         mdl_3d.fit(data_3d)
-        assert mdl_3d.images is not None
-        assert mdl_3d.spectra is not None
+        assert mdl_3d.X_image_components_ is not None
+        assert mdl_3d.X_spec_components_ is not None
         assert mdl_3d.explained_variance_ is not None
         assert mdl_3d.explained_variance_ratio_ is not None
         assert mdl_3d.singular_values_ is not None
@@ -27,21 +27,29 @@ class TestDecomposition:
         assert mdl_3d.noise_variance_ is not None
 
         mdl_3d.inverse_transform(10, perform_anscombe=True)
-        assert mdl_3d.data_denoised is not None
+        assert mdl_3d.X_denoised_ is not None
 
         mdl_3d.inverse_transform(10, perform_anscombe=False)
-        assert mdl_3d.data_denoised is not None
+        assert mdl_3d.X_denoised_ is not None
 
         mdl_3d.get_covariance()
         mdl_3d.get_params()
         mdl_3d.get_precision()
         mdl_3d.score()
         mdl_3d.score_samples()
+        mdl_3d.plot_statistics()
+        mdl_3d.plot_components(plot_range=(0, 3))
+        with pytest.raises(ValueError): mdl_3d.plot_components(plot_range=(-3, 6))
+        with pytest.raises(ValueError): mdl_3d.plot_components(plot_range=(-3, 6))
+        with pytest.raises(ValueError): mdl_3d.plot_components(plot_range=(-3, 1025))
+        with pytest.raises(TypeError): mdl_3d.plot_components(plot_range=[2, 4])
+        with pytest.raises(TypeError): mdl_3d.plot_components(plot_range=3)
+        with pytest.raises(TypeError): mdl_3d.plot_components(plot_range=(3))
 
         # 4-dimensional data
         mdl_4d.fit(data_4d)
-        assert mdl_4d.images is not None
-        assert mdl_4d.spectra is not None
+        assert mdl_4d.X_image_components_ is not None
+        assert mdl_4d.X_spec_components_ is not None
         assert mdl_4d.explained_variance_ is not None
         assert mdl_4d.explained_variance_ratio_ is not None
         assert mdl_4d.singular_values_ is not None
@@ -49,10 +57,10 @@ class TestDecomposition:
         assert mdl_4d.noise_variance_ is not None
 
         mdl_4d.inverse_transform(10, perform_anscombe=True)
-        assert mdl_4d.data_denoised is not None
+        assert mdl_4d.X_denoised_ is not None
 
         mdl_4d.inverse_transform(10, perform_anscombe=False)
-        assert mdl_4d.data_denoised is not None
+        assert mdl_4d.X_denoised_ is not None
 
         mdl_4d.get_covariance()
         mdl_4d.get_params()

@@ -7,6 +7,70 @@ from skhyper.view import hsiPlot
 
 
 class Process:
+    """
+    Process object to store the hyperspectral array.
+
+    Parameters
+    ----------
+    X : array, dimensions (3 or 4)
+        The hyperspectral data. It should be 3- or 4-dimensional in the form:
+            X_3d = [x, y, spectrum] or
+            X_4d = [x, y, z, spectrum]
+
+    scale : bool
+        Scales the spectra to either between {0, 1} or {-1, 1} depending on presence of negative values.
+
+    Attributes
+    ----------
+    view()
+        Opens a hyperspectral viewer with the hyperspectral array loaded (pyqt GUI)
+
+    shape : array
+        Returns the shape of the hyperspectral array
+
+    n_dimension : int
+        Returns the number of dimensions of the hyperspectral array (3 or 4)
+
+    n_features : int
+        Returns the number of spectral points (features)
+
+    n_samples : int
+        Returns the total number of pixels in the hyperspectral array
+
+    flat : array, dimension (2)
+        Returns a flattened 2-d version of the hyperspectral array
+
+    image : array, shape(x, y, (z))
+        Returns the image averaged over the selected spectral range
+
+    spectrum : array, shape(n_features)
+        Returns the spectrum averaged over the selected pixels
+
+    mean_image : array, shape(x, y, (z))
+        Returns the image averaged over the entire spectral range
+
+    mean_spectrum : array, shape(n_features)
+        Returns the spectrum averaged over all the pixels
+
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from skhyper.process import Process
+
+    >>> test_data = np.random.rand(100, 100, 10, 1024)
+    >>> X = Process(test_data, scale=True)
+
+    >>> X.n_dimension
+    4
+
+    >>> X.n_features
+    1024
+
+    >>> X.n_samples
+    100000
+
+    """
     def __init__(self, X, scale=True):
         self.data = X
 

@@ -1,63 +1,23 @@
 import pytest
 import numpy as np
 
-from skhyper.cluster import KMeans, AgglomerativeClustering, SpectralClustering
+from skhyper.process import Process
+from skhyper.cluster import KMeans
 
 
 class TestCluster:
     def test_kmeans(self):
-        data_3d = np.random.rand(20, 20, 1024)
-        data_4d = np.random.rand(20, 20, 5, 1024)
+        data_3d = np.random.rand(40, 40, 1024)
+        data_4d = np.random.rand(20, 20, 3, 1024)
+
+        X_3d = Process(data_3d)
+        X_4d = Process(data_4d)
 
         # ensure that 3- and 4-dimensional data produce non-zero labels and data clusters
-        mdl_3d = KMeans(2)
-        mdl_3d.fit(data_3d)
-        assert mdl_3d.labels is not None
-        assert mdl_3d.data_clusters is not None
+        mdl_3d = KMeans(n_clusters=2)
+        mdl_3d.fit(X_3d)
+        assert mdl_3d.labels_ is not None
 
-        mdl_4d = KMeans(2)
-        mdl_4d.fit(data_4d)
-        assert mdl_4d.labels is not None
-        assert mdl_4d.data_clusters is not None
-
-        # ensure that plot() cannot be called prior to calling fit()
-        mdl_plot = KMeans(2)
-        with pytest.raises(AttributeError): mdl_plot.plot()
-
-    def test_agglomerative_clustering(self):
-        data_3d = np.random.rand(20, 20, 1024)
-        data_4d = np.random.rand(20, 20, 5, 1024)
-
-        # ensure that 3- and 4-dimensional data produce non-zero labels and data clusters
-        mdl_3d = AgglomerativeClustering(2)
-        mdl_3d.fit(data_3d)
-        assert mdl_3d.labels is not None
-        assert mdl_3d.data_clusters is not None
-
-        mdl_4d = AgglomerativeClustering(2)
-        mdl_4d.fit(data_4d)
-        assert mdl_4d.labels is not None
-        assert mdl_4d.data_clusters is not None
-
-        # ensure that plot() cannot be called prior to calling fit()
-        mdl_plot = AgglomerativeClustering(2)
-        with pytest.raises(AttributeError): mdl_plot.plot()
-
-    def test_spectral_clustering(self):
-        data_3d = np.random.rand(20, 20, 1024)
-        data_4d = np.random.rand(20, 20, 5, 1024)
-
-        # ensure that 3- and 4-dimensional data produce non-zero labels and data clusters
-        mdl_3d = SpectralClustering(2)
-        mdl_3d.fit(data_3d)
-        assert mdl_3d.labels is not None
-        assert mdl_3d.data_clusters is not None
-
-        mdl_4d = SpectralClustering(2)
-        mdl_4d.fit(data_4d)
-        assert mdl_4d.labels is not None
-        assert mdl_4d.data_clusters is not None
-
-        # ensure that plot() cannot be called prior to calling fit()
-        mdl_plot = SpectralClustering(2)
-        with pytest.raises(AttributeError): mdl_plot.plot()
+        mdl_4d = KMeans(n_clusters=2)
+        mdl_4d.fit(X_4d)
+        assert mdl_4d.labels_ is not None

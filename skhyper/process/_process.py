@@ -84,12 +84,18 @@ class Process:
         self.mean_image = None
         self.mean_spectrum = None
 
-        self._initialize()
+        self.update()
 
     def __getitem__(self, item):
         return self.data[item]
 
-    def _initialize(self):
+    def update(self):
+        """ Update properties of the hyperspectral array
+
+        This should be called whenever `X.data` is directly modified to update the attributes
+        of the `X` object.
+
+        """
         # Perform data operations
         self._data_checks()
         if self._scale: self._data_scale()
@@ -148,7 +154,7 @@ class Process:
 
         Opens a hyperspectral viewer with the hyperspectral array loaded (pyqt GUI)
         """
-        hsiPlot(self.data)
+        hsiPlot(self)
 
     def flatten(self):
         """Flatten the hyperspectral data

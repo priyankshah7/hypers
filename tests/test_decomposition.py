@@ -1,75 +1,76 @@
 import pytest
 import numpy as np
 
-from skhyper.decomposition import PCA
+from skhyper.process import Process
+from skhyper.decomposition import PCA, FastICA
 
 
 class TestDecomposition:
     def test_pca(self):
         mdl = PCA()
         with pytest.raises(AttributeError): mdl.plot_statistics()
-        with pytest.raises(AttributeError): mdl.plot_components()
 
         data_3d = np.random.rand(40, 40, 1024)
-        data_4d = np.random.rand(40, 40, 5, 1024)
+        data_4d = np.random.rand(20, 20, 3, 1024)
+
+        X_3d = Process(data_3d)
+        X_4d = Process(data_4d)
 
         mdl_3d = PCA()
         mdl_4d = PCA()
 
         # 3-dimensional data
-        mdl_3d.fit(data_3d)
-        assert mdl_3d.X_image_components_ is not None
-        assert mdl_3d.X_spec_components_ is not None
+        mdl_3d.fit_transform(X_3d)
+        assert mdl_3d.image_components_ is not None
+        assert mdl_3d.spec_components_ is not None
         assert mdl_3d.explained_variance_ is not None
         assert mdl_3d.explained_variance_ratio_ is not None
         assert mdl_3d.singular_values_ is not None
         assert mdl_3d.mean_ is not None
         assert mdl_3d.noise_variance_ is not None
 
-        mdl_3d.inverse_transform(10, perform_anscombe=True)
-        assert mdl_3d.X_denoised_ is not None
+        Xd_3d = mdl_3d.inverse_transform(n_components=10, perform_anscombe=True)
+        assert Xd_3d is not None
 
-        mdl_3d.inverse_transform(10, perform_anscombe=False)
-        assert mdl_3d.X_denoised_ is not None
-
-        mdl_3d.get_covariance()
-        mdl_3d.get_params()
-        mdl_3d.get_precision()
-        mdl_3d.score()
-        mdl_3d.score_samples()
-        mdl_3d.plot_statistics()
-        mdl_3d.plot_components(plot_range=(0, 3))
-        with pytest.raises(ValueError): mdl_3d.plot_components(plot_range=(-3, 6))
-        with pytest.raises(ValueError): mdl_3d.plot_components(plot_range=(-3, 6))
-        with pytest.raises(ValueError): mdl_3d.plot_components(plot_range=(-3, 1025))
-        with pytest.raises(TypeError): mdl_3d.plot_components(plot_range=[2, 4])
-        with pytest.raises(TypeError): mdl_3d.plot_components(plot_range=3)
-        with pytest.raises(TypeError): mdl_3d.plot_components(plot_range=(3))
+        Xd_3d = mdl_3d.inverse_transform(n_components=10, perform_anscombe=False)
+        assert Xd_3d is not None
 
         # 4-dimensional data
-        mdl_4d.fit(data_4d)
-        assert mdl_4d.X_image_components_ is not None
-        assert mdl_4d.X_spec_components_ is not None
+        mdl_4d.fit_transform(X_4d)
+        assert mdl_4d.image_components_ is not None
+        assert mdl_4d.spec_components_ is not None
         assert mdl_4d.explained_variance_ is not None
         assert mdl_4d.explained_variance_ratio_ is not None
         assert mdl_4d.singular_values_ is not None
         assert mdl_4d.mean_ is not None
         assert mdl_4d.noise_variance_ is not None
 
-        mdl_4d.inverse_transform(10, perform_anscombe=True)
-        assert mdl_4d.X_denoised_ is not None
+        Xd_4d = mdl_4d.inverse_transform(n_components=10, perform_anscombe=True)
+        assert Xd_4d is not None
 
-        mdl_4d.inverse_transform(10, perform_anscombe=False)
-        assert mdl_4d.X_denoised_ is not None
+        Xd_4d = mdl_4d.inverse_transform(n_components=10, perform_anscombe=False)
+        assert Xd_4d is not None
 
-        mdl_4d.get_covariance()
-        mdl_4d.get_params()
-        mdl_4d.get_precision()
-        mdl_4d.score()
-        mdl_4d.score_samples()
+    def test_fastica(self):
+        data_3d = np.random.rand(40, 40, 1024)
+        data_4d = np.random.rand(20, 20, 3, 1024)
 
-        # test to ensure that number of samples must be greater than number of features
-        data_features = np.random.rand(20, 20, 1024)  # 20*20 < 1024
-        mdl_features = PCA()
+        X_3d = Process(data_3d)
+        X_4d = Process(data_4d)
 
-        with pytest.raises(TypeError): mdl_features.fit(data_features)
+        # mdl_3d = FastICA()
+        # mdl_4d = FastICA()
+        #
+        # # 3-dimensional data
+        # mdl_3d.fit_transform(X_3d)
+        # assert mdl_3d.image_components_ is not None
+        # assert mdl_3d.spec_components_ is not None
+        # assert mdl_3d.mixing_ is not None
+        # assert mdl_3d.n_iter_ is not None
+        #
+        # # 4-dimensional data
+        # mdl_4d.fit_transform(X_4d)
+        # assert mdl_4d.image_components_ is not None
+        # assert mdl_4d.spec_components_ is not None
+        # assert mdl_4d.mixing_ is not None
+        # assert mdl_4d.n_iter_ is not None

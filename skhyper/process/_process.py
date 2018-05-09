@@ -22,9 +22,6 @@ class Process:
 
     Attributes
     ----------
-    view()
-        Opens a hyperspectral viewer with the hyperspectral array loaded (pyqt GUI)
-
     shape : array
         Returns the shape of the hyperspectral array
 
@@ -57,29 +54,29 @@ class Process:
     --------
     >>> import numpy as np
     >>> from skhyper.process import Process
-
+    >>>
     >>> test_data = np.random.rand(100, 100, 10, 1024)
     >>> X = Process(test_data, scale=True)
-
+    >>>
     >>> X.n_dimension
     4
-
+    >>>
     >>> X.n_features
     1024
-
+    >>>
     >>> X.n_samples
     100000
 
     """
     def __init__(self, X, scale=True):
         self.data = X
+        self._scale = scale
 
         # Data properties
         self.shape = None
         self.n_dimension = None
         self.n_features = None
         self.n_samples = None
-        self.flat = None
 
         # Hyperspectral image/spectrum
         self.image = None
@@ -87,15 +84,17 @@ class Process:
         self.mean_image = None
         self.mean_spectrum = None
 
-        # Perform data operations
-        self._data_checks()
-        if scale: self._data_scale()
-        self._data_flatten()
-        self._data_mean()
-        self._data_access()
+        self._initialize()
 
     def __getitem__(self, item):
         return self.data[item]
+
+    def _initialize(self):
+        # Perform data operations
+        self._data_checks()
+        if self._scale: self._data_scale()
+        self._data_mean()
+        self._data_access()
 
     def _data_checks(self):
         if type(self.data) != np.ndarray:
@@ -123,10 +122,10 @@ class Process:
 
     def _data_flatten(self):
         if self.n_dimension == 3:
-            self.flat = np.reshape(self.data, (self.shape[0] * self.shape[1], self.shape[2]))
+            return np.reshape(self.data, (self.shape[0] * self.shape[1], self.shape[2]))
 
         elif self.n_dimension == 4:
-            self.flat = np.reshape(self.data, (self.shape[0] * self.shape[1] * self.shape[2], self.shape[3]))
+            return np.reshape(self.data, (self.shape[0] * self.shape[1] * self.shape[2], self.shape[3]))
 
     def _data_mean(self):
         if self.n_dimension == 3:
@@ -145,7 +144,17 @@ class Process:
         self.spectrum = _AccessSpectrum(self.data, self.shape, self.n_dimension)
 
     def view(self):
+        """ Hyperspectral viewer
+
+        Opens a hyperspectral viewer with the hyperspectral array loaded (pyqt GUI)
+        """
         hsiPlot(self.data)
+
+    def flatten(self):
+        """Flatten the hyperspectral data
+
+        Flattens the hyperspectral data from 3d/4d to 2d by unravelling the pixel order."""
+        return self._data_flatten()
 
 
 class _AccessImage:

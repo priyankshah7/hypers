@@ -45,5 +45,5 @@ def normalize(X, spectrum):
                     for _z in range (X.shape[2]):
                         X.data[_x, _y, _z, :] /= spectrum
 
-        X._initialize()
+        X.update()
         print('Hyperspectral data normalized.')

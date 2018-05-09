@@ -69,5 +69,5 @@ def savgol_filter(X, window_length=5, polyorder=3, deriv=0, delta=1.0, axis=-1, 
                                                            polyorder=polyorder, deriv=deriv, delta=delta,
                                                            axis=axis, mode=mode, cval=cval)
 
-    X._initialize()
+    X.update()
     print('Hyperspectral data smoothed.')

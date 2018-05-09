@@ -5,23 +5,40 @@ from PyQt5.Qt import QPalette, QColor
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QMainWindow, QApplication, QStyleFactory
 
-from skhyper.view.hsi.form import mainwindow
-from skhyper.process._properties import data_shape
+from skhyper import process
+from skhyper.view._form import mainwindow
 
 
 class HSIDialog(QMainWindow, mainwindow.Ui_MainWindow):
-    def __init__(self, data, parent=None):
+    """ Hyperspectral data viewer
+
+    Displays the hyperspectral data. Features include:
+    - Multiple layers (z-axis) by scrolling through the layers.
+    - Viewing the image pertaining to chosen spectral bands.
+    - Viewing the spectra averaged over a chosen region in the image.
+
+    This class should not be imported directly. Instead either:
+    - Import hsiPlot from skhyper.view and use on a Process object
+    - Call the `view()` method of a Process object
+
+    """
+    def __init__(self, X, parent=None):
         super(HSIDialog, self).__init__(parent)
         self.setupUi(self)
         self.setWindowTitle('View Hyperspectral Data')
-        self.data = data
+
+        if not isinstance(X, process.Process):
+            raise TypeError('Data needs to be passed to skhyper.process.Process first')
+
+        self.data = X
+
         self.shape = None
         self.dimensions = None
 
-        self.slider.valueChanged.connect(self.funcUpdateLayer)
-        self.updateImage.clicked.connect(self.funcUpdateImage)
-        self.updateSpectrum.clicked.connect(self.funcUpdateSpectrum)
-        self.Reset.clicked.connect(self.funcReset)
+        self.slider.valueChanged.connect(self.update_layer)
+        self.updateImage.clicked.connect(self.update_image)
+        self.updateSpectrum.clicked.connect(self.update_spectrum)
+        self.Reset.clicked.connect(self.reset)
 
         # --- Setting image/plot settings -----------------------
         self.spec_lo = 0
@@ -35,50 +52,43 @@ class HSIDialog(QMainWindow, mainwindow.Ui_MainWindow):
         self.plotline = self.specwin.plot()
         # -------------------------------------------------------
 
-        self.loadData()
+        self.load_data()
 
-    def loadData(self):
+    def load_data(self):
         if self.data is None:
             self.slider.setEnabled(False)
 
-        elif type(self.data) != np.ndarray:
-            raise TypeError('Data must be a numpy array.')
-
         else:
-            shape, dimensions = data_shape(self.data)
-            self.shape = shape
-            self.dimensions = dimensions
+            self.shape = self.data.shape
+            self.dimensions = self.data.n_dimension
             # self.slider.setMaximum(self.shape[2]-1)
 
-            if dimensions != 3 and dimensions != 4:
-                raise TypeError('Expected data to have dimensions of 3 or 4 only.')
-
-            if dimensions == 3:
+            if self.dimensions == 3:
                 self.slider.setEnabled(False)
-                self.dataImage(self.data)
-                self.dataSpectrum(self.data)
+                self.data_image(self.data)
+                self.data_spectrum(self.data)
 
-            elif dimensions == 4:
+            elif self.dimensions == 4:
                 self.slider.setValue(0)
                 self.slider.setMaximum(self.shape[2]-1)
-                self.dataImage(self.data[:, :, 0, :])
-                self.dataSpectrum(self.data[:, :, 0, :])
+                self.data_image(self.data[:, :, 0, :])
+                self.data_spectrum(self.data[:, :, 0, :])
 
     def spec_region_updated(self, regionItem):
         self.spec_lo, self.spec_hi = regionItem.getRegion()
 
-    def funcUpdateLayer(self):
-        self.dataImage(self.data[:, :, int(self.slider.value()), :])
-        self.dataSpectrum(self.data[:, :, int(self.slider.value()), :])
+    def update_layer(self):
+        self.data_image(self.data[:, :, int(self.slider.value()), :])
+        self.data_spectrum(self.data[:, :, int(self.slider.value()), :])
 
-    def funcUpdateImage(self):
+    def update_image(self):
         if self.dimensions == 3:
-            self.dataImage(self.data[:, :, int(self.spec_lo):int(self.spec_hi)])
+            self.data_image(self.data[:, :, int(self.spec_lo):int(self.spec_hi)])
 
         elif self.dimensions == 4:
-            self.dataImage(self.data[:, :, int(self.slider.value())-1, int(self.spec_lo):int(self.spec_hi)])
+            self.data_image(self.data[:, :, int(self.slider.value()) - 1, int(self.spec_lo):int(self.spec_hi)])
 
-    def funcUpdateSpectrum(self):
+    def update_spectrum(self):
         # Obtaining coordinates of ROI graphic in the image plot
         image_coord_handles = self.imagewin.roi.getState()
         posimage = image_coord_handles['pos']
@@ -94,22 +104,32 @@ class HSIDialog(QMainWindow, mainwindow.Ui_MainWindow):
         ymax = posy + sizey
 
         if self.dimensions == 3:
-            self.dataSpectrum(self.data[ymin:ymax, xmin:xmax, :])
+            self.data_spectrum(self.data[ymin:ymax, xmin:xmax, :])
 
         elif self.dimensions == 4:
-            self.dataSpectrum(self.data[ymin:ymax, xmin:xmax, int(self.slider.value())-1, :])
+            self.data_spectrum(self.data[ymin:ymax, xmin:xmax, int(self.slider.value()) - 1, :])
 
-    def funcReset(self):
-        self.loadData()
+    def reset(self):
+        self.load_data()
 
-    def dataImage(self, data):
+    def data_image(self, data):
         self.imagewin.setImage(np.squeeze(np.mean(data, 2)))
 
-    def dataSpectrum(self, data):
+    def data_spectrum(self, data):
         self.plotline.setData(np.squeeze(np.mean(np.mean(data, 1), 0)))
 
 
-def hsiPlot(data):
+def hsiPlot(X):
+    """Hyperspectral data viewer
+
+    Displays the hyperspectral data. This is one of two methods to do this.
+
+    Parameters
+    ----------
+    X : object, Process instance
+        The object X containing the hyperspectral array.
+
+    """
     app = QApplication(sys.argv)
 
     # Setting the dark-themed Fusion style for the GUI
@@ -134,7 +154,7 @@ def hsiPlot(data):
 
     app.setPalette(dark_palette)
 
-    form = HSIDialog(data)
+    form = HSIDialog(X)
     form.show()
     app.exec_()
     # sys.exit(app.exec_())

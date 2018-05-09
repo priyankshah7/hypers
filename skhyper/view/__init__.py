@@ -1,2 +1,3 @@
-from skhyper.view.image.imageDialog import imagePlot
-from skhyper.view.hsi.hsiDialog import hsiPlot
+from skhyper.view._hsiDialog import hsiPlot
+
+__all__ = ['hsiPlot']

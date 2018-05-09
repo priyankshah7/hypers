@@ -10,91 +10,109 @@ from skhyper.decomposition._anscombe import anscombe_transform, inverse_anscombe
 
 
 class PCA:
-    """
-        Principal component analysis (PCA)
-        Linear dimensionality reduction using Singular Value Decomposition of the
-        data to project it to a lower dimensional space.
+    """Principal component analysis (PCA)
 
-        Parameters
-        ----------
-        n_components :  int, float, None or string
-                        Number of components to keep.
+    Linear dimensionality reduction using Singular Value Decomposition of the
+    data to project it to a lower dimensional space.
 
-        copy : bool (default True)
-               If False, data passed to fit are overwritten and running fit(X).transform(X)
-               will not yield the expected results, use fit_transform(X) instead.
+    Parameters
+    ----------
+    n_components :  int or None
+        Number of components to use. If none is passed, all are used.
 
-        whiten : bool, optional (default False)
-                 When True (False by default) the components_ vectors are multiplied by the
-                 square root of n_samples and then divided by the singular values to
-                 ensure uncorrelated outputs with unit component-wise variances.
+    copy : bool (default True)
+        If False, data passed to fit are overwritten and running fit(X).transform(X)
+        will not yield the expected results, use fit_transform(X) instead.
 
-                 Whitening will remove some information from the transformed signal (the
-                 relative variance scales of the components) but can sometime improve the
-                 predictive accuracy of the downstream estimators by making their data respect
-                 some hard-wired assumptions.
+    whiten : bool, optional (default False)
+        When True (False by default) the components_ vectors are multiplied by the
+        square root of n_samples and then divided by the singular values to
+        ensure uncorrelated outputs with unit component-wise variances.
 
-        svd_solver : string {‘auto’, ‘full’, ‘arpack’, ‘randomized’}
-            auto :
-                the solver is selected by a default policy based on X.shape and
-                n_components: if the input data is larger than 500x500 and the number of components
-                to extract is lower than 80% of the smallest dimension of the data, then the
-                more efficient ‘randomized’ method is enabled. Otherwise the exact full SVD is
-                computed and optionally truncated afterwards.
-            full :
-                run exact full SVD calling the standard LAPACK solver via scipy.linalg.svd and
-                select the components by postprocessing
-            arpack :
-                run SVD truncated to n_components calling ARPACK solver via scipy.sparse.linalg.svds.
-                It requires strictly 0 < n_components < X.shape[1]
-            randomized :
-                run randomized SVD
+        Whitening will remove some information from the transformed signal (the
+        relative variance scales of the components) but can sometime improve the
+        predictive accuracy of the downstream estimators by making their data respect
+        some hard-wired assumptions.
 
-        tol : float >= 0, optional (default .0)
-              Tolerance for singular values computed by svd_solver == ‘arpack’.
+    svd_solver : string {‘auto’, ‘full’, ‘arpack’, ‘randomized’}
+        auto :
+            the solver is selected by a default policy based on X.shape and
+            n_components: if the input data is larger than 500x500 and the number of components
+            to extract is lower than 80% of the smallest dimension of the data, then the
+            more efficient ‘randomized’ method is enabled. Otherwise the exact full SVD is
+            computed and optionally truncated afterwards.
+        full :
+            run exact full SVD calling the standard LAPACK solver via scipy.linalg.svd and
+            select the components by postprocessing
+        arpack :
+            run SVD truncated to n_components calling ARPACK solver via scipy.sparse.linalg.svds.
+            It requires strictly 0 < n_components < X.shape[1]
+        randomized :
+            run randomized SVD
 
-        iterated_power : int >= 0, or ‘auto’, (default ‘auto’)
-                         Number of iterations for the power method computed by svd_solver == ‘randomized’.
+    tol : float >= 0, optional (default .0)
+        Tolerance for singular values computed by svd_solver == ‘arpack’.
 
-        random_state : int, RandomState instance or None, optional (default None)
-                       If int, random_state is the seed used by the random number generator;
-                       If RandomState instance, random_state is the random number generator;
-                       If None, the random number generator is the RandomState instance used by
-                       np.random. Used when svd_solver == ‘arpack’ or ‘randomized’.
+    iterated_power : int >= 0, or ‘auto’, (default ‘auto’)
+        Number of iterations for the power method computed by svd_solver == ‘randomized’.
 
-        Attributes
-        ----------
-        image_components_ : array, shape (x, y, (z), n_features)
+    random_state : int, RandomState instance or None, optional (default None)
+        If int, random_state is the seed used by the random number generator;
+        If RandomState instance, random_state is the random number generator;
+        If None, the random number generator is the RandomState instance used by
+        np.random. Used when svd_solver == ‘arpack’ or ‘randomized’.
 
-        spec_components_ : array, shape(n_features, n_features)
+    Attributes
+    ----------
+    image_components_ : array, shape (x, y, (z), n_features)
 
-        mdl : PCA() instance
-              An instance of the PCA model from scikit-learn used when instantiating PCA() from scikit-hyper
+    spec_components_ : array, shape(n_features, n_features)
 
-        explained_variance_ : array, shape (n_components,)
-                              The amount of variance explained by each of the selected components. Equal
-                              to n_components largest eigenvalues of the covariance matrix of X.
+    mdl : object, PCA() instance
+        An instance of the PCA model from scikit-learn used when instantiating PCA() from scikit-hyper
 
-        explained_variance_ratio_ : array, shape (n_components,)
-                                    Percentage of variance explained by each of the selected components.
-                                    If ``n_components`` is not set then all components are stored and
-                                    the sum of explained variances is equal to 1.0.
+    explained_variance_ : array, shape (n_components,)
+        The amount of variance explained by each of the selected components. Equal
+        to n_components largest eigenvalues of the covariance matrix of X.
 
-        singular_values_ : array, shape (n_components,)
-                           The singular values corresponding to each of the selected components. The
-                           singular values are equal to the 2-norms of the ``n_components`` variables
-                           in the lower-dimensional space.
+    explained_variance_ratio_ : array, shape (n_components,)
+        Percentage of variance explained by each of the selected components.
+        If ``n_components`` is not set then all components are stored and
+        the sum of explained variances is equal to 1.0.
 
-        mean_ : array, shape (n_features,)
-                Per-feature empirical mean, estimated from the training set. Equal to `X.mean(axis=0)`.
+    singular_values_ : array, shape (n_components,)
+        The singular values corresponding to each of the selected components. The
+        singular values are equal to the 2-norms of the ``n_components`` variables
+        in the lower-dimensional space.
 
-        noise_variance_ : float
-                          The estimated noise covariance following the Probabilistic PCA model from
-                          Tipping and Bishop 1999. See "Pattern Recognition and Machine Learning"
-                          by C. Bishop, 12.2.1 p. 574 or http://www.miketipping.com/papers/met-mppca.pdf.
-                          It is required to computed the estimated data covariance and score samples. Equal
-                          to the average of (min(n_features, n_samples) - n_components) smallest
-                          eigenvalues of the covariance matrix of X.
+    mean_ : array, shape (n_features,)
+        Per-feature empirical mean, estimated from the training set. Equal to `X.mean(axis=0)`.
+
+    noise_variance_ : float
+        The estimated noise covariance following the Probabilistic PCA model from
+        Tipping and Bishop 1999. See "Pattern Recognition and Machine Learning"
+        by C. Bishop, 12.2.1 p. 574 or http://www.miketipping.com/papers/met-mppca.pdf.
+        It is required to computed the estimated data covariance and score samples. Equal
+        to the average of (min(n_features, n_samples) - n_components) smallest
+        eigenvalues of the covariance matrix of X.
+
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from skhyper.process import Process
+    >>> from skhyper.decomposition import PCA
+    >>>
+    >>> test_data = np.random.rand(100, 100, 10, 1024)
+    >>> X = Process(test_data)
+    >>>
+    >>> mdl = PCA()
+    >>> mdl.fit_transform(X)
+    >>> Xd = mdl.inverse_transform(n_components=100, perform_anscombe=False)
+    >>>
+    >>> # X and Xd have the same shape, however Xd only retains the first 100 principal
+    >>> # components (and thus, is 'denoised'). Use the skree plot to help you determine
+    >>> # how many components to keep.
     """
     def __init__(self, n_components=None, copy=True, whiten=False, svd_solver='auto', tol=0.0,
                  iterated_power='auto', random_state=None):
@@ -134,6 +152,7 @@ class PCA:
         """
         Statistics figure.
         Figure 1 : Explained variance, explained variance ratio, singular values and empirical mean
+
         """
         self._check_is_fitted()
 
@@ -167,25 +186,13 @@ class PCA:
 
         Parameters
         ----------
-        X : skhyper.process.Process instance passed a hyperspectral numpy array
+        X : object, type (Process)
 
         Returns
         -------
         self : object
-               Returns the instance itself
+            Returns the instance itself
 
-
-        Examples
-        --------
-        >>> import numpy as np
-        >>> from skhyper.process import Process
-        >>> from skhyper.decomposition import PCA
-
-        >>> test_data = np.random.rand(100, 100, 1024)
-        >>> X = Process(test_data)
-
-        >>> mdl = PCA()
-        >>> mdl.fit_transform(X)
         """
         self._X = X
         if not isinstance(self._X, Process):
@@ -195,7 +202,7 @@ class PCA:
                            svd_solver=self.svd_solver, tol=self.tol, iterated_power=self.iterated_power,
                            random_state=self.random_state)
 
-        w_matrix = mdl.fit_transform(self._X.flat)
+        w_matrix = mdl.fit_transform(self._X.flatten())
         h_matrix = mdl.components_
 
         self.mdl = mdl
@@ -218,42 +225,29 @@ class PCA:
         Parameters
         ----------
         n_components : int
-                       Number of components to keep when projected back to original space
+            Number of components to keep when projected back to original space
 
         perform_anscombe : bool, optional (default False)
-                           Choose whether to perform Anscombe transformation prior to projecting
+            Choose whether to perform Anscombe transformation prior to projecting
 
         gauss_std : int, optional (default 0)
-                    Standard deviation of data, for Anscombe transformation
+            Standard deviation of data, for Anscombe transformation
 
         gauss_mean : int, optional (default 0)
-                     Mean of data, for Anscombe transformation
+            Mean of data, for Anscombe transformation
 
         poisson_multi : int, optional (default 1)
-                        Poisson multiplier, for Anscombe transformation
+            Poisson multiplier, for Anscombe transformation
 
         Returns
         -------
-        Xd : Process instance of Xd
+        Xd : object, Process instance of Xd
              Denoised hyperspectral data with the same dimensions as the array passed to fit_transform()
 
-
-        Examples
-        --------
-        >>> import numpy as np
-        >>> from skhyper.process import Process
-        >>> from skhyper.decomposition import PCA
-
-        >>> test_data = np.random.rand(100, 100, 10, 1024)
-        >>> X = Process(test_data)
-
-        >>> mdl = PCA()
-        >>> mdl.fit_transform(X)
-        >>> Xd = mdl.inverse_transform(n_components=100, perform_anscombe=False)
         """
         self._check_is_fitted()
 
-        X_flat = self._X.flat
+        X_flat = self._X.flatten()
         if perform_anscombe:
             X_flat = anscombe_transform(X_flat, gauss_std=gauss_std, gauss_mean=gauss_mean,
                                         poisson_multi=poisson_multi)

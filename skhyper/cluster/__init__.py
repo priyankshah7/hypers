@@ -1,3 +1,3 @@
 from skhyper.cluster._kmeans import KMeans
-from skhyper.cluster._agglomerative_clustering import AgglomerativeClustering
-from skhyper.cluster._spectral_clustering import SpectralClustering
+
+__all__ = ['KMeans']

@@ -2,7 +2,6 @@
 Independent component analysis
 """
 import numpy as np
-import matplotlib.pyplot as plt
 from sklearn.decomposition import FastICA as _sklearn_ica
 
 from skhyper.process import Process

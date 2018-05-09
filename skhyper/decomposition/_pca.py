@@ -10,15 +10,15 @@ from skhyper.decomposition._anscombe import anscombe_transform, inverse_anscombe
 
 
 class PCA:
-    """
-    Principal component analysis (PCA)
+    """Principal component analysis (PCA)
+
     Linear dimensionality reduction using Singular Value Decomposition of the
     data to project it to a lower dimensional space.
 
     Parameters
     ----------
     n_components :  int or None
-        Number of components to keep.
+        Number of components to use. If none is passed, all are used.
 
     copy : bool (default True)
         If False, data passed to fit are overwritten and running fit(X).transform(X)
@@ -68,7 +68,7 @@ class PCA:
 
     spec_components_ : array, shape(n_features, n_features)
 
-    mdl : PCA() instance
+    mdl : object, PCA() instance
         An instance of the PCA model from scikit-learn used when instantiating PCA() from scikit-hyper
 
     explained_variance_ : array, shape (n_components,)
@@ -102,13 +102,17 @@ class PCA:
     >>> import numpy as np
     >>> from skhyper.process import Process
     >>> from skhyper.decomposition import PCA
-
+    >>>
     >>> test_data = np.random.rand(100, 100, 10, 1024)
     >>> X = Process(test_data)
-
+    >>>
     >>> mdl = PCA()
     >>> mdl.fit_transform(X)
     >>> Xd = mdl.inverse_transform(n_components=100, perform_anscombe=False)
+    >>>
+    >>> # X and Xd have the same shape, however Xd only retains the first 100 principal
+    >>> # components (and thus, is 'denoised'). Use the skree plot to help you determine
+    >>> # how many components to keep.
     """
     def __init__(self, n_components=None, copy=True, whiten=False, svd_solver='auto', tol=0.0,
                  iterated_power='auto', random_state=None):
@@ -148,6 +152,7 @@ class PCA:
         """
         Statistics figure.
         Figure 1 : Explained variance, explained variance ratio, singular values and empirical mean
+
         """
         self._check_is_fitted()
 
@@ -197,7 +202,7 @@ class PCA:
                            svd_solver=self.svd_solver, tol=self.tol, iterated_power=self.iterated_power,
                            random_state=self.random_state)
 
-        w_matrix = mdl.fit_transform(self._X.flat)
+        w_matrix = mdl.fit_transform(self._X.flatten())
         h_matrix = mdl.components_
 
         self.mdl = mdl
@@ -236,13 +241,13 @@ class PCA:
 
         Returns
         -------
-        Xd : Process instance of Xd
+        Xd : object, Process instance of Xd
              Denoised hyperspectral data with the same dimensions as the array passed to fit_transform()
 
         """
         self._check_is_fitted()
 
-        X_flat = self._X.flat
+        X_flat = self._X.flatten()
         if perform_anscombe:
             X_flat = anscombe_transform(X_flat, gauss_std=gauss_std, gauss_mean=gauss_mean,
                                         poisson_multi=poisson_multi)

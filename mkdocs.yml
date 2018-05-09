@@ -1,8 +1,0 @@
-site_name: scikit-hyper
-pages:
-  - Home: index.md
-  - Cluster: cluster.md
-  - Decomposition: decomposition.md
-  - Hyperspectral Viewer: view.md
-  - Index: list.md
-theme: readthedocs

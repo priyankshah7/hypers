@@ -107,13 +107,13 @@ class KMeans:
     >>> import numpy as np
     >>> from skhyper.cluster import KMeans
     >>> from skhyper.process import Process
-
+    >>>
     >>> data = np.random.rand(100, 100, 10, 1024)
     >>> X = Process(data)
-
+    >>>
     >>> mdl = KMeans(n_clusters=4)
     >>> mdl.fit(X)
-
+    >>>
     >>> # Access image and spectral components of the individual clusters
     >>> mdl.image_components_[2]
     >>> mdl.spec_components_[2]
@@ -164,7 +164,7 @@ class KMeans:
                               max_iter=self.max_iter, tol=self.tol,
                               precompute_distances=self.precompute_distances,
                               verbose=self.verbose, random_state=self.random_state, copy_x=self.copy_x,
-                              n_jobs=self.n_jobs, algorithm=self.algorithm).fit(self._X.flat)
+                              n_jobs=self.n_jobs, algorithm=self.algorithm).fit(self._X.flatten())
 
         labels = np.reshape(mdl.labels_, self._X.shape[:-1])
         labels += 1

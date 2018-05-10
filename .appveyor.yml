@@ -19,4 +19,4 @@ install:
 build: false
 
 test_script:
-  - "%CMD_IN_ENV% python -m pytest C:\projects\scikit-hyper\tests"
+  - "%CMD_IN_ENV% python -m pytest tests"

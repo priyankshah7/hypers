@@ -4,8 +4,8 @@ environment:
       - PYTHON_VERSION: "3.6.0"
 
 install:
-  - "%PYTHON%\\python.exe -m pip install --upgrade pip"
-  - "%PYTHON%\\python.exe -m pip install wheel"
+  - "python -m pip install --upgrade pip"
+  - "python -m pip install wheel"
   - "%CMD_IN_ENV% pip install -r requirements.txt"
 
 build: off

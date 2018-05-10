@@ -1,6 +1,5 @@
 environment:
-  matrix:
-      global:
+    global:
         PYTHON: "C:\\conda"
         MINICONDA_VERSION: "latest"
         PYTHON_ARCH: "64"

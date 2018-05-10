@@ -20,4 +20,4 @@ install:
 build: false
 
 test_script:
-  - "%PYTHON%/Scripts/py.test tests"
+  - "%CMD_IN_ENV% python -m pytest"

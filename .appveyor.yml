@@ -1,7 +1,7 @@
 environment:
   matrix:
-    - PYTHON: "C:\\Python35-x64"
-    - PYTHON: "C:\\Python36-x64"
+      - PYTHON_VERSION: "3.5.0"
+      - PYTHON_VERSION: "3.6.0"
 
 install:
   - "%PYTHON%\\python.exe -m pip install --upgrade pip"

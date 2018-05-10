@@ -5,9 +5,8 @@ environment:
 
 install:
   - "python -m pip install --upgrade pip"
-  - "python -m pip install pyqt5"
   - "python -m pip install wheel"
-  - "%CMD_IN_ENV% pip install -r requirements.txt"
+  - "python -m pip install numpy scipy matplotlib scikit-learn"
 
 build: off
 

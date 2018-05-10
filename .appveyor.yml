@@ -11,7 +11,7 @@ environment:
 install:
   - "python -m pip install --upgrade pip"
   - "python -m pip install wheel"
-  - "python -m pip install numpy scipy matplotlib scikit-learn pytest PyQt5 pyqtgraph"
+  - "python -m pip install numpy scipy matplotlib scikit-learn pytest"
 
 build: off
 

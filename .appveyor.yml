@@ -1,12 +1,11 @@
 environment:
   matrix:
-      - PYTHON_VERSION: "3.5.0"
-      - PYTHON_VERSION: "3.6.0"
+      - PYTHON: "C:\\Python36-x64"
 
 install:
   - "python -m pip install --upgrade pip"
   - "python -m pip install wheel"
-  - "python -m pip install numpy scipy matplotlib scikit-learn"
+  - "python -m pip install numpy scipy matplotlib scikit-learn pytest"
 
 build: off
 

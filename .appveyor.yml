@@ -1,6 +1,13 @@
 environment:
   matrix:
-      - PYTHON: "C:\\Python36-x64"
+      global:
+        PYTHON: "C:\\conda"
+        MINICONDA_VERSION: "latest"
+        PYTHON_ARCH: "64"
+        CONDA_DEPENDENCIES: "numpy scipy scikit-learn setuptools pytest pyqt5 pyqtgraph"
+
+    matrix:
+        - PYTHON_VERSION: "3.6"
 
 install:
   - "python -m pip install --upgrade pip"

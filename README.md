@@ -1,8 +1,10 @@
 # scikit-hyper
 [![Build Status](https://travis-ci.com/priyankshah7/scikit-hyper.svg?token=xX99xZvXU9jWErT5D1zh&branch=master)](https://travis-ci.com/priyankshah7/scikit-hyper)
+[![Build status](https://ci.appveyor.com/api/projects/status/q8mebbh8dadc6v02?svg=true)](https://ci.appveyor.com/project/priyankshah7/scikit-hyper)
 [![Documentation Status](https://readthedocs.org/projects/scikit-hyper/badge/?version=latest)](http://scikit-hyper.readthedocs.io/en/latest/?badge=latest)
 [![Python Version 3.5](https://img.shields.io/badge/Python-3.5-blue.svg)](https://www.python.org/downloads/)
 [![Python Version 3.6](https://img.shields.io/badge/Python-3.6-blue.svg)](https://www.python.org/downloads/)
+[![PyPI version](https://badge.fury.io/py/scikit-hyper.svg)](https://badge.fury.io/py/scikit-hyper)
 
 Machine learning for hyperspectral data in Python
 
@@ -27,7 +29,7 @@ pip install scikit-hyper
 	+ PCA - completed
 	+ Kernel PCA - todo
 	+ ICA - completed
-	+ NMF - todo
+	+ NMF - completed
 
 + Tools
 	+ Spectral smoothing - completed
@@ -51,7 +53,7 @@ X = Process(test_data, scale=True)
 # X.mean_spectrum and X.mean_image (mean image/spectrum of the entire dataset)
 # X.spectrum[:, :, :, :] and X.image[:, :, :, :] (image/spectrum in chosen region)
 # X.view()  (opens a hyperspectral viewer with X loaded)
-# X.flat (a 'flattened' 2-d version of the data)
+# X.flatten() (a 'flattened' 2-d version of the data)
 # for all features, see the documentation
 
 # To denoise the dataset using PCA:

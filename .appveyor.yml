@@ -20,7 +20,8 @@ install:
   - "activate test"
   - "python -m pip install --upgrade pip"
   - "python -m pip install wheel"
-  - "python -m pip install numpy scipy matplotlib scikit-learn pytest==3.5.0 pyqt5 pyqtgraph"
+  - "python -m pip install numpy scipy matplotlib scikit-learn pyqt5 pyqtgraph"
+  - pip install -e .[test]
 
 build: false
 

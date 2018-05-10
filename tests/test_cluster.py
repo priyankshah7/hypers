@@ -7,8 +7,8 @@ from skhyper.cluster import KMeans
 
 class TestCluster:
     def test_kmeans(self):
-        data_3d = np.random.rand(40, 40, 1024)
-        data_4d = np.random.rand(20, 20, 3, 1024)
+        data_3d = np.random.rand(6, 6, 25)
+        data_4d = np.random.rand(5, 5, 2, 25)
 
         X_3d = Process(data_3d)
         X_4d = Process(data_4d)

@@ -1,5 +1,8 @@
 from setuptools import setup
 
+with open('README.md') as f:
+    LONG_DESCRIPTION = f.read()
+
 setup(
     name='scikit-hyper',
 
@@ -25,6 +28,8 @@ setup(
     author_email='priyank.shah@kcl.ac.uk',
 
     description='Hyperspectral data analysis and machine learning',
+
+    long_description=LONG_DESCRIPTION,
 
     keywords=['hyperspectral',
               'data-analysis',

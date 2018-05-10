@@ -2,6 +2,7 @@
 Stores data in a custom class and generates attributes for other modules
 """
 
+import warnings
 import numpy as np
 from skhyper.view import hsiPlot
 
@@ -117,7 +118,8 @@ class Process:
             self.n_features = self.shape[2]
 
             if not self.n_samples > self.n_features:
-                raise TypeError('The number of samples must be greater than the number of features')
+                # raise TypeError('The number of samples must be greater than the number of features')
+                warnings.warn('n_samples (number of pixels) should be greater than n_features (spectral points)')
 
         elif self.n_dimension == 4:
             self.n_samples = self.shape[0] * self.shape[1] * self.shape[2]

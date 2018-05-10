@@ -54,9 +54,9 @@ class FastICA:
 
     Attributes
     ----------
-    image_components_ : array, shape (x, y, (z), n_features)
+    image_components_ : array, shape (x, y, (z), n_components)
 
-    spec_components_ : array, shape(n_features, n_features)
+    spec_components_ : array, shape(n_features, n_components)
 
     mdl : object, FastICA() instance
         An instance of the FastICA model from scikit-learn used when
@@ -84,12 +84,13 @@ class FastICA:
     >>> mdl.fit_transform(X)
     >>>
     >>> # To view the image/spectrum for each component:
-    >>> # e.g.
+    >>> # e.g. 2nd component
     >>> import matplotlib.pyplot as plt
     >>>
     >>> plt.figure()
-    >>> plt.subplot(121); mdl.image_components_[1]
-    >>> plt.subplot(122); mdl.spec_components_[1]
+    >>> plt.subplot(121); mdl.image_components_[..., 1]
+    >>> plt.subplot(122); mdl.spec_components_[..., 1]
+    >>> plt.show()
     """
     def __init__(self, n_components=None, algorithm='parallel', whiten=True, fun='logcosh',
                  fun_args=None, max_iter=200, tol=1e-4, w_init=None, random_state=None):
@@ -153,7 +154,10 @@ class FastICA:
         self.mixing_ = mdl.mixing_
         self.n_iter_ = mdl.n_iter_
 
-        self.image_components_ = np.reshape(w_matrix, self._X.shape)
+        if not self.n_components:
+            self.image_components_ = np.reshape(w_matrix, self._X.shape)
+        else:
+            self.image_components_ = np.reshape(w_matrix, self._X.shape[:-1] + (self.n_components,))
         self.spec_components_ = h_matrix.T
 
         return self

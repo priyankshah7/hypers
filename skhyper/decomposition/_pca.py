@@ -64,9 +64,9 @@ class PCA:
 
     Attributes
     ----------
-    image_components_ : array, shape (x, y, (z), n_features)
+    image_components_ : array, shape (x, y, (z), n_components)
 
-    spec_components_ : array, shape(n_features, n_features)
+    spec_components_ : array, shape(n_features, n_components)
 
     mdl : object, PCA() instance
         An instance of the PCA model from scikit-learn used when instantiating PCA() from scikit-hyper
@@ -212,7 +212,10 @@ class PCA:
         self.mean_ = mdl.mean_
         self.noise_variance_ = mdl.noise_variance_
 
-        self.image_components_ = np.reshape(w_matrix, self._X.shape)
+        if not self.n_components:
+            self.image_components_ = np.reshape(w_matrix, self._X.shape)
+        else:
+            self.image_components_ = np.reshape(w_matrix, self._X.shape[:-1] + (self.n_components,))
         self.spec_components_ = h_matrix.T
 
         return self

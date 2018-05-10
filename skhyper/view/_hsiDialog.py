@@ -30,7 +30,7 @@ class HSIDialog(QMainWindow, mainwindow.Ui_MainWindow):
         if not isinstance(X, process.Process):
             raise TypeError('Data needs to be passed to skhyper.process.Process first')
 
-        self.data = X
+        self._X = X
 
         self.shape = None
         self.dimensions = None
@@ -55,38 +55,38 @@ class HSIDialog(QMainWindow, mainwindow.Ui_MainWindow):
         self.load_data()
 
     def load_data(self):
-        if self.data is None:
+        if self._X is None:
             self.slider.setEnabled(False)
 
         else:
-            self.shape = self.data.shape
-            self.dimensions = self.data.n_dimension
+            self.shape = self._X.shape
+            self.dimensions = self._X.n_dimension
             # self.slider.setMaximum(self.shape[2]-1)
 
             if self.dimensions == 3:
                 self.slider.setEnabled(False)
-                self.data_image(self.data)
-                self.data_spectrum(self.data)
+                self.data_image(self._X.data)
+                self.data_spectrum(self._X.data)
 
             elif self.dimensions == 4:
                 self.slider.setValue(0)
                 self.slider.setMaximum(self.shape[2]-1)
-                self.data_image(self.data[:, :, 0, :])
-                self.data_spectrum(self.data[:, :, 0, :])
+                self.data_image(self._X[:, :, 0, :])
+                self.data_spectrum(self._X[:, :, 0, :])
 
     def spec_region_updated(self, regionItem):
         self.spec_lo, self.spec_hi = regionItem.getRegion()
 
     def update_layer(self):
-        self.data_image(self.data[:, :, int(self.slider.value()), :])
-        self.data_spectrum(self.data[:, :, int(self.slider.value()), :])
+        self.data_image(self._X[:, :, int(self.slider.value()), :])
+        self.data_spectrum(self._X[:, :, int(self.slider.value()), :])
 
     def update_image(self):
         if self.dimensions == 3:
-            self.data_image(self.data[:, :, int(self.spec_lo):int(self.spec_hi)])
+            self.data_image(self._X[:, :, int(self.spec_lo):int(self.spec_hi)])
 
         elif self.dimensions == 4:
-            self.data_image(self.data[:, :, int(self.slider.value()) - 1, int(self.spec_lo):int(self.spec_hi)])
+            self.data_image(self._X[:, :, int(self.slider.value()) - 1, int(self.spec_lo):int(self.spec_hi)])
 
     def update_spectrum(self):
         # Obtaining coordinates of ROI graphic in the image plot
@@ -104,10 +104,10 @@ class HSIDialog(QMainWindow, mainwindow.Ui_MainWindow):
         ymax = posy + sizey
 
         if self.dimensions == 3:
-            self.data_spectrum(self.data[ymin:ymax, xmin:xmax, :])
+            self.data_spectrum(self._X[ymin:ymax, xmin:xmax, :])
 
         elif self.dimensions == 4:
-            self.data_spectrum(self.data[ymin:ymax, xmin:xmax, int(self.slider.value()) - 1, :])
+            self.data_spectrum(self._X[ymin:ymax, xmin:xmax, int(self.slider.value()) - 1, :])
 
     def reset(self):
         self.load_data()

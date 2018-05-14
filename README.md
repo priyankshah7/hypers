@@ -12,12 +12,18 @@ Machine learning for hyperspectral data in Python
 + Simple to use, syntax similar to scikit-learn
 
 ## Installation
+**This package is currently being developed and is not yet ready for general release. The first
+general release will be v0.1.0**
+
 To install using `pip`:
 ```
 pip install scikit-hyper
 ```
 
 ## Features
+
+**N.B. For now, using this package is predicated on the hyperspectral data having been processed into a 
+numpy array.** 
 
 + Cluster
 	+ KMeans clustering - completed

@@ -10,6 +10,8 @@ Subpackages
     skhyper.datasets
     skhyper.decomposition
     skhyper.process
+    skhyper.naive_bayes
+    skhyper.svm
     skhyper.view
 
 Module contents

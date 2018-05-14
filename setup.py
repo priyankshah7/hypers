@@ -6,11 +6,13 @@ with open('README.md') as f:
 setup(
     name='scikit-hyper',
 
-    version='0.0.1a',
+    version='0.0.2c',
 
     packages=['skhyper',
               'skhyper.view',
               'skhyper.view._form',
+              'skhyper.naive_bayes',
+              'skhyper.svm',
               'skhyper.cluster',
               'skhyper.process',
               'skhyper.decomposition'],
@@ -19,7 +21,7 @@ setup(
 
     url='https://github.com/priyankshah7/scikit-hyper',
 
-    download_url='https://github.com/priyankshah7/scikit-hyper/archive/v0.0.1.tar.gz',
+    download_url='https://github.com/priyankshah7/scikit-hyper/archive/v0.0.2.tar.gz',
 
     license='BSD 3-Clause',
 
@@ -30,6 +32,8 @@ setup(
     description='Hyperspectral data analysis and machine learning',
 
     long_description=LONG_DESCRIPTION,
+
+    long_description_content_type='text/markdown',
 
     keywords=['hyperspectral',
               'data-analysis',

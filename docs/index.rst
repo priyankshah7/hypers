@@ -42,14 +42,6 @@ Machine learning for hyperspectral data in Python
 
 
 
-Features
-========
-
-- Tools
-   - ``savgol_filter``: Savitzky-Golay filter (spectral smoothing) - `completed`
-   - ``normalize``: Spectral normalization - `completed`
-
-
 .. toctree::
     :maxdepth: 1
     :caption: Other

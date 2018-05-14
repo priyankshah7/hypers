@@ -1,11 +1,10 @@
-skhyper.cluster package
+skhyper.svm package
 =======================
 
 Module contents
 ---------------
 
-.. automodule:: skhyper.cluster
+.. automodule:: skhyper.svm
     :members:
     :undoc-members:
     :show-inheritance:
-

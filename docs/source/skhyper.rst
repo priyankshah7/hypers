@@ -7,7 +7,6 @@ Subpackages
 .. toctree::
 
     skhyper.cluster
-    skhyper.datasets
     skhyper.decomposition
     skhyper.process
     skhyper.naive_bayes

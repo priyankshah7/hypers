@@ -155,6 +155,11 @@ class KMeans:
         ----------
         X : object, type (Process)
 
+        Returns
+        -------
+        self : object
+            Returns self.
+
         """
         self._X = X
         if not isinstance(self._X, Process):
@@ -169,6 +174,7 @@ class KMeans:
         labels = np.reshape(mdl.labels_, self._X.shape[:-1])
         labels += 1
 
+        self.mdl = mdl
         self.labels_ = labels
         self.inertia_ = mdl.inertia_
 
@@ -186,3 +192,5 @@ class KMeans:
 
             elif self._X.n_dimension == 4:
                 self.spec_components_[cluster] = np.squeeze(np.mean(np.mean(np.mean(self.spec_components_[cluster], 2), 1), 0))
+
+        return self

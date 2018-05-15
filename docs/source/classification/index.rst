@@ -15,3 +15,4 @@ Hyperspectral classification can be performed with the modules listed below.
 
     svm
     naive_bayes
+    neighbors

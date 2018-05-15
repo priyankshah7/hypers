@@ -4,7 +4,9 @@ Stores data in a custom class and generates attributes for other modules
 
 import warnings
 import numpy as np
+
 from skhyper.view import hsiPlot
+from sklearn.decomposition import PCA
 
 
 class Process:
@@ -161,8 +163,25 @@ class Process:
     def flatten(self):
         """Flatten the hyperspectral data
 
-        Flattens the hyperspectral data from 3d/4d to 2d by unravelling the pixel order."""
+        Flattens the hyperspectral data from 3d/4d to 2d by unravelling the pixel order.
+        """
         return self._data_flatten()
+
+    def scree(self):
+        """Returns the array for the scree plot
+
+        Returns the scree plot from `PCA` as an array.
+
+        Returns
+        -------
+        scree : array, shape (n_features,)
+
+        """
+        mdl = PCA()
+        mdl.fit_transform(self.flatten())
+        scree = mdl.explained_variance_ratio_
+
+        return scree
 
 
 class _AccessImage:

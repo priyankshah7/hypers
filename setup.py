@@ -42,10 +42,10 @@ setup(
               'hyperspectral-analysis',
               'machine learning'],
 
-    install_requires=['numpy',
-                      'scipy',
-                      'matplotlib',
-                      'pyqt5',
-                      'pyqtgraph',
-                      'scikit-learn']
+    install_requires=['numpy>=1.14.2',
+                      'scipy>=1.1.0',
+                      'matplotlib>=2.2.2',
+                      'pyqt5>=5.10.1',
+                      'pyqtgraph>=0.10.0',
+                      'scikit-learn>=0.19.1']
 )

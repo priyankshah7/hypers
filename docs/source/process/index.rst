@@ -33,6 +33,9 @@ The object `X` has several useful attributes for immediate analysis:
     X.spectrum[10:20, 10:20, :, :]     # Returns spectrum within chosen pixel range
     X.image[..., 100:200]              # Returns image averaged between spectral bands
 
+    # To access the scree plot (as an array) that explains the variance contribution:
+    X.scree()
+
     # To view and interact with the data:
     X.view()                           # Opens a hyperspectral viewer
 

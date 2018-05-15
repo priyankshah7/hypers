@@ -10,6 +10,7 @@ Subpackages
     skhyper.decomposition
     skhyper.process
     skhyper.naive_bayes
+    skhyper.neighbors
     skhyper.svm
     skhyper.view
 

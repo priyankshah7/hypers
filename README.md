@@ -11,6 +11,15 @@ Machine learning for hyperspectral data in Python
 + Built on numpy, scipy, matplotlib and scikit-learn
 + Simple to use, syntax similar to scikit-learn
 
+<p align="center"><img src="/docs/images/hyperspectral_image.png" width="300"></p>
+
+## Contents
+1. [Installation](#installation)
+2. [Features](#features)
+3. [Examples](#examples)
+4. [Documentation](#documentation)
+5. [License](#license)
+
 ## Installation
 **This package is currently being developed and is not yet ready for general release. The first
 general release will be v0.1.0**
@@ -20,25 +29,38 @@ To install using `pip`:
 pip install scikit-hyper
 ```
 
+The following packages are required:
+
++ numpy
++ scipy
++ scikit-learn
++ matplotlib
++ seaborn
++ PyQt5
++ pyqtgraph
+
 ## Features
+The following features have currently been implemented:
 
-**N.B. For now, using this package is predicated on the hyperspectral data having been processed into a 
-numpy array.** 
++ Classification
+    + Naive Bayes
+    + K-nearest neighbors
+    + Support vector machines
 
-+ Cluster
-	+ KMeans clustering - completed
-	+ Hierarchical clustering - todo
-	+ DBSCAN - todo
++ Clustering
+	+ KMeans
 
 + Decomposition
-	+ PCA - completed
-	+ Kernel PCA - todo
-	+ ICA - completed
-	+ NMF - completed
+	+ Principal component analysis
+	+ Independent component analysis
+	+ Non-negative matrix factorization
+
++ Hyperspectral viewer
+    + A lightweight pyqt gui that displays and allows interactivity with the hyperspectral data
 
 + Tools
-	+ Spectral smoothing - completed
-	+ Spectral normalization - completed
+	+ Spectral smoothing
+	+ Spectral normalization
 
 	
 ## Examples
@@ -97,3 +119,9 @@ mdl.fit(X)
 # mdl.image_components_  (a list of n_clusters number of image arrays)
 # mdl.spec_components_  (a list of n_clusters number of spectral arrays)
 ```
+
+## Documentation
+The docs are hosted [here](http://scikit-hyper.readthedocs.io/en/latest/?badge=latest).
+
+## License
+scikit-hyper is licensed under the OSI approved BSD 3-Clause License.

@@ -15,6 +15,7 @@ matplotlib==2.2.2
 more-itertools==4.1.0
 numpy==1.14.3
 packaging==17.1
+pandas==0.22.0
 pkginfo==1.4.2
 pluggy==0.6.0
 pockets==0.6.2
@@ -30,6 +31,7 @@ requests==2.18.4
 requests-toolbelt==0.8.0
 scikit-learn==0.19.1
 scipy==1.1.0
+seaborn==0.8.1
 sip==4.19.8
 six==1.11.0
 snowballstemmer==1.2.1

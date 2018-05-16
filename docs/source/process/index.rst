@@ -2,8 +2,12 @@
 Processing data
 ===============
 
-Processing data is done using :class:`~skhyper.process.Process`. Note that this requires the
-hyperspectral array to have been formatted into a numpy array.
+Processing data is done using :class:`~skhyper.process.Process`.
+
+.. note::
+
+    Note that this requires the hyperspectral array to have been formatted
+    into a numpy array.
 
 .. code-block:: python
 

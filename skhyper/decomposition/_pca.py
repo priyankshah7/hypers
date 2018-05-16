@@ -2,11 +2,14 @@
 Principal component analysis
 """
 import numpy as np
+import seaborn as sns
 import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA as _sklearn_pca
 
 from skhyper.process import Process
 from skhyper.decomposition._anscombe import anscombe_transform, inverse_anscombe_transform
+
+sns.set()
 
 
 class PCA:

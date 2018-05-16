@@ -11,7 +11,7 @@ Machine learning for hyperspectral data in Python
 + Built on numpy, scipy, matplotlib and scikit-learn
 + Simple to use, syntax similar to scikit-learn
 
-<center><img src="/docs/images/hyperspectral_image.png" width="300" align="center" alt="Hyperspectral feature extraction"></center>
+<p align="center"><img src="/docs/images/hyperspectral_image.png" width="300"></p>
 
 ## Installation
 **This package is currently being developed and is not yet ready for general release. The first

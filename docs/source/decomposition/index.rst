@@ -2,17 +2,18 @@
 Dimensionality reduction
 ========================
 
-Matrix factorization for feature extraction and hyperspectral denoising. This can be
-performed with the module `skhyper.decomposition`.
+Hyperspectral decomposition can be used either for denoising the dataset or for
+feature extraction. The techniques currently available are listed below.
 
-As of now, the following algorithms have been implemented or will be soon:
+.. figure:: hyperspectral_image.png
+    :width: 300px
+    :align: center
+    :height: 150px
+    :alt: Hyperspectral feature extraction
+    :figclass: align-center
 
-- ``PCA``: Principal components analysis - `completed`
-- ``KernelPCA``: Kernel principal components analysis - `todo`
-- ``ICA``: Independent component analysis - `completed`
-- ``NMF``: Non-negative matrix factorization - `completed`
 
-
+**Contents**
 
 .. toctree::
     :maxdepth: 2

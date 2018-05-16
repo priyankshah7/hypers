@@ -2,13 +2,19 @@
 Classification
 ==============
 
-Hyperspectral classification can be performed with the modules listed below.
+Hyperspectral classification uses labelled images to train a model which can then
+be used to predict labels for new hyperspectral datasets. The techniques currently
+available are listed below.
 
-- ``SVC``: Support vector machines classification - `completed`
-- ``KNeighborsClassifier``: K-nearest neighbors - `todo`
-- ``GaussianNB``: Gaussian Naive Bayes - `todo`
-- ``MLPClassifier``: Multi-layer perceptron neural network - `todo`
+.. figure:: hyperspectral_image.png
+    :width: 300px
+    :align: center
+    :height: 150px
+    :alt: Hyperspectral feature extraction
+    :figclass: align-center
 
+
+**Contents**
 
 .. toctree::
     :maxdepth: 1

@@ -28,6 +28,15 @@ Machine learning for hyperspectral data in Python
 -  Built on numpy, scipy, matplotlib and scikit-learn
 -  Simple to use, syntax similar to scikit-learn
 
+.. figure:: images/hyperspectral_image.png
+    :width: 300px
+    :align: center
+    :height: 150px
+    :alt: Hyperspectral feature extraction
+    :figclass: align-center
+
+    Extracting class components from hyperspectral data.
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents

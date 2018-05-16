@@ -2,15 +2,18 @@
 Clustering
 ==========
 
-Clustering of unlabeled data can be performed with the module `skhyper.cluster`
+Hyperspectral clustering of unlabelled data can be used to locate spectrally different clusters
+in the hyperspectral dataset. The techniques currently available are listed below.
 
-As of now, the following algorithms have been implemented or will be soon:
+.. figure:: hyperspectral_image.png
+    :width: 300px
+    :align: center
+    :height: 150px
+    :alt: Hyperspectral feature extraction
+    :figclass: align-center
 
-- ``KMeans``: K-means clustering - `completed`
-- ``AgglomerativeClustering``: Hierarchical clustering - `todo`
-- ``DBSCAN``: Density-Based Spatial Clustering of Applications with Noise - `todo`
 
-
+**Contents**
 
 .. toctree::
     :maxdepth: 2

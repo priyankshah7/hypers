@@ -13,6 +13,7 @@ Machine learning for hyperspectral data in Python
 
 <p align="center"><img src="/docs/images/hyperspectral_image.png" width="300"></p>
 
+## Contents
 1. [Installation](#installation)
 2. [Features](#features)
 3. [Examples](#examples)

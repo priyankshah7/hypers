@@ -1,3 +1,3 @@
-from skhyper.svm._classification import SVC
+from skhyper.svm._svc import SVC
 
 __all__ = ['SVC']

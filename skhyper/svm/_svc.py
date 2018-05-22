@@ -1,5 +1,5 @@
 """
-C-support Vector Classification
+C-support vector classification
 """
 import operator
 import functools
@@ -197,7 +197,7 @@ class SVC:
         self.support_vectors_ = mdl.support_vectors_
         self.n_support_ = mdl.n_support_
         self.dual_coef_ = mdl.dual_coef_
-        self.coef_ = mdl.coef_
+        if self.kernel == 'linear': self.coef_ = mdl.coef_
         self.intercept_ = mdl.intercept_
 
         return self
@@ -220,8 +220,10 @@ class SVC:
         if not isinstance(X, Process):
             raise TypeError('Data needs to be passed to skhyper.process.Process first')
 
+        self._check_is_fitted()
+
         y_pred = self.mdl.predict(X.flatten())
-        y_pred = np.reshape(y_pred, self._X.shape[:-1])
+        y_pred = np.reshape(y_pred, X.shape[:-1])
 
         return y_pred
 
@@ -245,6 +247,8 @@ class SVC:
         """
         if not isinstance(X, Process):
             raise TypeError('Data needs to be passed to skhyper.process.Process first')
+
+        self._check_is_fitted()
 
         T = self.mdl.predict_log_proba(X.flatten())
         T = np.reshape(T, X.shape[:-1] + (T.shape[1], ))
@@ -271,6 +275,8 @@ class SVC:
         """
         if not isinstance(X, Process):
             raise TypeError('Data needs to be passed to skhyper.process.Process first')
+
+        self._check_is_fitted()
 
         T = self.mdl.predict_proba(X.flatten())
         T = np.reshape(T, X.shape[:-1] + (T.shape[1],))

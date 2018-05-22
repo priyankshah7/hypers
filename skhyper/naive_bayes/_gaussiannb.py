@@ -119,7 +119,7 @@ class GaussianNB:
             raise TypeError('Data needs to be passed to skhyper.process.Process first')
 
         y_pred = self.mdl.predict(X.flatten())
-        y_pred = np.reshape(y_pred, self._X.shape[:-1])
+        y_pred = np.reshape(y_pred, X.shape[:-1])
 
         return y_pred
 

@@ -148,7 +148,7 @@ class KNeighborsClassifier:
         self._check_is_fitted()
 
         y_pred = self.mdl.predict(X.flatten())
-        y_pred = np.reshape(y_pred, self._X.shape[:-1])
+        y_pred = np.reshape(y_pred, X.shape[:-1])
 
         return y_pred
 

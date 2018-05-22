@@ -81,9 +81,15 @@ class NMF:
 
     Attributes
     ----------
-    image_components_ : array, shape (x, y, (z), n_components)
+    image_components_ : list
+        Returns a list of image arrays for each component. The size is:
+            - n_components: If the number of components were specified
+            - n_features: If the number of components were not specified
 
-    spec_components_ : array, shape(n_features, n_components)
+    spec_components_ : list
+        Returns a list of spectral arrays for each component. The size is:
+            - n_components: If the number of components were specified
+            - n_features: If the number of components were not specified
 
     mdl : object, NMF() instance
         An instance of the NMF model from scikit-learn used when
@@ -185,10 +191,26 @@ class NMF:
         self.n_iter_ = mdl.n_iter_
 
         if not self.n_components:
-            self.image_components_ = np.reshape(w_matrix, self._X.shape)
+            self.image_components_ = [0] * self._X.shape[-1]
+            self.spec_components_ = [0] * self._X.shape[-1]
+
+            w_matrix_ord = np.reshape(w_matrix, self._X.shape)
+            h_matrix_ord = h_matrix.T
+
+            for comp in range(self._X.shape[-1]):
+                self.image_components_[comp] = np.squeeze(w_matrix_ord[..., comp])
+                self.spec_components_[comp] = h_matrix_ord[..., comp]
+
         else:
-            self.image_components_ = np.reshape(w_matrix, self._X.shape[:-1] + (self.n_components,))
-        self.spec_components_ = h_matrix.T
+            self.image_components_ = [0] * self.n_components
+            self.spec_components_ = [0] * self.n_components
+
+            w_matrix_ord = np.reshape(w_matrix, self._X.shape[:-1] + (self.n_components,))
+            h_matrix_ord = h_matrix.T
+
+            for comp in range(self.n_components):
+                self.image_components_[comp] = np.squeeze(w_matrix_ord[..., comp])
+                self.spec_components_[comp] = h_matrix_ord[..., comp]
 
         return self
 

@@ -197,7 +197,7 @@ class SVC:
         self.support_vectors_ = mdl.support_vectors_
         self.n_support_ = mdl.n_support_
         self.dual_coef_ = mdl.dual_coef_
-        self.coef_ = mdl.coef_
+        if self.kernel == 'linear': self.coef_ = mdl.coef_
         self.intercept_ = mdl.intercept_
 
         return self
@@ -223,7 +223,7 @@ class SVC:
         self._check_is_fitted()
 
         y_pred = self.mdl.predict(X.flatten())
-        y_pred = np.reshape(y_pred, self._X.shape[:-1])
+        y_pred = np.reshape(y_pred, X.shape[:-1])
 
         return y_pred
 

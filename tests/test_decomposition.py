@@ -34,6 +34,9 @@ class TestDecomposition:
         assert mdl_3d.mean_ is not None
         assert mdl_3d.noise_variance_ is not None
 
+        assert len(mdl_3d.image_components_) == 32
+        assert len(mdl_3d.spec_components_) == 32
+
         Xd_3d = mdl_3d.inverse_transform(n_components=10, perform_anscombe=True)
         assert Xd_3d is not None
 
@@ -49,6 +52,9 @@ class TestDecomposition:
         assert mdl_4d.singular_values_ is not None
         assert mdl_4d.mean_ is not None
         assert mdl_4d.noise_variance_ is not None
+
+        assert len(mdl_4d.image_components_) == 32
+        assert len(mdl_4d.spec_components_) == 32
 
         Xd_4d = mdl_4d.inverse_transform(n_components=10, perform_anscombe=True)
         assert Xd_4d is not None
@@ -70,16 +76,26 @@ class TestDecomposition:
 
         # 3-dimensional data
         mdl_3d.fit_transform(self.X_3d)
+        assert mdl_3d.image_components_ is not None
+        assert mdl_3d.spec_components_ is not None
         assert mdl_3d.reconstruction_err_ is not None
         assert mdl_3d.n_iter_ is not None
+
+        assert len(mdl_3d.image_components_) == 3
+        assert len(mdl_3d.spec_components_) == 3
 
         Xd_3d = mdl_3d.inverse_transform(n_components=1)
         assert Xd_3d is not None
 
         # 4-dimensional data
         mdl_4d.fit_transform(self.X_4d)
+        assert mdl_4d.image_components_ is not None
+        assert mdl_4d.spec_components_ is not None
         assert mdl_4d.reconstruction_err_ is not None
         assert mdl_4d.n_iter_ is not None
+
+        assert len(mdl_4d.image_components_) == 3
+        assert len(mdl_4d.spec_components_) == 3
 
         Xd_4d = mdl_4d.inverse_transform(n_components=1)
         assert Xd_4d is not None
@@ -90,16 +106,26 @@ class TestDecomposition:
 
         # 3-dimensional data
         mdl_3d.fit_transform(self.X_3d)
+        assert mdl_3d.image_components_ is not None
+        assert mdl_3d.spec_components_ is not None
         assert mdl_3d.mixing_ is not None
         assert mdl_3d.n_iter_ is not None
+
+        assert len(mdl_3d.image_components_) == 3
+        assert len(mdl_3d.spec_components_) == 3
 
         Xd_3d = mdl_3d.inverse_transform(n_components=1)
         assert Xd_3d is not None
 
         # 4-dimensional data
         mdl_4d.fit_transform(self.X_4d)
+        assert mdl_4d.image_components_ is not None
+        assert mdl_4d.spec_components_ is not None
         assert mdl_4d.mixing_ is not None
         assert mdl_4d.n_iter_ is not None
+
+        assert len(mdl_4d.image_components_) == 3
+        assert len(mdl_4d.spec_components_) == 3
 
         Xd_4d = mdl_4d.inverse_transform(n_components=1)
         assert Xd_4d is not None

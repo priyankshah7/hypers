@@ -11,7 +11,7 @@ this module).
 .. warning::
 
     This implementation is not intended for large-scale applications.
-    In particular, scikit-learn offers no GPU support.
+    In particular, scikit-learn (which this module wraps around) offers no GPU support.
 
 **Example**
 

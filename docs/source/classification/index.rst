@@ -22,3 +22,4 @@ available are listed below.
     svm
     naive_bayes
     neighbors
+    neural_network

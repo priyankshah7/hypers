@@ -11,6 +11,7 @@ Subpackages
     skhyper.process
     skhyper.naive_bayes
     skhyper.neighbors
+    skhyper.neural_network
     skhyper.svm
     skhyper.view
 

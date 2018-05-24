@@ -6,13 +6,14 @@ with open('README.md') as f:
 setup(
     name='scikit-hyper',
 
-    version='0.0.4',
+    version='0.0.5',
 
     packages=['skhyper',
               'skhyper.view',
               'skhyper.view._form',
               'skhyper.naive_bayes',
               'skhyper.neighbors',
+              'skhyper.neural_network',
               'skhyper.svm',
               'skhyper.cluster',
               'skhyper.process',
@@ -22,7 +23,7 @@ setup(
 
     url='https://github.com/priyankshah7/scikit-hyper',
 
-    download_url='https://github.com/priyankshah7/scikit-hyper/archive/v0.0.4.tar.gz',
+    download_url='https://github.com/priyankshah7/scikit-hyper/archive/v0.0.5.tar.gz',
 
     license='BSD 3-Clause',
 

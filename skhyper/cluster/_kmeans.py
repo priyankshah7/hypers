@@ -5,6 +5,7 @@ import numpy as np
 from sklearn.cluster import KMeans as _sklearn_kmeans
 
 from skhyper.process import Process
+from skhyper.cluster._plot import _plot_components
 
 
 class KMeans:
@@ -146,6 +147,12 @@ class KMeans:
         self.copy_x = copy_x
         self.n_jobs = n_jobs
         self.algorithm = algorithm
+
+    def plot(self, plt_type):
+        # TODO add number of components here
+        if plt_type == 'components':
+            title = 'K-means'
+            _plot_components(self.image_components_, self.spec_components_, title)
 
     def fit(self, X):
         """

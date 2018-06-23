@@ -1,5 +1,12 @@
 # scikit-hyper changelog
 
+## Version 0.0.6 (pre-release)
+#### Features
++ Added a plotting package for cluster/decomposition techniques and Process object
+
+#### Bug fixes
++ Corrected issue with updating spectrum in the hyperspectral viewer for asymmetrical images.
+
 ## Version 0.0.5 (pre-release)
 #### Features
 + Added MLPClassifier in `skhyper.neural_network`

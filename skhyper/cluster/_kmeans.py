@@ -5,7 +5,6 @@ import numpy as np
 from sklearn.cluster import KMeans as _sklearn_kmeans
 
 from skhyper.process import Process
-from skhyper.cluster._plot import _plot_components
 
 
 class KMeans:
@@ -148,12 +147,6 @@ class KMeans:
         self.n_jobs = n_jobs
         self.algorithm = algorithm
 
-    def plot(self, plt_type):
-        # TODO add number of components here
-        if plt_type == 'components':
-            title = 'K-means'
-            _plot_components(self.image_components_, self.spec_components_, title)
-
     def fit(self, X):
         """
         Fits the KMeans model to the processed hyperspectral array.
@@ -194,10 +187,10 @@ class KMeans:
                 self.spec_components_[cluster][..., spectral_point] = np.multiply(self._X[..., spectral_point],
                                                                                   np.where(labels == cluster + 1, labels, 0) / (cluster + 1))
 
-            if self._X.n_dimension == 3:
+            if self._X.ndim == 3:
                 self.spec_components_[cluster] = np.squeeze(np.mean(np.mean(self.spec_components_[cluster], 1), 0))
 
-            elif self._X.n_dimension == 4:
+            elif self._X.ndim == 4:
                 self.spec_components_[cluster] = np.squeeze(np.mean(np.mean(np.mean(self.spec_components_[cluster], 2), 1), 0))
 
         return self

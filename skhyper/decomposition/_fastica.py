@@ -5,7 +5,6 @@ import numpy as np
 from sklearn.decomposition import FastICA as _sklearn_ica
 
 from skhyper.process import Process
-from skhyper.decomposition._plot import _plot_components
 
 
 class FastICA:
@@ -131,12 +130,6 @@ class FastICA:
         """
         if self._X is None:
             raise AttributeError('Data has not yet been fitted with fit_transform()')
-
-    def plot(self, plt_type):
-        # TODO add number of components here
-        if plt_type == 'components':
-            title = 'ICA'
-            _plot_components(self.image_components_, self.spec_components_, title)
 
     def fit_transform(self, X):
         """

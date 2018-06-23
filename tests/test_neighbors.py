@@ -8,7 +8,6 @@ from skhyper.neighbors import KNeighborsClassifier
 class TestNeighbors:
     def setup(self):
         data_3d, label_3d = make_blobs(n_samples=64, n_features=16, centers=3)
-
         data_4d, label_4d = make_blobs(n_samples=128, n_features=16, centers=3)
 
         data_3d = np.reshape(data_3d, (8, 8, 16))

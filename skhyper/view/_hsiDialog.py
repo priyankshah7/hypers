@@ -60,7 +60,7 @@ class HSIDialog(QMainWindow, mainwindow.Ui_MainWindow):
 
         else:
             self.shape = self._X.shape
-            self.dimensions = self._X.n_dimension
+            self.dimensions = self._X.ndim
             # self.slider.setMaximum(self.shape[2]-1)
 
             if self.dimensions == 3:

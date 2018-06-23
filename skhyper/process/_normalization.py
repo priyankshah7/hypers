@@ -34,12 +34,12 @@ def normalize(X, spectrum):
         raise ValueError('The spectral range of the spectrum and hyperspectral data need to be the same')
 
     else:
-        if X.n_dimension == 3:
+        if X.ndim == 3:
             for _x in range(X.shape[0]):
                 for _y in range(X.shape[1]):
                     X.data[_x, _y, :] /= spectrum
 
-        elif X.n_dimension == 4:
+        elif X.ndim == 4:
             for _x in range(X.shape[0]):
                 for _y in range(X.shape[1]):
                     for _z in range (X.shape[2]):

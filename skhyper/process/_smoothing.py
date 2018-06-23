@@ -54,14 +54,14 @@ def savgol_filter(X, window_length=5, polyorder=3, deriv=0, delta=1.0, axis=-1, 
     if not isinstance(X, Process):
         raise TypeError('Data needs to be passed to skhyper.process.Process first')
 
-    if X.n_dimension == 3:
+    if X.ndim == 3:
         for _x in range(X.shape[0]):
             for _y in range(X.shape[1]):
                 X.data[_x, _y, :] = _savgol_filter(X.data[_x, _y, :], window_length=window_length,
                                                    polyorder=polyorder, deriv=deriv, delta=delta,
                                                    axis=axis, mode=mode, cval=cval)
 
-    elif X.n_dimension == 4:
+    elif X.ndim == 4:
         for _x in range(X.shape[0]):
             for _y in range(X.shape[1]):
                 for _z in range(X.shape[2]):

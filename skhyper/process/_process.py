@@ -61,7 +61,7 @@ class Process:
     >>> test_data = np.random.rand(100, 100, 10, 1024)
     >>> X = Process(test_data, scale=True)
     >>>
-    >>> X.n_dimension
+    >>> X.ndim
     4
     >>>
     >>> X.n_features
@@ -77,7 +77,7 @@ class Process:
 
         # Data properties
         self.shape = None
-        self.n_dimension = None
+        self.ndim = None
         self.n_features = None
         self.n_samples = None
 
@@ -110,12 +110,12 @@ class Process:
             raise TypeError('Data must be a numpy array')
 
         self.shape = self.data.shape
-        self.n_dimension = len(self.shape)
+        self.ndim = len(self.shape)
 
-        if self.n_dimension != 3 and self.n_dimension != 4:
+        if self.ndim != 3 and self.ndim != 4:
             raise TypeError('Data must be 3- or 4- dimensional.')
 
-        if self.n_dimension == 3:
+        if self.ndim == 3:
             self.n_samples = self.shape[0] * self.shape[1]
             self.n_features = self.shape[2]
 
@@ -123,7 +123,7 @@ class Process:
                 # raise TypeError('The number of samples must be greater than the number of features')
                 warnings.warn('n_samples (number of pixels) should be greater than n_features (spectral points)')
 
-        elif self.n_dimension == 4:
+        elif self.ndim == 4:
             self.n_samples = self.shape[0] * self.shape[1] * self.shape[2]
             self.n_features = self.shape[3]
 
@@ -131,27 +131,33 @@ class Process:
                 raise TypeError('The number of samples must be greater than the number of features')
 
     def _data_flatten(self):
-        if self.n_dimension == 3:
+        if self.ndim == 3:
             return np.reshape(self.data, (self.shape[0] * self.shape[1], self.shape[2]))
 
-        elif self.n_dimension == 4:
+        elif self.ndim == 4:
             return np.reshape(self.data, (self.shape[0] * self.shape[1] * self.shape[2], self.shape[3]))
 
     def _data_mean(self):
-        if self.n_dimension == 3:
+        if self.ndim == 3:
             self.mean_image = np.squeeze(np.mean(self.data, 2))
             self.mean_spectrum = np.squeeze(np.mean(np.mean(self.data, 1), 0))
 
-        elif self.n_dimension == 4:
+        elif self.ndim == 4:
             self.mean_image = np.squeeze(np.mean(self.data, 3))
             self.mean_spectrum = np.squeeze(np.mean(np.mean(np.mean(self.data, 2), 1), 0))
 
     def _data_scale(self):
-        self.data = self.data / np.abs(np.max(self.data))
+        """ Scale the hyperspectral data
+
+        Scales the hyperspectral data to between 0 and 1 for all positive data or
+        -1 and 1 for positive and negative data.
+
+        """
+        self.data = self.data / np.max(np.abs(self.data))
 
     def _data_access(self):
-        self.image = _AccessImage(self.data, self.shape, self.n_dimension)
-        self.spectrum = _AccessSpectrum(self.data, self.shape, self.n_dimension)
+        self.image = _AccessImage(self.data, self.shape, self.ndim)
+        self.spectrum = _AccessSpectrum(self.data, self.shape, self.ndim)
 
     def view(self):
         """ Hyperspectral viewer
@@ -164,6 +170,12 @@ class Process:
         """Flatten the hyperspectral data
 
         Flattens the hyperspectral data from 3d/4d to 2d by unravelling the pixel order.
+
+        Returns
+        -------
+        X_flattened : array, shape (x*y*(z), n_features)
+            A flattened version of the hyperspectral array
+
         """
         return self._data_flatten()
 

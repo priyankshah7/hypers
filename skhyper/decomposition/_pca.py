@@ -8,7 +8,6 @@ from sklearn.decomposition import PCA as _sklearn_pca
 
 from skhyper.process import Process
 from skhyper.decomposition._anscombe import anscombe_transform, inverse_anscombe_transform
-from skhyper.decomposition._plot import _plot_components
 
 sns.set()
 
@@ -158,39 +157,32 @@ class PCA:
         if self._X is None:
             raise AttributeError('Data has not yet been fitted with fit_transform()')
 
-    def plot(self, plt_type):
-        # TODO add number of components here
-        if plt_type == 'components':
-            title = 'PCA'
-            _plot_components(self.image_components_, self.spec_components_, title)
+    def plot_statistics(self):
+        self._check_is_fitted()
 
-        elif plt_type == 'statistics':
-            # TODO remove plot_statistics()
-            self._check_is_fitted()
-
-            plt.figure(facecolor='white')
-            plt.subplot(2, 2, 1)
-            plt.plot(self.explained_variance_)
-            plt.xlabel('Principle compoenent no.')
-            plt.ylabel('Variance')
-            plt.title('Explained variance')
-            plt.subplot(2, 2, 2)
-            plt.plot(self.explained_variance_ratio_)
-            plt.xlabel('Principle compoenent no.')
-            plt.ylabel('Variance ratio')
-            plt.title('Explained variance ratio')
-            plt.subplot(2, 2, 3)
-            plt.plot(self.singular_values_)
-            plt.xlabel('Principle compoenent no.')
-            plt.ylabel('Singular values')
-            plt.title('Singular values')
-            plt.subplot(2, 2, 4)
-            plt.plot(self.mean_)
-            plt.xlabel('Spectrum')
-            plt.ylabel('Intensity')
-            plt.title('Empirical mean')
-            plt.tight_layout()
-            plt.show()
+        plt.figure(facecolor='white')
+        plt.subplot(2, 2, 1)
+        plt.plot(self.explained_variance_)
+        plt.xlabel('Principle compoenent no.')
+        plt.ylabel('Variance')
+        plt.title('Explained variance')
+        plt.subplot(2, 2, 2)
+        plt.plot(self.explained_variance_ratio_)
+        plt.xlabel('Principle compoenent no.')
+        plt.ylabel('Variance ratio')
+        plt.title('Explained variance ratio')
+        plt.subplot(2, 2, 3)
+        plt.plot(self.singular_values_)
+        plt.xlabel('Principle compoenent no.')
+        plt.ylabel('Singular values')
+        plt.title('Singular values')
+        plt.subplot(2, 2, 4)
+        plt.plot(self.mean_)
+        plt.xlabel('Spectrum')
+        plt.ylabel('Intensity')
+        plt.title('Empirical mean')
+        plt.tight_layout()
+        plt.show()
 
     def fit_transform(self, X):
         """

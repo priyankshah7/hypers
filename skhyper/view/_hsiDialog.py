@@ -104,10 +104,10 @@ class HSIDialog(QMainWindow, mainwindow.Ui_MainWindow):
         ymax = posy + sizey
 
         if self.dimensions == 3:
-            self.data_spectrum(self._X[ymin:ymax, xmin:xmax, :])
+            self.data_spectrum(self._X[xmin:xmax, ymin:ymax, :])
 
         elif self.dimensions == 4:
-            self.data_spectrum(self._X[ymin:ymax, xmin:xmax, int(self.slider.value()) - 1, :])
+            self.data_spectrum(self._X[xmin:xmax, ymin:ymax, int(self.slider.value()) - 1, :])
 
     def reset(self):
         self.load_data()

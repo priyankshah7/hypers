@@ -2,7 +2,7 @@
 
 ## Version 0.0.6 (pre-release)
 #### Features
-+ Added a plotting package for cluster/decomposition techniques and Process object
++ Added a plotting package for cluster/decomposition techniques and Process object 
 
 #### Bug fixes
 + Corrected issue with updating spectrum in the hyperspectral viewer for asymmetrical images.

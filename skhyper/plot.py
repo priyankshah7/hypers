@@ -8,6 +8,30 @@ sns.set()
 
 
 def plot(X, **kwargs):
+    """Line plot for Process object or 3/4d numpy array
+
+    Parameters
+    ----------
+    X : type (ndarray or Process object)
+
+    kwargs : matplotlib plot arguments
+
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> import matplotlib.pyplot as pplt
+    >>> from skhyper.process import Process
+    >>> import skhyper.plot as cplt
+    >>>
+    >>> data = np.random.rand(20, 20, 512)
+    >>> X = Process(data)
+    >>>
+    >>> plt.figure()
+    >>> cplt.plot(X[0:10, 0:10, :], label='example')
+    >>> plt.legend()
+    >>> plt.show()
+    """
     if X.ndim == 3:
         plt.plot(np.squeeze(np.mean(np.mean(X[...], 1), 0)), **kwargs)
 
@@ -16,6 +40,30 @@ def plot(X, **kwargs):
 
 
 def imshow(X, **kwargs):
+    """Image for Process object or 3/4d numpy array
+
+    Parameters
+    ----------
+    X : type (ndarray or Process object)
+
+    kwargs : matplotlib imshow arguments
+
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> import matplotlib.pyplot as pplt
+    >>> from skhyper.process import Process
+    >>> import skhyper.plot as cplt
+    >>>
+    >>> data = np.random.rand(20, 20, 512)
+    >>> X = Process(data)
+    >>>
+    >>> plt.figure()
+    >>> cplt.imshow(X[..., 30:50])
+    >>> plt.colorbar()
+    >>> plt.show()
+    """
     if X.ndim == 3:
         plt.imshow(np.squeeze(np.mean(X[...], 2)), **kwargs)
 
@@ -24,6 +72,36 @@ def imshow(X, **kwargs):
 
 
 def components(images=None, spectra=None):
+    """
+    Parameters
+    ----------
+    images : list
+        A list of images obtained from clustering or decomposition techniques in scikit-hyper
+
+    spectra : list
+        A list of spectra obtained from clustering or decomposition techniques in scikit-hyper
+
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> import matplotlib.pyplot as pplt
+    >>>
+    >>> from skhyper.process import Process
+    >>> from skhyper.decomposition import PCA
+    >>> import skhyper.plot as cplt
+    >>>
+    >>> data = np.random.rand(20, 20, 512)
+    >>> X = Process(data)
+    >>>
+    >>> mdl = PCA()
+    >>> mdl.fit_transform(X)
+    >>>
+    >>> plt.figure()
+    >>> cplt.components(images=mdl.image_components_, spectra=mdl.spec_components_)
+    >>> plt.show()
+
+    """
     if images is not None and spectra is not None:
         if len(images) != len(spectra):
             raise IndexError('The number of components for the images and specs must be the same')

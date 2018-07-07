@@ -5,6 +5,7 @@ import operator
 import functools
 import numpy as np
 from sklearn.svm import SVC as _sklearn_svc
+from sklearn.model_selection import train_test_split
 
 from skhyper.process import Process
 
@@ -150,8 +151,36 @@ class SVC:
         """
         Performs a check to see if self.data is empty. If it is, then fit() has not been called yet.
         """
-        if self._X is None:
+        if self.mdl is None:
             raise AttributeError('Data has not yet been fitted with fit()')
+
+    def fit_train_test(self, X, y, test_size=0.8):
+        if not isinstance(X, Process):
+            raise TypeError('Data needs to be passed to skhyper.process.Process first')
+
+        if type(y) != np.ndarray:
+            raise TypeError('Target value array must be a numpy array')
+
+        if len(y.shape) != 2 and len(y.shape) != 3:
+            raise TypeError('Target value array must be 2- or 3-dimensional.')
+
+        X_train, X_test, y_train, y_test = train_test_split(X.flatten(),
+                                                            np.reshape(y, functools.reduce(operator.mul, y.shape, 1)),
+                                                            test_size=test_size)
+
+        mdl = _sklearn_svc(C=self.C, kernel=self.kernel, degree=self.degree, gamma=self.gamma,
+                           coef0=self.coef0, shrinking=self.shrinking, probability=self.probability,
+                           tol=self.tol, cache_size=self.cache_size, class_weight=self.class_weight,
+                           verbose=self.verbose, max_iter=self.max_iter,
+                           decision_function_shape=self.decision_function_shape, random_state=self.random_state)
+
+        mdl.fit(X_train, y_train)
+
+        self.mdl = mdl
+        score = mdl.score(X_test, y_test)
+
+        print('Score of the trained model on the test data is: ' + str(score))
+        return score
 
     def fit(self, X, y, sample_weight=None):
         """Fit the SVM model according to the given training data.

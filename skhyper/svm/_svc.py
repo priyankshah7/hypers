@@ -4,6 +4,7 @@ C-support vector classification
 import operator
 import functools
 import numpy as np
+from sklearn import preprocessing
 from sklearn.svm import SVC as _sklearn_svc
 from sklearn.model_selection import train_test_split
 
@@ -167,6 +168,13 @@ class SVC:
         X_train, X_test, y_train, y_test = train_test_split(X.flatten(),
                                                             np.reshape(y, functools.reduce(operator.mul, y.shape, 1)),
                                                             test_size=test_size)
+
+        le = preprocessing.LabelEncoder()
+        le.fit(y_train)
+        y_train = le.transform(y_train)
+
+        le.fit(y_test)
+        y_test = le.transform(y_test)
 
         mdl = _sklearn_svc(C=self.C, kernel=self.kernel, degree=self.degree, gamma=self.gamma,
                            coef0=self.coef0, shrinking=self.shrinking, probability=self.probability,

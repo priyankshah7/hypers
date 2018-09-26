@@ -160,7 +160,6 @@ class PCA:
     def plot_statistics(self):
         self._check_is_fitted()
 
-        plt.figure(facecolor='white')
         plt.subplot(2, 2, 1)
         plt.plot(self.explained_variance_)
         plt.xlabel('Principle compoenent no.')
@@ -181,8 +180,6 @@ class PCA:
         plt.xlabel('Spectrum')
         plt.ylabel('Intensity')
         plt.title('Empirical mean')
-        plt.tight_layout()
-        plt.show()
 
     def fit_transform(self, X):
         """

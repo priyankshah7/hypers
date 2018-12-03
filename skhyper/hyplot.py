@@ -20,23 +20,23 @@ def plot(X, **kwargs):
     Examples
     --------
     >>> import numpy as np
-    >>> import matplotlib.pyplot as pplt
+    >>> import matplotlib.pyplot as plt
     >>> from skhyper.process import Process
-    >>> import skhyper.plot as cplt
+    >>> import skhyper.hyplot as hplt
     >>>
     >>> data = np.random.rand(20, 20, 512)
     >>> X = Process(data)
     >>>
     >>> plt.figure()
-    >>> cplt.plot(X[0:10, 0:10, :], label='example')
+    >>> hplt.plot(X[0:10, 0:10, :], label='example')
     >>> plt.legend()
     >>> plt.show()
     """
     if X.ndim == 3:
-        plt.plot(np.squeeze(np.mean(np.mean(X[...], 1), 0)), **kwargs)
+        return plt.plot(np.squeeze(np.mean(np.mean(X[...], 1), 0)), **kwargs)
 
     elif X.ndim == 4:
-        plt.plot(np.squeeze(np.mean(np.mean(np.mean(X[...], 2), 1), 0)), **kwargs)
+        return plt.plot(np.squeeze(np.mean(np.mean(np.mean(X[...], 2), 1), 0)), **kwargs)
 
 
 def imshow(X, **kwargs):
@@ -54,21 +54,21 @@ def imshow(X, **kwargs):
     >>> import numpy as np
     >>> import matplotlib.pyplot as pplt
     >>> from skhyper.process import Process
-    >>> import skhyper.plot as cplt
+    >>> import skhyper.hyplot as hplt
     >>>
     >>> data = np.random.rand(20, 20, 512)
     >>> X = Process(data)
     >>>
     >>> plt.figure()
-    >>> cplt.imshow(X[..., 30:50])
+    >>> hplt.imshow(X[..., 30:50])
     >>> plt.colorbar()
     >>> plt.show()
     """
     if X.ndim == 3:
-        plt.imshow(np.squeeze(np.mean(X[...], 2)), **kwargs)
+        return plt.imshow(np.squeeze(np.mean(X[...], 2)), **kwargs)
 
     elif X.ndim == 4:
-        plt.imshow(np.squeeze(np.mean(X[...], 3)), **kwargs)
+        return plt.imshow(np.squeeze(np.mean(X[...], 3)), **kwargs)
 
 
 def components(images=None, spectra=None):
@@ -89,7 +89,7 @@ def components(images=None, spectra=None):
     >>>
     >>> from skhyper.process import Process
     >>> from skhyper.decomposition import PCA
-    >>> import skhyper.plot as cplt
+    >>> import skhyper.hyplot as hplt
     >>>
     >>> data = np.random.rand(20, 20, 512)
     >>> X = Process(data)
@@ -98,7 +98,7 @@ def components(images=None, spectra=None):
     >>> mdl.fit_transform(X)
     >>>
     >>> plt.figure()
-    >>> cplt.components(images=mdl.image_components_, spectra=mdl.spec_components_)
+    >>> hplt.components(images=mdl.image_components_, spectra=mdl.spec_components_)
     >>> plt.show()
 
     """

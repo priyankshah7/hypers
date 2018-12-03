@@ -44,10 +44,8 @@ Machine learning for hyperspectral data in Python
    source/install
    source/process/index
    source/hypview/index
-   source/classification/index
    source/cluster/index
    source/decomposition/index
-   source/tools/index
 
 
 

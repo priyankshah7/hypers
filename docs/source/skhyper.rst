@@ -9,10 +9,6 @@ Subpackages
     skhyper.cluster
     skhyper.decomposition
     skhyper.process
-    skhyper.naive_bayes
-    skhyper.neighbors
-    skhyper.neural_network
-    skhyper.svm
     skhyper.view
 
 Module contents

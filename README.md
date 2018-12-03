@@ -63,7 +63,6 @@ The following packages are required:
 ## Features
 Features implemented in scikit-hyper include:
 
-+ [Classification](http://scikit-hyper.readthedocs.io/en/latest/source/classification/index.html) (e.g. SVM, Naive Bayes)
 + [Clustering](http://scikit-hyper.readthedocs.io/en/latest/source/cluster/index.html) (KMeans)
 + [Decomposition](http://scikit-hyper.readthedocs.io/en/latest/source/decomposition/index.html) (e.g. PCA, ICA, NMF)
 + [Hyperspectral viewer](http://scikit-hyper.readthedocs.io/en/latest/source/hypview/index.html)

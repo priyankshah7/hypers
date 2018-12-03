@@ -1,5 +1,9 @@
 # scikit-hyper changelog
 
+## Version 0.0.7 (pre-release)
+#### Features
++ Removing all classification techniques (package will specialize solely on decomposition/clustering)
+
 ## Version 0.0.6 (pre-release)
 #### Features
 + Added a plotting package for cluster/decomposition techniques and Process object

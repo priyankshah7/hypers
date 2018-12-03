@@ -24,7 +24,7 @@ Machine learning for hyperspectral data in Python
 ## About
 This package builds upon the popular scikit-learn to provide an interface for performing 
 machine learning on hyperspectral data. Many of the commonly used techniques in the 
-analysis of hyperspectral data (PCA, ICA, clustering and classification) have been 
+analysis of hyperspectral data (e.g. PCA, ICA, clustering) have been 
 implemented and more will be added in the future.
 
 scikit-hyper also provides two features which aim to make exploratory analysis easier:

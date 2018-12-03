@@ -62,7 +62,7 @@ pywinpty==0.5.4
 PyYAML==3.13
 pyzmq==17.1.2
 qtconsole==4.4.3
-requests==2.20.1
+requests==2.18.4
 scikit-image==0.14.1
 scikit-learn==0.20.1
 scipy==1.1.0

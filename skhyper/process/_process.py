@@ -8,7 +8,8 @@ from scipy.signal import savgol_filter as _savgol
 from scipy.ndimage.filters import gaussian_filter as _gaussian_filt
 
 from skhyper.view import hsiPlot
-from sklearn.decomposition import PCA
+from sklearn.decomposition import *
+from sklearn.cluster import *
 
 
 class Process:
@@ -26,7 +27,7 @@ class Process:
         Scales the spectra to either between {0, 1} or {-1, 1} depending on presence of negative values.
 
     normalize : bool
-        Normalizes each spectra by subtracing the mean spectrum of the hyperspectral dataset.
+        Normalizes each spectra by subtracting the mean spectrum of the hyperspectral dataset.
 
     Attributes
     ----------
@@ -41,9 +42,6 @@ class Process:
 
     n_samples : int
         Returns the total number of pixels in the hyperspectral array
-
-    flat : array, dimension (2)
-        Returns a flattened 2-d version of the hyperspectral array
 
     image : array, shape(x, y, (z))
         Returns the image averaged over the selected spectral range
@@ -74,9 +72,9 @@ class Process:
     >>>
     >>> X.n_samples
     100000
-
     """
     def __init__(self, X, scale=True, normalize=False):
+        # TODO Store in numpy memmap
         self.data = X
         self._scale = scale
         self._normalize = normalize
@@ -93,6 +91,10 @@ class Process:
         self.spectrum = None
         self.mean_image = None
         self.mean_spectrum = None
+
+        # sklearn
+        self.mdl_decompose = None
+        self.mdl_cluster = None
 
         self.update()
 
@@ -250,6 +252,96 @@ class Process:
 
         return scree
 
+    def decompose(self, mdl):
+        sk_decompose_types = (
+            PCA,
+            FastICA,
+            #KernelPCA,
+            IncrementalPCA,
+            TruncatedSVD,
+            DictionaryLearning,
+            MiniBatchDictionaryLearning,
+            FactorAnalysis,
+            NMF,
+            LatentDirichletAllocation
+        )
+        
+        if type(mdl) not in sk_decompose_types:
+            raise TypeError('Must pass a sklearn decomposition class. Refer to documentation.')
+
+        self.mdl_decompose = mdl
+        n_components = self.mdl_decompose.get_params()['n_components']
+        images = self.mdl_decompose.fit_transform(self.flatten()).reshape(self.data.shape[:-1] + (n_components,))
+        specs = self.mdl_decompose.components_.transpose()
+
+        return images, specs
+
+    def cluster(self, mdl, decomposed=False, pca_comps=4):
+        sk_cluster_types = (
+            KMeans,
+            # AffinityPropagation,
+            # MeanShift,
+            SpectralClustering,
+            AgglomerativeClustering,
+            # DBSCAN,
+            # Birch
+        )
+
+        if type(mdl) not in sk_cluster_types:
+            raise TypeError('Must pass a sklearn cluster class. Refer to documentation.')
+
+        self.mdl_cluster = mdl
+        n_clusters = self.mdl_cluster.get_params()['n_clusters']
+        if decomposed:
+            print('Clustering with the first ' + str(pca_comps) + ' PCA components.')
+            mdl_pca = PCA(n_components=pca_comps)
+            comps = mdl_pca.fit_transform(self.flatten())
+            self.mdl_cluster.fit(comps)
+            labels = self.mdl_cluster.labels_.reshape(self.data.shape[:-1])
+            
+            try:
+                specs = mdl_pca.inverse_transform(self.mdl_cluster.cluster_centers_)
+            except AttributeError:
+                specs = np.zeros((n_clusters, self.data.shape[-1]))
+                lbls = labels + 1
+                for cluster_number in range(n_clusters):
+                    msk = np.zeros(self.data.shape)
+                    for spectral_point in range(self.data.shape[-1]):
+                        msk[..., spectral_point] = np.multiply(
+                            self.data[..., spectral_point], 
+                            np.where(lbls==cluster_number+1, lbls, 0)/(cluster_number+1)
+                        )
+                    
+                    if self.ndim == 3:
+                        specs[cluster_number, :] = np.squeeze(np.mean(np.mean(msk, 1), 0))
+                    elif self.ndim == 4:
+                        specs[cluster_number, :] = np.squeeze(np.mean(np.mean(np.mean(msk, 2), 1), 0))
+                # specs = mdl_pca.inverse_transform(specs.transpose())
+                # TODO Check whether you are getting the correct PCA reduced clustering here
+
+        else:
+            self.mdl_cluster.fit(self.flatten())
+            labels = self.mdl_cluster.labels_.reshape(self.data.shape[:-1])
+
+            try:
+                specs = self.mdl_cluster.cluster_centers_
+            except AttributeError:
+                specs = np.zeros((n_clusters, self.data.shape[-1]))
+                lbls = labels + 1
+                for cluster_number in range(n_clusters):
+                    msk = np.zeros(self.data.shape)
+                    for spectral_point in range(self.data.shape[-1]):
+                        msk[..., spectral_point] = np.multiply(
+                            self.data[..., spectral_point], 
+                            np.where(lbls==cluster_number+1, lbls, 0)/(cluster_number+1)
+                        )
+                    
+                    if self.ndim == 3:
+                        specs[cluster_number, :] = np.squeeze(np.mean(np.mean(msk, 1), 0))
+                    elif self.ndim == 4:
+                        specs[cluster_number, :] = np.squeeze(np.mean(np.mean(np.mean(msk, 2), 1), 0))
+
+        return labels, specs
 
 class _AccessImage:
     def __init__(self, X, shape, n_dimension):

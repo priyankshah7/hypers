@@ -47,8 +47,8 @@ be v0.1.0**
 #### Hyperspectral data
 Whilst this package is designed to work with any type of hyperspectral data, of the form: 
 
-$X[x, y, spectrum]$ or 
-$X[x, y, z, spectrum]$
+**X[x, y, spectrum]** or
+**X[x, y, z, spectrum]**
 
 some of the features are particularly useful for vibrational-scattering related hyperspectral data (e.g. Raman micro-spectroscopy), e.g. the spectral component of the hyperspectral viewer (see figure above).
 

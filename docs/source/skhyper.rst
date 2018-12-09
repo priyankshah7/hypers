@@ -6,8 +6,6 @@ Subpackages
 
 .. toctree::
 
-    skhyper.cluster
-    skhyper.decomposition
     skhyper.process
     skhyper.view
 

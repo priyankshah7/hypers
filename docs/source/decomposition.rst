@@ -16,6 +16,7 @@ At the moment, the following classes from ``scikit-learn`` are supported:
 - LatentDirichletAllocation
 
 .. code-block:: python
+
     import numpy as np 
     from sklearn.decomposition import PCA
 

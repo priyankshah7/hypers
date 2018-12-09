@@ -44,9 +44,6 @@ Machine learning for hyperspectral data in Python
    source/install
    source/process/index
    source/hypview/index
-   source/cluster/index
-   source/decomposition/index
-
 
 
 .. toctree::

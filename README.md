@@ -71,51 +71,37 @@ Features implemented in scikit-hyper include:
 	
 ## Examples
 
-### Hyperspectral denoising
+### Hyperspectral dimensionality reduction and clustering
 ```python
 import numpy as np
+from sklearn.decomposition import PCA
+from sklearn.cluster import KMeans
 from skhyper.process import Process
-from skhyper.decomposition import PCA
 
 # Generating a random 4-d dataset and creating a Process instance
+# The test dataset here has spatial dimensions (x=200, y=200, z=10) and spectral dimension (s=1024)
 test_data = np.random.rand(200, 200, 10, 1024)
 X = Process(test_data, scale=True)
 
-# To denoise the dataset using PCA:
-# First we fit the PCA model to the data, and then fit_transform()
-# All the usual scikit-learn parameters are available
-mdl = PCA()
-mdl.fit_transform(X)
+# Using Principal Components Analysis to reduce to first 5 components
+# The variables ims, spcs are arrays of the first 5 principal components for the images, spectra respectively
+ims, spcs = X.decompose(
+    mdl=PCA(n_components=5)
+)
 
-# The scree plot can be accessed by:
-mdl.plot_statistics()
+# Clustering using K-means (with and without applying PCA first)
+# The cluster method will return the labeled image array and the spectrum for each cluster
+lbls_nodecompose, spcs_nodecompose = X.cluster(
+    mdl=KMeans(n_clusters=3),
+    decomposed=False
+)
 
-# Choosing the number of components to keep, we project back 
-# into the original space:
-Xd = mdl.inverse_transform(n_components=200)
-
-# Xd is another instance of Process, which contains the new
-# denoised hyperspectral data
-```
-
-### Hyperspectral clustering
-```python
-import numpy as np
-from skhyper.process import Process
-from skhyper.cluster import KMeans
-
-# Generating a random 3-d dataset and creating a Process instance
-test_data = np.random.rand(200, 200, 1024)
-X = Process(test_data, scale=True)
-
-# Again, all the usual scikit-learn parameters are available
-mdl = KMeans(n_clusters=4)
-mdl.fit(X)
-
-# The outputs are:
-# mdl.labels_  (a 2d/3d image with n_clusters number of labels)
-# mdl.image_components_  (a list of n_clusters number of image arrays)
-# mdl.spec_components_  (a list of n_clusters number of spectral arrays)
+# Clustering on only the first 5 principal components
+lbls_decomposed, spcs_decomposed = X.cluster(
+    mdl=KMeans(n_clusters=3),
+    decomposed=True,
+    pca_comps=5
+)
 ```
 
 ## Documentation

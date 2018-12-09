@@ -44,6 +44,15 @@ scikit-hyper also provides two features which aim to make exploratory analysis e
 **Please note that this package is currently in pre-release. The first general release will 
 be v0.1.0**
 
+#### Hyperspectral data
+Whilst this package is designed to work with any type of hyperspectral data, of the form: 
+
+$X[x, y, spectrum]$ or 
+$X[x, y, z, spectrum]$
+
+some of the features are particularly useful for vibrational-scattering related hyperspectral data (e.g. Raman micro-spectroscopy), e.g. the spectral component of the hyperspectral viewer (see figure above).
+
+
 ## Installation
 To install using `pip`:
 ```
@@ -63,15 +72,16 @@ The following packages are required:
 ## Features
 Features implemented in scikit-hyper include:
 
-+ [Clustering](http://scikit-hyper.readthedocs.io/en/latest/source/cluster/index.html) (KMeans)
++ [Clustering](http://scikit-hyper.readthedocs.io/en/latest/source/cluster/index.html) (e.g. KMeans, Spectral clustering, Hierarchical clustering)
 + [Decomposition](http://scikit-hyper.readthedocs.io/en/latest/source/decomposition/index.html) (e.g. PCA, ICA, NMF)
 + [Hyperspectral viewer](http://scikit-hyper.readthedocs.io/en/latest/source/hypview/index.html)
-+ [Tools](http://scikit-hyper.readthedocs.io/en/latest/source/tools/index.html) (smoothing, normalization)
 
 	
 ## Examples
 
 ### Hyperspectral dimensionality reduction and clustering
+Below is a quick example of using some of the features of the package on a randomized hyperspectral array. For an example using the IndianPines dataset, see the Jupyter notebook in the examples/ directory.
+
 ```python
 import numpy as np
 from sklearn.decomposition import PCA
@@ -106,9 +116,6 @@ lbls_decomposed, spcs_decomposed = X.cluster(
 
 ## Documentation
 The docs are hosted [here](http://scikit-hyper.readthedocs.io/en/latest/?badge=latest).
-
-The package API includes documentation from the [scikit-learn](https://github.com/scikit-learn/scikit-learn) 
-modules where the particular module is wrapped around the scikit-learn version.
 
 ## License
 scikit-hyper is licensed under the OSI approved BSD 3-Clause License.

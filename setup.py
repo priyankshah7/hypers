@@ -11,9 +11,7 @@ setup(
     packages=['skhyper',
               'skhyper.view',
               'skhyper.view._form',
-              'skhyper.cluster',
-              'skhyper.process',
-              'skhyper.decomposition'],
+              'skhyper.process'],
 
     python_requires='>=3.5.0',
 

@@ -6,8 +6,6 @@ import warnings
 import numpy as np
 from scipy.signal import savgol_filter as _savgol
 from scipy.ndimage.filters import gaussian_filter as _gaussian_filt
-
-from skhyper.view import hsiPlot
 from sklearn.decomposition import (
     PCA, FastICA, IncrementalPCA, TruncatedSVD, DictionaryLearning, MiniBatchDictionaryLearning,
     FactorAnalysis, NMF, LatentDirichletAllocation
@@ -16,6 +14,11 @@ from sklearn.cluster import (
     KMeans, AffinityPropagation, MeanShift, SpectralClustering, AgglomerativeClustering,
     DBSCAN, Birch
 )
+
+from skhyper.tools._normalization import _data_normalization
+from skhyper.tools._scale import _data_scale
+from skhyper.tools._smoothen import _data_smoothen
+from skhyper.view import hsiPlot
 
 DECOMPOSE_TYPES = (
     PCA,
@@ -139,8 +142,8 @@ class Process:
         """
         # Perform data operations
         self._data_checks()
-        if self._scale: self._data_scale()
-        if self._normalize: self._data_normalization()
+        if self._scale: _data_scale(self)
+        if self._normalize: _data_normalization(self)
         self._data_mean()
         self._data_access()
 
@@ -185,35 +188,6 @@ class Process:
             self.mean_image = np.squeeze(np.mean(self.data, 3))
             self.mean_spectrum = np.squeeze(np.mean(np.mean(np.mean(self.data, 2), 1), 0))
 
-    def _data_scale(self):
-        """ Scale the hyperspectral data
-
-        Scales the hyperspectral data to between 0 and 1 for all positive data or
-        -1 and 1 for positive and negative data.
-        """
-        self.data = self.data / np.max(np.abs(self.data))
-
-    def _data_normalization(self):
-        """Normalize the hyperspectral data
-
-        Normalizes the hyperspectral data by subtracting the mean spectrum of the
-        data from each pixel.
-        """
-        if self.ndim == 3:
-            mean_spectrum = np.squeeze(np.mean(np.mean(self.data, 1), 0))
-
-            for xpix in range(self.shape[0]):
-                for ypix in range(self.shape[1]):
-                    self.data[xpix, ypix, :] -= mean_spectrum
-
-        elif self.ndim == 4:
-            mean_spectrum = np.squeeze(np.mean(np.mean(np.mean(self.data, 2), 1), 0))
-
-            for xpix in range(self.shape[0]):
-                for ypix in range(self.shape[1]):
-                    for zpix in range(self.shape[2]):
-                        self.data[xpix, ypix, zpix, :] -= mean_spectrum
-
     def _data_access(self):
         self.image = _AccessImage(self.data, self.shape, self.ndim)
         self.spectrum = _AccessSpectrum(self.data, self.shape, self.ndim)
@@ -226,30 +200,7 @@ class Process:
         hsiPlot(self)
 
     def smoothen(self, **kwargs):
-        if self.smoothing == 'savitzky_golay':
-            if self.ndim == 3:
-                for xpix in range(self.shape[0]):
-                    for ypix in range(self.shape[1]):
-                        self.data[xpix, ypix, :] = _savgol(self.data[xpix, ypix, :], **kwargs)
-
-            elif self.ndim == 4:
-                for xpix in range(self.shape[0]):
-                    for ypix in range(self.shape[1]):
-                        for zpix in range(self.shape[2]):
-                            self.data[xpix, ypix, zpix, :] = _savgol(self.data[xpix, ypix, :], **kwargs)
-
-        elif self.smoothing == 'gaussian_filter':
-            if self.ndim == 3:
-                for xpix in range(self.shape[0]):
-                    for ypix in range(self.shape[1]):
-                        self.data[xpix, ypix, :] = _gaussian_filt(self.data[xpix, ypix, :], **kwargs)
-
-            elif self.ndim == 4:
-                for xpix in range(self.shape[0]):
-                    for ypix in range(self.shape[1]):
-                        for zpix in range(self.shape[2]):
-                            self.data[xpix, ypix, zpix, :] = _gaussian_filt(self.data[xpix, ypix, :], **kwargs)
-
+        _data_smoothen(self, **kwargs)
         self.update()
 
     def flatten(self):

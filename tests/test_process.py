@@ -1,16 +1,44 @@
 import pytest
 import numpy as np
 from sklearn.datasets import make_blobs
-from sklearn.decomposition import *
-from sklearn.cluster import *
-
 from skhyper.process import Process
+from sklearn.decomposition import (
+    PCA, FastICA, IncrementalPCA, TruncatedSVD, DictionaryLearning, MiniBatchDictionaryLearning,
+    FactorAnalysis, NMF, LatentDirichletAllocation
+)
+from sklearn.cluster import (
+    KMeans, AffinityPropagation, MeanShift, SpectralClustering, AgglomerativeClustering,
+    DBSCAN, Birch
+)
+
+DECOMPOSE_TYPES = (
+    PCA,
+    FastICA,
+    #KernelPCA,
+    IncrementalPCA,
+    TruncatedSVD,
+    DictionaryLearning,
+    MiniBatchDictionaryLearning,
+    FactorAnalysis,
+    NMF,
+    LatentDirichletAllocation
+)
+
+CLUSTER_TYPES = (
+    KMeans,
+    # AffinityPropagation,
+    # MeanShift,
+    SpectralClustering,
+    AgglomerativeClustering,
+    # DBSCAN,
+    # Birch
+)
 
 
 class TestProcess:
     def setup(self):
-        data_3d, label_3d = make_blobs(n_samples=64, n_features=32, centers=3)
-        data_4d, label_4d = make_blobs(n_samples=128, n_features=32, centers=3)
+        data_3d, _ = make_blobs(n_samples=64, n_features=32, centers=3)
+        data_4d, _ = make_blobs(n_samples=128, n_features=32, centers=3)
 
         data_3d = np.abs(np.reshape(data_3d, (8, 8, 32)))
         data_4d = np.abs(np.reshape(data_4d, (8, 8, 2, 32)))
@@ -19,20 +47,7 @@ class TestProcess:
         self.X_4d = Process(data_4d)
 
     def test_decompose(self):
-        sk_decompose_types = (
-            PCA,
-            FastICA,
-            #KernelPCA,
-            IncrementalPCA,
-            TruncatedSVD,
-            DictionaryLearning,
-            MiniBatchDictionaryLearning,
-            FactorAnalysis,
-            NMF,
-            LatentDirichletAllocation
-        )
-
-        for decomp_type in sk_decompose_types:
+        for decomp_type in DECOMPOSE_TYPES:
             ims_3d, spcs3d = self.X_3d.decompose(mdl=decomp_type(n_components=2))
             ims_4d, spcs4d = self.X_4d.decompose(mdl=decomp_type(n_components=2))
 
@@ -42,17 +57,7 @@ class TestProcess:
             assert spcs4d.shape == (32, 2)
 
     def test_cluster(self):
-        sk_cluster_types = (
-            KMeans,
-            # AffinityPropagation,
-            # MeanShift,
-            SpectralClustering,
-            AgglomerativeClustering,
-            # DBSCAN,
-            # Birch
-        )
-
-        for cluster_type in sk_cluster_types:
+        for cluster_type in CLUSTER_TYPES:
             print(cluster_type.__name__)
             lbls_3d, spcs3d = self.X_3d.cluster(
                 mdl=cluster_type(n_clusters=2), decomposed=False

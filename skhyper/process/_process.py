@@ -8,8 +8,37 @@ from scipy.signal import savgol_filter as _savgol
 from scipy.ndimage.filters import gaussian_filter as _gaussian_filt
 
 from skhyper.view import hsiPlot
-from sklearn.decomposition import *
-from sklearn.cluster import *
+from sklearn.decomposition import (
+    PCA, FastICA, IncrementalPCA, TruncatedSVD, DictionaryLearning, MiniBatchDictionaryLearning,
+    FactorAnalysis, NMF, LatentDirichletAllocation
+)
+from sklearn.cluster import (
+    KMeans, AffinityPropagation, MeanShift, SpectralClustering, AgglomerativeClustering,
+    DBSCAN, Birch
+)
+
+DECOMPOSE_TYPES = (
+    PCA,
+    FastICA,
+    #KernelPCA,
+    IncrementalPCA,
+    TruncatedSVD,
+    DictionaryLearning,
+    MiniBatchDictionaryLearning,
+    FactorAnalysis,
+    NMF,
+    LatentDirichletAllocation
+)
+
+CLUSTER_TYPES = (
+    KMeans,
+    # AffinityPropagation,
+    # MeanShift,
+    SpectralClustering,
+    AgglomerativeClustering,
+    # DBSCAN,
+    # Birch
+)
 
 
 class Process:
@@ -252,21 +281,8 @@ class Process:
 
         return scree
 
-    def decompose(self, mdl):
-        sk_decompose_types = (
-            PCA,
-            FastICA,
-            #KernelPCA,
-            IncrementalPCA,
-            TruncatedSVD,
-            DictionaryLearning,
-            MiniBatchDictionaryLearning,
-            FactorAnalysis,
-            NMF,
-            LatentDirichletAllocation
-        )
-        
-        if type(mdl) not in sk_decompose_types:
+    def decompose(self, mdl):        
+        if type(mdl) not in DECOMPOSE_TYPES:
             raise TypeError('Must pass a sklearn decomposition class. Refer to documentation.')
 
         self.mdl_decompose = mdl
@@ -277,17 +293,7 @@ class Process:
         return images, specs
 
     def cluster(self, mdl, decomposed=False, pca_comps=4):
-        sk_cluster_types = (
-            KMeans,
-            # AffinityPropagation,
-            # MeanShift,
-            SpectralClustering,
-            AgglomerativeClustering,
-            # DBSCAN,
-            # Birch
-        )
-
-        if type(mdl) not in sk_cluster_types:
+        if type(mdl) not in CLUSTER_TYPES:
             raise TypeError('Must pass a sklearn cluster class. Refer to documentation.')
 
         self.mdl_cluster = mdl

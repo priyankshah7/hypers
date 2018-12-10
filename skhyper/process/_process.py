@@ -3,6 +3,7 @@ Stores data in a custom class and generates attributes for other modules
 """
 import warnings
 import numpy as np
+from sklearn.decomposition import PCA
 
 from skhyper.tools._normalization import _data_normalization
 from skhyper.tools._scale import _data_scale

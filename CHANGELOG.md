@@ -2,7 +2,8 @@
 
 ## Version 0.0.7 (pre-release)
 #### Features
-+ Removing all classification techniques (package will specialize solely on decomposition/clustering)
++ Removed skhyper wrappers for scikit-learn classes. Added new decompose and cluster methods to the Process class to which a scikit-learn class is passed.
++ Removed skhyper wrappers for classification. This will be added again in a similar vein to the above decompose and cluster methods in the future.
 
 ## Version 0.0.6 (pre-release)
 #### Features

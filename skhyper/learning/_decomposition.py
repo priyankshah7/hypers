@@ -28,3 +28,20 @@ def _data_decomposition(X, mdl):
     specs = X.mdl_decompose.components_.transpose()
 
     return images, specs
+
+
+def _data_scree(X):
+    """Returns the array for the scree plot
+
+    Returns the scree plot from `PCA` as an array.
+
+    Returns
+    -------
+    scree : array, shape (n_features,)
+
+    """
+    mdl = PCA()
+    mdl.fit_transform(X.flatten())
+    scree = mdl.explained_variance_ratio_
+
+    return scree

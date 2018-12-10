@@ -3,13 +3,12 @@ Stores data in a custom class and generates attributes for other modules
 """
 import warnings
 import numpy as np
-from sklearn.decomposition import PCA
 
 from skhyper.tools._normalization import _data_normalization
 from skhyper.tools._scale import _data_scale
 from skhyper.tools._smoothen import _data_smoothen
 from skhyper.learning._cluster import _data_cluster
-from skhyper.learning._decomposition import _data_decomposition
+from skhyper.learning._decomposition import _data_decomposition, _data_scree
 from skhyper.view import hsiPlot
 
 
@@ -186,20 +185,7 @@ class Process:
         return self._data_flatten()
 
     def scree(self):
-        """Returns the array for the scree plot
-
-        Returns the scree plot from `PCA` as an array.
-
-        Returns
-        -------
-        scree : array, shape (n_features,)
-
-        """
-        mdl = PCA()
-        mdl.fit_transform(self.flatten())
-        scree = mdl.explained_variance_ratio_
-
-        return scree
+        return _data_scree(self)
 
     def decompose(self, mdl):        
         return _data_decomposition(self, mdl)

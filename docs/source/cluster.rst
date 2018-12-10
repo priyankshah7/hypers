@@ -13,6 +13,7 @@ Clustering can be performed on both the data stored in the Process object itself
 set of principal components of the dataset (as demonstrated below).
 
 .. code-block:: python
+
     import numpy as np
     from sklearn.cluster import KMeans
     from sklearn.decomposition import PCA 

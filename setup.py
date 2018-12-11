@@ -6,7 +6,7 @@ with open('README.md') as f:
 setup(
     name='scikit-hyper',
 
-    version='0.0.8-beta.2',
+    version='0.0.8-beta.3',
 
     packages=['skhyper',
               'skhyper.view',
@@ -19,7 +19,7 @@ setup(
 
     url='https://github.com/priyankshah7/scikit-hyper',
 
-    download_url='https://github.com/priyankshah7/scikit-hyper/archive/v0.0.8-beta.2.tar.gz',
+    download_url='https://github.com/priyankshah7/scikit-hyper/archive/v0.0.8-beta.3.tar.gz',
 
     license='BSD 3-Clause',
 

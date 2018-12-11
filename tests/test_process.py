@@ -43,13 +43,7 @@ class TestProcess:
         self.data_3d = np.abs(np.reshape(data_3d, (8, 8, 32)))
         self.data_4d = np.abs(np.reshape(data_4d, (8, 8, 2, 32)))
 
-    def test_normalize(self):
-        _ = Process(self.data_3d, normalize=True)
-        _ = Process(self.data_4d, normalize=True)
-
-    def test_scale(self):
-        _ = Process(self.data_3d, scale=True)
-        _ = Process(self.data_4d, scale=True)
+    # TODO Added tests for preprocessing
 
     def test_smoothing(self):
         X_3d = Process(self.data_3d)

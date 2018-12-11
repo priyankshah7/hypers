@@ -6,7 +6,7 @@ with open('README.md') as f:
 setup(
     name='scikit-hyper',
 
-    version='0.0.7',
+    version='0.0.8-beta.2',
 
     packages=['skhyper',
               'skhyper.view',
@@ -17,7 +17,7 @@ setup(
 
     url='https://github.com/priyankshah7/scikit-hyper',
 
-    download_url='https://github.com/priyankshah7/scikit-hyper/archive/v0.0.7.tar.gz',
+    download_url='https://github.com/priyankshah7/scikit-hyper/archive/v0.0.8-beta.2.tar.gz',
 
     license='BSD 3-Clause',
 
@@ -40,9 +40,7 @@ setup(
 
     install_requires=['numpy>=1.14.2',
                       'scipy>=1.1.0',
-                      'matplotlib>=2.2.2',
                       'pyqt5>=5.10.1',
                       'pyqtgraph>=0.10.0',
-                      'scikit-learn>=0.19.1',
-                      'seaborn>=0.8.0']
+                      'scikit-learn>=0.20.1']
 )

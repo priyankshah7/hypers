@@ -10,6 +10,10 @@ from sklearn.cluster import (
     KMeans, AffinityPropagation, MeanShift, SpectralClustering, AgglomerativeClustering,
     DBSCAN, Birch
 )
+from sklearn.preprocessing import (
+    MaxAbsScaler, MinMaxScaler, PowerTransformer, QuantileTransformer, RobustScaler,
+    StandardScaler
+)
 
 DECOMPOSE_TYPES = (
     PCA,
@@ -34,6 +38,14 @@ CLUSTER_TYPES = (
     # Birch
 )
 
+PREPROCESSING_TYPES = (
+    MaxAbsScaler,
+    MinMaxScaler,
+    PowerTransformer,
+    QuantileTransformer,
+    RobustScaler,
+    StandardScaler
+)
 
 class TestProcess:
     def setup(self):
@@ -43,7 +55,18 @@ class TestProcess:
         self.data_3d = np.abs(np.reshape(data_3d, (8, 8, 32)))
         self.data_4d = np.abs(np.reshape(data_4d, (8, 8, 2, 32)))
 
-    # TODO Added tests for preprocessing
+    def test_preprocessing(self):
+        X_3d = Process(self.data_3d)
+        X_4d = Process(self.data_4d)
+
+        for preprocess_type in PREPROCESSING_TYPES:
+            X_3d.preprocess(
+                mdl=preprocess_type()
+            )
+
+            X_4d.preprocess(
+                mdl=preprocess_type()
+            )
 
     def test_smoothing(self):
         X_3d = Process(self.data_3d)
@@ -67,8 +90,12 @@ class TestProcess:
         X_4d = Process(self.data_4d)
 
         for decomp_type in DECOMPOSE_TYPES:
-            ims_3d, spcs3d = X_3d.decompose(mdl=decomp_type(n_components=2))
-            ims_4d, spcs4d = X_4d.decompose(mdl=decomp_type(n_components=2))
+            ims_3d, spcs3d = X_3d.decompose(
+                mdl=decomp_type(n_components=2)
+            )
+            ims_4d, spcs4d = X_4d.decompose(
+                mdl=decomp_type(n_components=2)
+            )
 
             assert ims_3d.shape == (8, 8, 2)
             assert spcs3d.shape == (32, 2)

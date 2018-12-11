@@ -4,8 +4,7 @@ Stores data in a custom class and generates attributes for other modules
 import warnings
 import numpy as np
 
-from skhyper.tools._normalization import _data_normalization
-from skhyper.tools._scale import _data_scale
+from skhyper.process._preprocessing import _data_preprocessing
 from skhyper.tools._smoothen import _data_smoothen
 from skhyper.learning._cluster import _data_cluster
 from skhyper.learning._decomposition import _data_decomposition, _data_scree
@@ -73,11 +72,9 @@ class Process:
     >>> X.n_samples
     100000
     """
-    def __init__(self, X, scale=True, normalize=False):
+    def __init__(self, X):
         # TODO Store in numpy memmap
         self.data = X
-        self._scale = scale
-        self._normalize = normalize
 
         # Data properties
         self.shape = None
@@ -93,6 +90,7 @@ class Process:
         self.mean_spectrum = None
 
         # sklearn
+        self.mdl_preprocess = None
         self.mdl_decompose = None
         self.mdl_cluster = None
 
@@ -110,8 +108,6 @@ class Process:
         """
         # Perform data operations
         self._data_checks()
-        if self._scale: _data_scale(self)
-        if self._normalize: _data_normalization(self)
         self._data_mean()
         self._data_access()
 
@@ -186,6 +182,9 @@ class Process:
 
     def scree(self):
         return _data_scree(self)
+
+    def preprocess(self, mdl):
+        _data_preprocessing(self, mdl)
 
     def decompose(self, mdl):        
         return _data_decomposition(self, mdl)

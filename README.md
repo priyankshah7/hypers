@@ -64,8 +64,6 @@ The following packages are required:
 + numpy
 + scipy
 + scikit-learn
-+ matplotlib
-+ seaborn
 + PyQt5
 + pyqtgraph
 

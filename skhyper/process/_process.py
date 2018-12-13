@@ -164,6 +164,35 @@ class Process:
         hsiPlot(self)
 
     def smoothen(self, **kwargs):
+        """ Data smoothening
+        
+        Smoothens all spectra in the dataset using one of the following:
+
+        - Savitzky-Golay filter (scipy.signal.savgol_filter)
+        - Gaussian filter (scipy.ndimage.filters.gaussian_filter)
+
+        Savitzky-Golay is chosen by default. To choose the Gaussian filter, 
+        set `smoothing='gaussian_filter'`. e.g.
+
+        >>> import numpy as np
+        >>> from skhyper.process import Process
+        >>> data = np.random.rand(50, 50, 100)
+        >>> X = Process(data)
+        >>> X.smoothing
+        'savitzky_golay'
+        >>> X.smoothing = 'gaussian_filter'
+        >>> X.smoothen()
+
+        Parameters
+        ----------
+        **kwargs : Savitsky-Golay or Gaussian filter parameters
+
+        Returns
+        -------
+        None
+        
+        """
+
         _data_smoothen(self, **kwargs)
         self.update()
 
@@ -181,16 +210,128 @@ class Process:
         return self._data_flatten()
 
     def scree(self):
+        """ Scree plot
+        
+        Returns the scree plot by applying PCA. Useful to understand the contribution
+        of each principal component to the total variance in the dataset.
+        
+        Returns
+        -------
+        scree : np.ndarray (n_features,)
+        """
+
         return _data_scree(self)
 
     def preprocess(self, mdl):
+        """ Preprocess stored dataset
+        
+        Preprocess the stored dataset using the following preprocessing classes from 
+        scikit-learn.
+
+        - MaxAbsScaler
+        - MinMaxScaler
+        - PowerTransformer
+        - QuantileTransformer
+        - RobustScaler
+        - StandardScaler
+        
+        Parameters
+        ----------
+        mdl : object
+            scikit-learn preprocessing class
+
+        Examples
+        --------
+        >>> import numpy as np
+        >>> from sklearn.preprocessing import StandardScaler
+        >>> from skhyper.process import Process
+
+        >>> data = np.random.rand(50, 50, 100)
+        >>> X = Process(data)
+        >>> X.preprocess(mdl=StandardScaler())
+        """
         _data_preprocessing(self, mdl)
 
-    def decompose(self, mdl):        
+    def decompose(self, mdl):
+        """ Dimensionality reduction
+        
+        Apply one of the following scikit-learn dimensionality reduction techniques to the
+        stored dataset:
+
+        - PCA
+        - FastICA
+        - IncrementalPCA
+        - TruncatedSVD
+        - DictionaryLearning
+        - MiniBatchDictionaryLearning
+        - FactorAnalysis
+        - NMF
+        - LatentDirichletAllocation
+        
+        Parameters
+        ----------
+        mdl : object
+            scikit-learn decomposition class
+        
+        Returns
+        -------
+        ims : np.ndarray (n_samples, n_components)
+            Images of the n_components number of principal components
+
+        spcs : np.ndarray (n_features, n_components)
+            Spectra of the n_components number of principal components
+
+        >>> import numpy as np
+        >>> from sklearn.decomposition import PCA
+        >>> from skhyper.process import Process
+
+        >>> data = np.random.rand(50, 50, 100)
+        >>> X = Process(data)
+        >>> ims, spcs = X.decompose(mdl=PCA(n_components=2))
+        """
+
         return _data_decomposition(self, mdl)
 
     def cluster(self, mdl, decomposed=False, pca_comps=4):
+        """ Clustering
+
+        Apply one of the following scikit-learn clustering techniques to the stored dataset:
+
+        - KMeans
+        - SpectralClustering
+        - AgglomerativeClustering
+
+        Parameters
+        ----------
+        mdl : object
+            scikit-learn clustering class
+
+        decomposed : bool
+            If true, clusters on the decomposed components
+
+        pca_comps : int
+            If `decomposed=True`, this specifies the number of principle components to use.
+
+        Returns
+        -------
+        lbls : np.ndarray (x, y, (z))
+            Returns an image array with the pixels labelled according to the cluster assigned
+
+        spcs : np.ndarray (n_clusters, n_features)
+            Returns the spectra of the clusters.
+
+        Examples
+        --------
+        >>> import numpy as np
+        >>> from sklearn.cluster import KMeans
+        >>> from skhyper.process import Process
+
+        >>> data = np.random.rand(50, 50, 100)
+        >>> X = Process(data)
+        >>> lbls, spcs = X.cluster(mdl=KMeans(n_clusters=3))
+        """
         return _data_cluster(self, mdl, decomposed, pca_comps)
+
 
 class _AccessImage:
     def __init__(self, X, shape, n_dimension):

@@ -85,6 +85,24 @@ class TestProcess:
         X_4d.smoothing = 'gaussian_filter'
         X_4d.smoothen(sigma=0.5)
 
+    def test_flatten(self):
+        X_3d = Process(self.data_3d)
+        X_4d = Process(self.data_4d)
+        flattened_3d = X_3d.flatten()
+        flattened_4d = X_4d.flatten()
+
+        assert flattened_3d.shape == (X_3d.shape[0]*X_3d.shape[1], X_3d.shape[2])
+        assert flattened_4d.shape == (X_4d.shape[0]*X_4d.shape[1]*X_4d.shape[2], X_4d.shape[3])
+
+    def test_scree(self):
+        X_3d = Process(self.data_3d)
+        X_4d = Process(self.data_4d)
+        scree_3d = X_3d.scree()
+        scree_4d = X_4d.scree()
+
+        assert scree_3d.shape == (X_3d.shape[-1], )
+        assert scree_4d.shape == (X_4d.shape[-1], )
+
     def test_decompose(self):
         X_3d = Process(self.data_3d)
         X_4d = Process(self.data_4d)

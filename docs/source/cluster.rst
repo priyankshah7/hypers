@@ -21,7 +21,7 @@ set of principal components of the dataset (as demonstrated below).
     from skhyper.process import Process 
 
     tst_data = np.random.rand(50, 50, 1000)
-    X = Process(tst_data, scale=True)
+    X = Process(tst_data)
 
     # Clustering on the stored data first
     lbls_nodecompose, spcs_nodecompose = X.cluster(

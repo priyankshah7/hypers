@@ -15,7 +15,7 @@ Processing data is done using :class:`~skhyper.process.Process`.
     from skhyper.process import Process
 
     test_data = np.random.rand(40, 40, 4, 512)
-    X = Process(test_data, scale=True)
+    X = Process(test_data)
 
 The above example passes a 4D (random) hyperspectral numpy array into the `Process` instance `X`.
 The object `X` has several useful attributes for immediate analysis:
@@ -42,4 +42,8 @@ The object `X` has several useful attributes for immediate analysis:
 
     # To view and interact with the data:
     X.view()                           # Opens a hyperspectral viewer
+
+
+To view the full list of methods and attributes that the Process class contains, see 
+:class:`~skhyper.process.Process`.
 

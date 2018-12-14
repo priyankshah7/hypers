@@ -23,7 +23,7 @@ At the moment, the following classes from ``scikit-learn`` are supported:
     from skhyper.process import Process 
 
     tst_data = np.random.rand(50, 50, 1000)
-    X = Process(tst_data, scale=True)
+    X = Process(tst_data)
 
     # Retrieving images and spectra of the first 10 principal components of the dataset
     ims, spcs = X.decompose(

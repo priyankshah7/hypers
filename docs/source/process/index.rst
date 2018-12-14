@@ -44,6 +44,6 @@ The object `X` has several useful attributes for immediate analysis:
     X.view()                           # Opens a hyperspectral viewer
 
 
-Properties
-----------
+To view the full list of methods and attributes that the Process class contains, see 
+:class:`~skhyper.process.Process`.
 

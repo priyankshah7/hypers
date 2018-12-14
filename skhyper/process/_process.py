@@ -22,12 +22,6 @@ class Process:
             X_3d = [x, y, spectrum] or
             X_4d = [x, y, z, spectrum]
 
-    scale : bool
-        Scales the spectra to either between {0, 1} or {-1, 1} depending on presence of negative values.
-
-    normalize : bool
-        Normalizes each spectra by subtracting the mean spectrum of the hyperspectral dataset.
-
     Attributes
     ----------
     shape : array
@@ -187,10 +181,6 @@ class Process:
         ----------
         **kwargs : Savitsky-Golay or Gaussian filter parameters
 
-        Returns
-        -------
-        None
-        
         """
 
         _data_smoothen(self, **kwargs)
@@ -228,6 +218,10 @@ class Process:
         Preprocess the stored dataset using the following preprocessing classes from 
         scikit-learn.
 
+        NOTE:
+        This applies the preprocessing step to the features (i.e. spectra), not to the spatial 
+        components.
+
         - MaxAbsScaler
         - MinMaxScaler
         - PowerTransformer
@@ -245,7 +239,7 @@ class Process:
         >>> import numpy as np
         >>> from sklearn.preprocessing import StandardScaler
         >>> from skhyper.process import Process
-
+        >>>
         >>> data = np.random.rand(50, 50, 100)
         >>> X = Process(data)
         >>> X.preprocess(mdl=StandardScaler())
@@ -281,10 +275,12 @@ class Process:
         spcs : np.ndarray (n_features, n_components)
             Spectra of the n_components number of principal components
 
+        Examples
+        --------
         >>> import numpy as np
         >>> from sklearn.decomposition import PCA
         >>> from skhyper.process import Process
-
+        >>> 
         >>> data = np.random.rand(50, 50, 100)
         >>> X = Process(data)
         >>> ims, spcs = X.decompose(mdl=PCA(n_components=2))
@@ -325,7 +321,7 @@ class Process:
         >>> import numpy as np
         >>> from sklearn.cluster import KMeans
         >>> from skhyper.process import Process
-
+        >>>
         >>> data = np.random.rand(50, 50, 100)
         >>> X = Process(data)
         >>> lbls, spcs = X.cluster(mdl=KMeans(n_clusters=3))

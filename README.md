@@ -1,9 +1,9 @@
 # hypers
-[![Build Status](https://travis-ci.com/priyankshah7/scikit-hyper.svg?token=xX99xZvXU9jWErT5D1zh&branch=master)](https://travis-ci.com/priyankshah7/scikit-hyper)
-[![Documentation Status](https://readthedocs.org/projects/scikit-hyper/badge/?version=latest)](http://scikit-hyper.readthedocs.io/en/latest/?badge=latest)
+[![Build Status](https://travis-ci.com/priyankshah7/hypers.svg?token=xX99xZvXU9jWErT5D1zh&branch=master)](https://travis-ci.com/priyankshah7/hypers)
+[![Documentation Status](https://readthedocs.org/projects/hypers/badge/?version=latest)](http://hypers.readthedocs.io/en/latest/?badge=latest)
 [![Python Version 3.5](https://img.shields.io/badge/Python-3.5-blue.svg)](https://www.python.org/downloads/)
 [![Python Version 3.6](https://img.shields.io/badge/Python-3.6-blue.svg)](https://www.python.org/downloads/)
-[![PyPI version](https://badge.fury.io/py/scikit-hyper.svg)](https://badge.fury.io/py/scikit-hyper)
+[![PyPI version](https://badge.fury.io/py/hypers.svg)](https://badge.fury.io/py/hypers)
 
 Provides an object model for hyperspectral data.
 
@@ -28,7 +28,7 @@ commonly used tools are built into the object, including a lightweight interacti
 Importantly, the object also interfaces with `scikit-learn` to allow the cluser and decomposition classes (e.g. PCA, 
 ICA, K-means) to be used directly with the object.
 
-+ [Dataset object](http://scikit-hyper.readthedocs.io/en/latest/source/Dataset/index.html) (`hypers.Dataset`)
++ [Dataset object](http://hypers.readthedocs.io/en/latest/source/Dataset/index.html) (`hypers.Dataset`)
     
     This class forms the core of hypers. It provides useful information about the 
     hyperspectral data and makes machine learning on the data simple.
@@ -67,7 +67,7 @@ The following packages are required:
 + pyqtgraph
 
 ## Features
-Features implemented in scikit-hyper include:
+Features implemented in ``hypers`` include:
 
 + [Clustering](http://hypers.readthedocs.io/en/latest/source/cluster/index.html) (e.g. KMeans, Spectral clustering, Hierarchical clustering)
 + [Decomposition](http://hypers.readthedocs.io/en/latest/source/decomposition/index.html) (e.g. PCA, ICA, NMF)

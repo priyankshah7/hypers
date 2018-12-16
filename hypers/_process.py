@@ -52,10 +52,10 @@ class Dataset:
     Examples
     --------
     >>> import numpy as np
-    >>> from skhyper.process import Process
+    >>> import hypers as hp
     >>>
     >>> test_data = np.random.rand(100, 100, 10, 1024)
-    >>> X = Process(test_data, scale=True)
+    >>> X = hp.Dataset(test_data, scale=True)
     >>>
     >>> X.ndim
     4
@@ -169,9 +169,9 @@ class Dataset:
         set `smoothing='gaussian_filter'`. e.g.
 
         >>> import numpy as np
-        >>> from skhyper.process import Process
+        >>> import hypers as hp
         >>> data = np.random.rand(50, 50, 100)
-        >>> X = Process(data)
+        >>> X = hp.Dataset(data)
         >>> X.smoothing
         'savitzky_golay'
         >>> X.smoothing = 'gaussian_filter'
@@ -238,9 +238,9 @@ class Dataset:
         --------
         >>> import numpy as np
         >>> from sklearn.preprocessing import StandardScaler
-        >>> from skhyper.process import Process
+        >>> import hypers as hp
         >>> data = np.random.rand(50, 50, 100)
-        >>> X = Process(data)
+        >>> X = hp.Dataset(data)
         >>> X.preprocess(mdl=StandardScaler())
         """
         _data_preprocessing(self, mdl)
@@ -278,9 +278,9 @@ class Dataset:
         --------
         >>> import numpy as np
         >>> from sklearn.decomposition import PCA
-        >>> from skhyper.process import Process
+        >>> import hypers as hp
         >>> data = np.random.rand(50, 50, 100)
-        >>> X = Process(data)
+        >>> X = hp.Dataset(data)
         >>> ims, spcs = X.decompose(mdl=PCA(n_components=2))
         """
 
@@ -318,9 +318,9 @@ class Dataset:
         --------
         >>> import numpy as np
         >>> from sklearn.cluster import KMeans
-        >>> from skhyper.process import Process
+        >>> import hypers as hp
         >>> data = np.random.rand(50, 50, 100)
-        >>> X = Process(data)
+        >>> X = hp.Dataset(data)
         >>> lbls, spcs = X.cluster(mdl=KMeans(n_clusters=3))
         """
         return _data_cluster(self, mdl, decomposed, pca_comps)

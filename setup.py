@@ -4,22 +4,22 @@ with open('README.md') as f:
     LONG_DESCRIPTION = f.read()
 
 setup(
-    name='scikit-hyper',
+    name='hypers',
 
     version='0.0.8-beta.3',
 
-    packages=['skhyper',
-              'skhyper.view',
-              'skhyper.view._form',
-              'skhyper.process',
-              'skhyper.tools',
-              'skhyper.learning'],
+    packages=['hypers',
+              'hypers.view',
+              'hypers.view._form',
+              'hypers.process',
+              'hypers.tools',
+              'hypers.learning'],
 
     python_requires='>=3.5.0',
 
-    url='https://github.com/priyankshah7/scikit-hyper',
+    url='https://github.com/priyankshah7/hypers',
 
-    download_url='https://github.com/priyankshah7/scikit-hyper/archive/v0.0.8-beta.3.tar.gz',
+    download_url='https://github.com/priyankshah7/hypers/archive/v0.0.8-beta.3.tar.gz',
 
     license='BSD 3-Clause',
 

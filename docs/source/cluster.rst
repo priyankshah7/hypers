@@ -2,7 +2,7 @@
 Clustering
 ==========
 
-Clustering data with ``scikit-hyper`` is done directly on the Process object model. At the 
+Clustering data with ``hypers`` is done directly on the Process object model. At the
 moment, the following clustering classes from ``scikit-learn`` are supported:
 
 - KMeans
@@ -15,13 +15,12 @@ set of principal components of the dataset (as demonstrated below).
 .. code-block:: python
 
     import numpy as np
+    import hypers as hp
     from sklearn.cluster import KMeans
     from sklearn.decomposition import PCA 
 
-    from skhyper.process import Process 
-
     tst_data = np.random.rand(50, 50, 1000)
-    X = Process(tst_data)
+    X = hp.Dataset(tst_data)
 
     # Clustering on the stored data first
     lbls_nodecompose, spcs_nodecompose = X.cluster(

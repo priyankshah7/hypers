@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
 
-from skhyper.process import Process
+import hypers as hp
 
 
 class TestDataTypes:
@@ -11,6 +11,6 @@ class TestDataTypes:
         data_2d = np.random.rand(2, 20)
 
         # data type checks
-        with pytest.raises(TypeError): Process(data_empty_list)
-        with pytest.raises(TypeError): Process(data_1d)
-        with pytest.raises(TypeError): Process(data_2d)
+        with pytest.raises(TypeError): hp.Dataset(data_empty_list)
+        with pytest.raises(TypeError): hp.Dataset(data_1d)
+        with pytest.raises(TypeError): hp.Dataset(data_2d)

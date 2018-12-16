@@ -1,4 +1,12 @@
-# scikit-hyper changelog
+# hypers changelog
+
+## Version 0.0.9 (pre-release)
+#### Features
++ Renamed package to hypers
+
+## Version 0.0.8 (pre-release)
+#### Features
++ Added preprocess method to Process class which takes preprocessing classes from sklearn to preprocess data.
 
 ## Version 0.0.7 (pre-release)
 #### Features

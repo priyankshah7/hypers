@@ -4,7 +4,7 @@ skhyper.process package
 Module contents
 ---------------
 
-.. automodule:: skhyper.process
+.. automodule:: hypers
     :members:
     :undoc-members:
     :show-inheritance:

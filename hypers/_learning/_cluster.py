@@ -7,7 +7,7 @@ from sklearn.cluster import (
 
 CLUSTER_TYPES = (
     KMeans,
-    # AffinityPropagation,
+    AffinityPropagation,
     # MeanShift,
     SpectralClustering,
     AgglomerativeClustering,
@@ -21,12 +21,16 @@ def _data_cluster(X, mdl, decomposed=False, pca_comps=4):
         raise TypeError('Must pass a sklearn cluster class. Refer to documentation.')
 
     X.mdl_cluster = mdl
-    n_clusters = X.mdl_cluster.get_params()['n_clusters']
+    if not type(mdl) == AffinityPropagation:
+        n_clusters = X.mdl_cluster.get_params()['n_clusters']
+    
     if decomposed:
         print('Clustering with the first ' + str(pca_comps) + ' PCA components.')
         mdl_pca = PCA(n_components=pca_comps)
         comps = mdl_pca.fit_transform(X.flatten())
         X.mdl_cluster.fit(comps)
+        if type(X.mdl_cluster) == AffinityPropagation:
+            n_clusters = X.mdl_cluster.cluster_centers_indices.shape[0]
         labels = X.mdl_cluster.labels_.reshape(X.data.shape[:-1])
             
         try:
@@ -46,11 +50,11 @@ def _data_cluster(X, mdl, decomposed=False, pca_comps=4):
                     specs[cluster_number, :] = np.squeeze(np.mean(np.mean(msk, 1), 0))
                 elif X.ndim == 4:
                     specs[cluster_number, :] = np.squeeze(np.mean(np.mean(np.mean(msk, 2), 1), 0))
-            # specs = mdl_pca.inverse_transform(specs.transpose())
-            # TODO Check whether you are getting the correct PCA reduced clustering here
 
     else:
         X.mdl_cluster.fit(X.flatten())
+        if type(X.mdl_cluster) == AffinityPropagation:
+            n_clusters = X.mdl_cluster.cluster_centers_indices.shape[0]
         labels = X.mdl_cluster.labels_.reshape(X.data.shape[:-1])
 
         try:

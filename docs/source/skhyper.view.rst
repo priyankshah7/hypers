@@ -4,7 +4,7 @@ skhyper.view package
 Module contents
 ---------------
 
-.. automodule:: skhyper.view
+.. automodule:: hypers._view
     :members:
     :undoc-members:
     :show-inheritance:

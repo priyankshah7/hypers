@@ -9,7 +9,7 @@ if "%SPHINXBUILD%" == "" (
 )
 set SOURCEDIR=.
 set BUILDDIR=_build
-set SPHINXPROJ=scikit-hyper
+set SPHINXPROJ=hypers
 
 if "%1" == "" goto help
 

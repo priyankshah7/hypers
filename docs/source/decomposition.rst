@@ -2,7 +2,7 @@
 Dimensionality Reduction
 ========================
 
-Dimensionality reduction with ``scikit-hyper`` is done directly on the Process object model. 
+Dimensionality reduction with ``hypers`` is done directly on the Process object model.
 At the moment, the following classes from ``scikit-learn`` are supported:
 
 - PCA
@@ -17,13 +17,12 @@ At the moment, the following classes from ``scikit-learn`` are supported:
 
 .. code-block:: python
 
-    import numpy as np 
+    import numpy as np
+    import hypers as hp
     from sklearn.decomposition import PCA
 
-    from skhyper.process import Process 
-
     tst_data = np.random.rand(50, 50, 1000)
-    X = Process(tst_data)
+    X = hp.Dataset(tst_data)
 
     # Retrieving images and spectra of the first 10 principal components of the dataset
     ims, spcs = X.decompose(

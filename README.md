@@ -1,15 +1,16 @@
-# scikit-hyper
+# hypers
 [![Build Status](https://travis-ci.com/priyankshah7/scikit-hyper.svg?token=xX99xZvXU9jWErT5D1zh&branch=master)](https://travis-ci.com/priyankshah7/scikit-hyper)
 [![Documentation Status](https://readthedocs.org/projects/scikit-hyper/badge/?version=latest)](http://scikit-hyper.readthedocs.io/en/latest/?badge=latest)
 [![Python Version 3.5](https://img.shields.io/badge/Python-3.5-blue.svg)](https://www.python.org/downloads/)
 [![Python Version 3.6](https://img.shields.io/badge/Python-3.6-blue.svg)](https://www.python.org/downloads/)
 [![PyPI version](https://badge.fury.io/py/scikit-hyper.svg)](https://badge.fury.io/py/scikit-hyper)
 
-Machine learning for hyperspectral data in Python
+Provides an object model for hyperspectral data.
 
 + Simple tools for exploratory analysis of hyperspectral data
-+ Built on numpy, scipy, matplotlib and scikit-learn
-+ Simple to use, syntax similar to scikit-learn
++ Interactive hyperspectral viewer built into the object
++ Allows for unsupervised machine learning directly on the object (using scikit-learn)
++ More features coming soon...
 
 <p align="center"><img src="/docs/images/hyperspectral_image.png" width="300"></p>
 
@@ -22,19 +23,17 @@ Machine learning for hyperspectral data in Python
 5. [License](#license)
 
 ## About
-This package builds upon the popular scikit-learn to provide an interface for performing 
-machine learning on hyperspectral data. Many of the commonly used techniques in the 
-analysis of hyperspectral data (e.g. PCA, ICA, clustering) have been 
-implemented and more will be added in the future.
+This package provides an object model for hyperspectral data (e.g. similar to pandas for tabulated data). Many of the 
+commonly used tools are built into the object, including a lightweight interactive gui for visualizing the data. 
+Importantly, the object also interfaces with `scikit-learn` to allow the cluser and decomposition classes (e.g. PCA, 
+ICA, K-means) to be used directly with the object.
 
-scikit-hyper also provides two features which aim to make exploratory analysis easier:
-
-+ [Process object](http://scikit-hyper.readthedocs.io/en/latest/source/process/index.html) (`skhyper.process.Process`)
++ [Dataset object](http://scikit-hyper.readthedocs.io/en/latest/source/Dataset/index.html) (`hypers.Dataset`)
     
-    This class forms the core of scikit-hyper. It provides useful information about the 
+    This class forms the core of hypers. It provides useful information about the 
     hyperspectral data and makes machine learning on the data simple.
     
-+ [Interactive hyperspectral viewer](http://scikit-hyper.readthedocs.io/en/latest/source/hypview/index.html)
++ [Interactive hyperspectral viewer](http://hypers.readthedocs.io/en/latest/source/hypview/index.html)
 
     A lightweight pyqt gui that provides an interative interface to view the 
     hyperspectral data.
@@ -56,7 +55,7 @@ some of the features are particularly useful for vibrational-scattering related 
 ## Installation
 To install using `pip`:
 ```
-pip install scikit-hyper
+pip install hypers
 ```
 
 The following packages are required:
@@ -70,9 +69,9 @@ The following packages are required:
 ## Features
 Features implemented in scikit-hyper include:
 
-+ [Clustering](http://scikit-hyper.readthedocs.io/en/latest/source/cluster/index.html) (e.g. KMeans, Spectral clustering, Hierarchical clustering)
-+ [Decomposition](http://scikit-hyper.readthedocs.io/en/latest/source/decomposition/index.html) (e.g. PCA, ICA, NMF)
-+ [Hyperspectral viewer](http://scikit-hyper.readthedocs.io/en/latest/source/hypview/index.html)
++ [Clustering](http://hypers.readthedocs.io/en/latest/source/cluster/index.html) (e.g. KMeans, Spectral clustering, Hierarchical clustering)
++ [Decomposition](http://hypers.readthedocs.io/en/latest/source/decomposition/index.html) (e.g. PCA, ICA, NMF)
++ [Hyperspectral viewer](http://hypers.readthedocs.io/en/latest/source/hypview/index.html)
 
 	
 ## Examples
@@ -82,14 +81,14 @@ Below is a quick example of using some of the features of the package on a rando
 
 ```python
 import numpy as np
+import hypers as hp
 from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans
-from skhyper.process import Process
 
 # Generating a random 4-d dataset and creating a Process instance
 # The test dataset here has spatial dimensions (x=200, y=200, z=10) and spectral dimension (s=1024)
 test_data = np.random.rand(200, 200, 10, 1024)
-X = Process(test_data, scale=True)
+X = hp.Dataset(test_data)
 
 # Using Principal Components Analysis to reduce to first 5 components
 # The variables ims, spcs are arrays of the first 5 principal components for the images, spectra respectively
@@ -113,7 +112,7 @@ lbls_decomposed, spcs_decomposed = X.cluster(
 ```
 
 ## Documentation
-The docs are hosted [here](http://scikit-hyper.readthedocs.io/en/latest/?badge=latest).
+The docs are hosted [here](http://hypers.readthedocs.io/en/latest/?badge=latest).
 
 ## License
-scikit-hyper is licensed under the OSI approved BSD 3-Clause License.
+hypers is licensed under the OSI approved BSD 3-Clause License.

@@ -2,7 +2,7 @@
 Processing data
 ===============
 
-Processing data is done using :class:`~skhyper.process.Process`.
+Processing data is done using :class:`~hypers.Dataset`.
 
 .. note::
 
@@ -12,13 +12,13 @@ Processing data is done using :class:`~skhyper.process.Process`.
 .. code-block:: python
 
     import numpy as np
-    from skhyper.process import Process
+    import hypers as hp
 
     test_data = np.random.rand(40, 40, 4, 512)
-    X = Process(test_data)
+    X = hp.Dataset(test_data)
 
-The above example passes a 4D (random) hyperspectral numpy array into the `Process` instance `X`.
-The object `X` has several useful attributes for immediate analysis:
+The above example passes a 4D (random) hyperspectral numpy array into the ``hp.Dataset`` instance ``X``.
+The object ``X`` has several useful attributes for immediate analysis:
 
 
 .. code-block:: python
@@ -45,5 +45,4 @@ The object `X` has several useful attributes for immediate analysis:
 
 
 To view the full list of methods and attributes that the Process class contains, see 
-:class:`~skhyper.process.Process`.
-
+:class:`~hypers.Dataset`.

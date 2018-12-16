@@ -5,8 +5,8 @@ from PyQt5.Qt import QPalette, QColor
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QMainWindow, QApplication, QStyleFactory
 
-from skhyper import process
-from skhyper.view._form import mainwindow
+import hypers as hp
+from hypers._view._form import mainwindow
 
 
 class HSIDialog(QMainWindow, mainwindow.Ui_MainWindow):
@@ -27,7 +27,7 @@ class HSIDialog(QMainWindow, mainwindow.Ui_MainWindow):
         self.setupUi(self)
         self.setWindowTitle('View Hyperspectral Data')
 
-        if not isinstance(X, process.Process):
+        if not isinstance(X, hp.Dataset):
             raise TypeError('Data needs to be passed to skhyper.process.Process first')
 
         self._X = X

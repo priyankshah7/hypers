@@ -6,13 +6,12 @@ Subpackages
 
 .. toctree::
 
-    skhyper.process
-    skhyper.view
+    hypers._process
 
 Module contents
 ---------------
 
-.. automodule:: skhyper
+.. automodule:: hypers
     :members:
     :undoc-members:
     :show-inheritance:

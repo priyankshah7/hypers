@@ -6,12 +6,12 @@ To install using ``pip``:
 
 .. code:: python
 
-    pip install scikit-hyper
+    pip install hypers
 
 
 Dependencies
 ------------
-The following packages are required and will be installed when installing ``scikit-hyper``.
+The following packages are required and will be installed when installing ``hypers``.
 
 - numpy
 - scipy

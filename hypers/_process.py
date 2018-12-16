@@ -4,14 +4,14 @@ Stores data in a custom class and generates attributes for other modules
 import warnings
 import numpy as np
 
-from skhyper.process._preprocessing import _data_preprocessing
-from skhyper.tools._smoothen import _data_smoothen
-from skhyper.learning._cluster import _data_cluster
-from skhyper.learning._decomposition import _data_decomposition, _data_scree
-from skhyper.view import hsiPlot
+from hypers._preprocessing import _data_preprocessing
+from hypers._tools._smoothen import _data_smoothen
+from hypers._learning._cluster import _data_cluster
+from hypers._learning._decomposition import _data_decomposition, _data_scree
+from hypers._view import hsiPlot
 
 
-class Process:
+class Dataset:
     """
     Process object to store the hyperspectral array.
 
@@ -239,7 +239,6 @@ class Process:
         >>> import numpy as np
         >>> from sklearn.preprocessing import StandardScaler
         >>> from skhyper.process import Process
-        >>>
         >>> data = np.random.rand(50, 50, 100)
         >>> X = Process(data)
         >>> X.preprocess(mdl=StandardScaler())
@@ -280,7 +279,6 @@ class Process:
         >>> import numpy as np
         >>> from sklearn.decomposition import PCA
         >>> from skhyper.process import Process
-        >>> 
         >>> data = np.random.rand(50, 50, 100)
         >>> X = Process(data)
         >>> ims, spcs = X.decompose(mdl=PCA(n_components=2))
@@ -321,7 +319,6 @@ class Process:
         >>> import numpy as np
         >>> from sklearn.cluster import KMeans
         >>> from skhyper.process import Process
-        >>>
         >>> data = np.random.rand(50, 50, 100)
         >>> X = Process(data)
         >>> lbls, spcs = X.cluster(mdl=KMeans(n_clusters=3))

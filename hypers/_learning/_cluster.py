@@ -1,20 +1,14 @@
 import numpy as np
+import hypers as hp
+from typing import Tuple
 from sklearn.decomposition import PCA
-from sklearn.cluster import (
-    KMeans, AffinityPropagation, MeanShift, SpectralClustering, AgglomerativeClustering, DBSCAN
-)
-
-CLUSTER_TYPES = (
-    KMeans,
-    AffinityPropagation,
-    MeanShift,
-    SpectralClustering,
-    AgglomerativeClustering,
-    DBSCAN
-)
+from sklearn.cluster import AffinityPropagation, MeanShift, DBSCAN
+from hypers._tools._types import ClusterType, CLUSTER_TYPES
 
 
-def _n_clusters(X, mdl):
+def _n_clusters(X: hp.Dataset,
+                mdl: ClusterType) -> int:
+
     if not type(mdl) in (AffinityPropagation, MeanShift, DBSCAN):
         n_clusters = X.mdl_cluster.get_params()['n_clusters']
 
@@ -27,10 +21,18 @@ def _n_clusters(X, mdl):
     elif type(mdl) == DBSCAN:
         n_clusters = X.mdl_cluster.core_sample_indices_.shape[0]
 
+    else:
+        raise TypeError
+
     return n_clusters
 
 
-def _data_cluster(X, mdl, decomposed=False, pca_comps=4):
+def _data_cluster(X: hp.Dataset,
+                  mdl: ClusterType,
+                  decomposed: bool,
+                  pca_comps: int,
+                  return_arrs: bool) -> Tuple[np.ndarray, np.ndarray]:
+
     if type(mdl) not in CLUSTER_TYPES:
         raise TypeError('Must pass a sklearn cluster class. Refer to documentation.')
 
@@ -73,4 +75,8 @@ def _data_cluster(X, mdl, decomposed=False, pca_comps=4):
             elif X.ndim == 4:
                 specs[cluster_number, :] = np.squeeze(np.mean(np.mean(np.mean(msk, 2), 1), 0))
 
-    return labels, specs
+    X._cluster_lbls = labels
+    X._cluster_spcs = specs
+
+    if return_arrs:
+        return labels, specs

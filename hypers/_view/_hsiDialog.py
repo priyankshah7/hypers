@@ -22,7 +22,7 @@ class HSIDialog(QMainWindow, mainwindow.Ui_MainWindow):
     - Call the `view()` method of a Process object
 
     """
-    def __init__(self, X, parent=None):
+    def __init__(self, X: hp.Dataset, parent=None):
         super(HSIDialog, self).__init__(parent)
         self.setupUi(self)
         self.setWindowTitle('View Hyperspectral Data')

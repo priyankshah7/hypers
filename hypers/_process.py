@@ -6,7 +6,6 @@ import numpy as np
 from hypers._preprocessing import _data_preprocessing, _data_scale
 from hypers._tools._smoothen import _data_smoothen
 from hypers._learning._cluster import _data_cluster
-from hypers._learning._mixture import _data_mixture
 from hypers._learning._decomposition import _data_decomposition, _data_scree
 from hypers._tools._update import (
     _data_access, _data_checks, _data_mean

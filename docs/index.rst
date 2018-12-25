@@ -22,7 +22,7 @@ hypers
 .. image:: https://badge.fury.io/py/scikit-hyper.svg
     :target: https://badge.fury.io/py/hypers
 
-Provides an object model for hyperspectral data.
+Provides a data structure model for hyperspectral data.
 
 + Simple tools for exploratory analysis of hyperspectral data
 + Interactive hyperspectral viewer built into the object

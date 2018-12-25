@@ -191,5 +191,8 @@ class Dataset:
 
         return _data_cluster(self, mdl, decomposed, pca_comps, return_arrs)
 
-    def plot(self, kind='both', target='data', data=None, figsize=None):
+    def plot(self, kind: str = 'both',
+             target: str = 'data',
+             figsize: str = None):
+
         return _data_plotting(self, kind=kind, target=target, figsize=figsize)

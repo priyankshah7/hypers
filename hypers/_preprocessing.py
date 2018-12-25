@@ -3,7 +3,7 @@ import hypers as hp
 from hypers._tools._types import PreprocessType, PREPROCESSING_TYPES
 
 
-def _data_preprocessing(X: hp.Dataset,
+def _data_preprocessing(X: 'hp.Dataset',
                         mdl: PreprocessType) -> None:
 
     if type(mdl) not in PREPROCESSING_TYPES:
@@ -16,7 +16,7 @@ def _data_preprocessing(X: hp.Dataset,
     X.update()
 
 
-def _data_scale(X: hp.Dataset) -> None:
+def _data_scale(X: 'hp.Dataset') -> None:
     if X.ndim == 3:
         for _x in range(X.shape[0]):
             for _y in range(X.shape[1]):

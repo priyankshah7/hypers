@@ -5,7 +5,7 @@ from sklearn.decomposition import PCA
 from hypers._tools._types import DecomposeType, DECOMPOSE_TYPES
 
 
-def _data_decomposition(X: hp.Dataset,
+def _data_decomposition(X: 'hp.Dataset',
                         mdl: DecomposeType,
                         return_arrs: bool) -> Tuple[np.ndarray, np.ndarray]:
 
@@ -24,7 +24,7 @@ def _data_decomposition(X: hp.Dataset,
         return images, specs
 
 
-def _data_scree(X: hp.Dataset) -> np.ndarray:
+def _data_scree(X: 'hp.Dataset') -> np.ndarray:
 
     mdl = PCA()
     mdl.fit_transform(X.flatten())

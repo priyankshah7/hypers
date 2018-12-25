@@ -3,7 +3,8 @@ from scipy.signal import savgol_filter
 from scipy.ndimage.filters import gaussian_filter
 
 
-def _data_smoothen(X: hp.Dataset, **kwargs):
+def _data_smoothen(X: 'hp.Dataset', **kwargs):
+
     if X.smoothing == 'savitzky_golay':
         if X.ndim == 3:
             for xpix in range(X.shape[0]):

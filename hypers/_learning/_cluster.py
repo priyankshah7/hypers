@@ -6,7 +6,7 @@ from sklearn.cluster import AffinityPropagation, MeanShift, DBSCAN
 from hypers._tools._types import ClusterType, CLUSTER_TYPES
 
 
-def _n_clusters(X: hp.Dataset,
+def _n_clusters(X: 'hp.Dataset',
                 mdl: ClusterType) -> int:
 
     if not type(mdl) in (AffinityPropagation, MeanShift, DBSCAN):
@@ -27,7 +27,7 @@ def _n_clusters(X: hp.Dataset,
     return n_clusters
 
 
-def _data_cluster(X: hp.Dataset,
+def _data_cluster(X: 'hp.Dataset',
                   mdl: ClusterType,
                   decomposed: bool,
                   pca_comps: int,

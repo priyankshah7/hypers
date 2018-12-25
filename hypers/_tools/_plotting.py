@@ -1,9 +1,14 @@
 import numpy as np
 import hypers as hp
+from typing import Optional
 import matplotlib.pyplot as plt
 
 
-def _data_plotting(X, kind, target, data, figsize):
+def _data_plotting(X: 'hp.Dataset',
+                   kind: str,
+                   target: str,
+                   figsize: Optional[tuple]):
+
     if kind not in ('both', 'im', 'spec'):
         raise TypeError('kind must be assigned to both, im or spec')
 

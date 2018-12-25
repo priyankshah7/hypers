@@ -2,7 +2,7 @@
 Clustering
 ==========
 
-Clustering data with ``hypers`` is done directly on the Process object model. At the
+Clustering data with ``hypers`` is performed directly on the Dataset object. At the
 moment, the following clustering classes from ``scikit-learn`` are supported:
 
 - KMeans

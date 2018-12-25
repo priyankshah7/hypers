@@ -2,7 +2,7 @@
 Dimensionality Reduction
 ========================
 
-Dimensionality reduction with ``hypers`` is done directly on the Process object model.
+Dimensionality reduction with ``hypers`` is performed directly on the Dataset object.
 At the moment, the following classes from ``scikit-learn`` are supported:
 
 - PCA

@@ -17,15 +17,5 @@ def _data_preprocessing(X: 'hp.Dataset',
 
 
 def _data_scale(X: 'hp.Dataset') -> None:
-    if X.ndim == 3:
-        for _x in range(X.shape[0]):
-            for _y in range(X.shape[1]):
-                X.data[_x, _y, :] /= np.max(X.data[_x, _y, :])
-
-    if X.ndim == 4:
-        for _x in range(X.shape[0]):
-            for _y in range(X.shape[1]):
-                for _z in range(X.shape[2]):
-                    X.data[_x, _y, _z, :] /= np.max(X.data[_x, _y, _z, :])
-
-    X.update()
+    for _val in np.ndindex(X.shape[:-1]):
+        X.data[_val] /= np.max(np.abs(X.data[_val]))

@@ -40,6 +40,7 @@ setup(
               'machine learning'],
 
     install_requires=['numpy>=1.14.2',
+                      'matplotlib',
                       'scipy>=1.1.0',
                       'pyqt5>=5.10.1',
                       'pyqtgraph>=0.10.0',

@@ -126,27 +126,25 @@ class Dataset:
     def flatten(self) -> np.ndarray:
         return np.reshape(self.data, (np.prod(self.shape[:-1]), self.shape[-1]))
 
-    def scree(self) -> np.ndarray:
-        return _data_scree(self)
+    def scree(self, plot: bool = False,
+              return_arrs: bool = True) -> np.ndarray:
+        return _data_scree(self, plot=plot, return_arrs=return_arrs)
 
     def preprocess(self, mdl: PreprocessType) -> None:
 
         _data_preprocessing(self, mdl)
 
     def decompose(self, mdl: DecomposeType,
+                  plot: bool = False,
                   return_arrs: bool = True) -> Tuple[np.ndarray, np.ndarray]:
 
-        return _data_decomposition(self, mdl, return_arrs)
+        return _data_decomposition(self, mdl, return_arrs=return_arrs, plot=plot)
 
     def cluster(self, mdl: ClusterType,
                 decomposed: bool = False,
                 pca_comps: int = 4,
+                plot: bool = False,
                 return_arrs: bool = True) -> Tuple[np.ndarray, np.ndarray]:
 
-        return _data_cluster(self, mdl, decomposed, pca_comps, return_arrs)
+        return _data_cluster(self, mdl, decomposed=decomposed, pca_comps=pca_comps, plot=plot, return_arrs=return_arrs)
 
-    def plot(self, kind: str = 'both',
-             target: str = 'data',
-             figsize: str = None):
-
-        return _data_plotting(self, kind=kind, target=target, figsize=figsize)

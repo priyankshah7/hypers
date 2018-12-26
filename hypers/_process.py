@@ -3,22 +3,11 @@ Stores data in a custom class and generates attributes for other modules
 """
 import numpy as np
 from typing import Tuple, Union
-from sklearn.preprocessing import (
-    MaxAbsScaler, MinMaxScaler, PowerTransformer, QuantileTransformer, RobustScaler,
-    StandardScaler, Normalizer
-)
-from sklearn.decomposition import (
-    PCA, FastICA, IncrementalPCA, TruncatedSVD, DictionaryLearning, MiniBatchDictionaryLearning,
-    FactorAnalysis, NMF, LatentDirichletAllocation
-)
-from sklearn.cluster import (
-    KMeans, AffinityPropagation, MeanShift, SpectralClustering, AgglomerativeClustering, DBSCAN
-)
+
 from hypers._preprocessing import _data_preprocessing, _data_scale
 from hypers._tools._smoothen import _data_smoothen
 from hypers._learning._cluster import _data_cluster
 from hypers._learning._decomposition import _data_decomposition, _data_scree
-from hypers._tools._plotting import _data_plotting
 from hypers._tools._types import PreprocessType, ClusterType, DecomposeType
 from hypers._tools._update import (
     _data_access, _data_checks, _data_mean
@@ -27,44 +16,10 @@ from hypers._view import hsiPlot
 
 
 class Dataset:
-    """Dataset structure to store the hyperspectral array.
-
-    Parameters
-    ----------
-    X : array, dimensions (3 or 4)
-        The hyperspectral data. It should be 3- or 4-dimensional in the form:
-            X_3d = [x, y, spectrum] or
-            X_4d = [x, y, z, spectrum]
-
-    Attributes
-    ----------
-    shape : array
-        Returns the shape of the hyperspectral array
-
-    n_dimension : int
-        Returns the number of dimensions of the hyperspectral array (3 or 4)
-
-    n_features : int
-        Returns the number of spectral points (features)
-
-    n_samples : int
-        Returns the total number of pixels in the hyperspectral array
-
-    image : array, shape(x, y, (z))
-        Returns the image averaged over the selected spectral range
-
-    spectrum : array, shape(n_features)
-        Returns the spectrum averaged over the selected pixels
-
-    mean_image : array, shape(x, y, (z))
-        Returns the image averaged over the entire spectral range
-
-    mean_spectrum : array, shape(n_features)
-        Returns the spectrum averaged over all the pixels
-
-    """
-    def __init__(self, data: np.ndarray) -> None:
+    def __init__(self, data: np.ndarray,
+                 scale: bool = True) -> None:
         self.data = data
+        self.scale = scale
 
         # Data properties
         self.shape = None
@@ -87,10 +42,10 @@ class Dataset:
 
         self.update()
 
-    def __getitem__(self, key) -> np.ndarray:
+    def __getitem__(self, key: tuple) -> np.ndarray:
         return self.data[key]
 
-    def __setitem__(self, key, value) -> None:
+    def __setitem__(self, key: tuple, value: Union[int, float, np.ndarray]) -> None:
         self.data[key] = value
         self.update()
 
@@ -156,6 +111,8 @@ class Dataset:
 
     def update(self) -> None:
         _data_checks(self)
+        if self.scale:
+            _data_scale(self)
         _data_mean(self)
         _data_access(self)
 
@@ -172,11 +129,8 @@ class Dataset:
     def scree(self) -> np.ndarray:
         return _data_scree(self)
 
-    def preprocess(self, mdl: PreprocessType,
-                   scale_features: bool = True) -> None:
+    def preprocess(self, mdl: PreprocessType) -> None:
 
-        if scale_features:
-            _data_scale(self)
         _data_preprocessing(self, mdl)
 
     def decompose(self, mdl: DecomposeType,

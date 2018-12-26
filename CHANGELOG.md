@@ -1,5 +1,23 @@
 # hypers changelog
 
+## Version 0.0.10 (pre-release)
+#### Features
++ Added MeanShift, AffinityPropagation and DBSCAN to the cluster method in Dataset
++ Added Normalizer to preprocess method in Dataset
++ Added Gaussian mixture models. It is implemented in the mixture method in Dataset
++ Added following magic methods to Dataset:
+    + __setitem__
+    + __mul__
+    + __truediv__
+    + __add__
+    + __sub__
+ + Added plotting for cluster, decompose and scree
+ 
+#### Performance enhancements
++ Looping over dims using ndindex, ndenumerate (speed improvement)
+
+#### Bug fixes
+
 ## Version 0.0.9 (pre-release)
 #### Features
 + Renamed package to hypers

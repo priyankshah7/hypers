@@ -1,6 +1,7 @@
 import numpy as np
 import hypers as hp
 from typing import Tuple
+import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA
 from sklearn.cluster import AffinityPropagation, MeanShift, DBSCAN
 from hypers._tools._types import ClusterType, CLUSTER_TYPES
@@ -31,6 +32,7 @@ def _data_cluster(X: 'hp.Dataset',
                   mdl: ClusterType,
                   decomposed: bool,
                   pca_comps: int,
+                  plot: bool,
                   return_arrs: bool) -> Tuple[np.ndarray, np.ndarray]:
 
     if type(mdl) not in CLUSTER_TYPES:
@@ -75,8 +77,19 @@ def _data_cluster(X: 'hp.Dataset',
             elif X.ndim == 4:
                 specs[cluster_number, :] = np.squeeze(np.mean(np.mean(np.mean(msk, 2), 1), 0))
 
-    X._cluster_lbls = labels
-    X._cluster_spcs = specs
+    specs = specs.T
+
+    if plot:
+        plt.subplot(121)
+        if X.ndim == 3:
+            plt.imshow(labels)
+        elif X.ndim == 4:
+            plt.imshow(np.squeeze(np.mean(labels, -1)))
+        plt.axis('off')
+        plt.subplot(122)
+        for cluster_number in range(n_clusters):
+            plt.plot(specs[..., cluster_number])
+        plt.show()
 
     if return_arrs:
         return labels, specs

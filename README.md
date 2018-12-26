@@ -44,10 +44,10 @@ ICA, K-means) to be used directly with the object.
 be v0.1.0**
 
 #### Hyperspectral data
-Whilst this package is designed to work with any type of hyperspectral data, of the form: 
+Whilst this package is designed to work with any type of hyperspectral data, of the form of either of the following: 
 
-**X[x, y, spectrum]** or
-**X[x, y, z, spectrum]**
+<img src="https://latex.codecogs.com/gif.latex?X&space;=&space;\left[x,&space;y,&space;spectrum&space;\right&space;]" title="X = \left[x, y, spectrum \right ]" /> ,
+<img src="https://latex.codecogs.com/gif.latex?X&space;=&space;\left[x,&space;y,&space;z,&space;spectrum&space;\right&space;]" title="X = \left[x, y, z, spectrum \right ]" />
 
 some of the features are particularly useful for vibrational-scattering related hyperspectral data (e.g. Raman micro-spectroscopy), e.g. the spectral component of the hyperspectral viewer (see figure above).
 
@@ -61,6 +61,7 @@ pip install hypers
 The following packages are required:
 
 + numpy
++ matplotlib
 + scipy
 + scikit-learn
 + PyQt5
@@ -85,7 +86,7 @@ import hypers as hp
 from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans
 
-# Generating a random 4-d dataset and creating a Process instance
+# Generating a random 4-d dataset and creating a Dataset instance
 # The test dataset here has spatial dimensions (x=200, y=200, z=10) and spectral dimension (s=1024)
 test_data = np.random.rand(200, 200, 10, 1024)
 X = hp.Dataset(test_data)

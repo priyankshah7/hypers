@@ -1,24 +1,14 @@
-import numpy as np 
-from sklearn.decomposition import (
-    PCA, FastICA, IncrementalPCA, TruncatedSVD, DictionaryLearning, MiniBatchDictionaryLearning,
-    FactorAnalysis, NMF, LatentDirichletAllocation
-)
-
-DECOMPOSE_TYPES = (
-    PCA,
-    FastICA,
-    #KernelPCA,
-    IncrementalPCA,
-    TruncatedSVD,
-    DictionaryLearning,
-    MiniBatchDictionaryLearning,
-    FactorAnalysis,
-    NMF,
-    LatentDirichletAllocation
-)
+import numpy as np
+import hypers as hp
+from typing import Tuple
+from sklearn.decomposition import PCA
+from hypers._tools._types import DecomposeType, DECOMPOSE_TYPES
 
 
-def _data_decomposition(X, mdl):
+def _data_decomposition(X: 'hp.Dataset',
+                        mdl: DecomposeType,
+                        return_arrs: bool) -> Tuple[np.ndarray, np.ndarray]:
+
     if type(mdl) not in DECOMPOSE_TYPES:
         raise TypeError('Must pass a sklearn decomposition class. Refer to documentation.')
 
@@ -27,21 +17,19 @@ def _data_decomposition(X, mdl):
     images = X.mdl_decompose.fit_transform(X.flatten()).reshape(X.data.shape[:-1] + (n_components,))
     specs = X.mdl_decompose.components_.transpose()
 
-    return images, specs
+    X._decompose_ims = images
+    X._decompose_spcs = specs
+
+    if return_arrs:
+        return images, specs
 
 
-def _data_scree(X):
-    """Returns the array for the scree plot
+def _data_scree(X: 'hp.Dataset') -> np.ndarray:
 
-    Returns the scree plot from `PCA` as an array.
-
-    Returns
-    -------
-    scree : array, shape (n_features,)
-
-    """
     mdl = PCA()
     mdl.fit_transform(X.flatten())
     scree = mdl.explained_variance_ratio_
+
+    X._scree = scree
 
     return scree

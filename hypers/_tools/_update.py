@@ -1,8 +1,9 @@
 import warnings
 import numpy as np
+import hypers as hp
 
 
-def _data_checks(X):
+def _data_checks(X: 'hp.Dataset'):
     if type(X.data) != np.ndarray:
         raise TypeError('Data must be a numpy array')
 
@@ -27,7 +28,7 @@ def _data_checks(X):
             warnings.warn('n_samples (number of pixels) should be greater than n_features (spectral points)')
 
 
-def _data_mean(X):
+def _data_mean(X: 'hp.Dataset'):
     if X.ndim == 3:
         X.mean_image = np.squeeze(np.mean(X.data, 2))
         X.mean_spectrum = np.squeeze(np.mean(np.mean(X.data, 1), 0))
@@ -37,7 +38,7 @@ def _data_mean(X):
         X.mean_spectrum = np.squeeze(np.mean(np.mean(np.mean(X.data, 2), 1), 0))
 
 
-def _data_access(X):
+def _data_access(X: 'hp.Dataset'):
     X.image = _AccessImage(X.data, X.shape, X.ndim)
     X.spectrum = _AccessSpectrum(X.data, X.shape, X.ndim)
 

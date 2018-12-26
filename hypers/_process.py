@@ -2,11 +2,24 @@
 Stores data in a custom class and generates attributes for other modules
 """
 import numpy as np
-
+from typing import Tuple, Union
+from sklearn.preprocessing import (
+    MaxAbsScaler, MinMaxScaler, PowerTransformer, QuantileTransformer, RobustScaler,
+    StandardScaler, Normalizer
+)
+from sklearn.decomposition import (
+    PCA, FastICA, IncrementalPCA, TruncatedSVD, DictionaryLearning, MiniBatchDictionaryLearning,
+    FactorAnalysis, NMF, LatentDirichletAllocation
+)
+from sklearn.cluster import (
+    KMeans, AffinityPropagation, MeanShift, SpectralClustering, AgglomerativeClustering, DBSCAN
+)
 from hypers._preprocessing import _data_preprocessing, _data_scale
 from hypers._tools._smoothen import _data_smoothen
 from hypers._learning._cluster import _data_cluster
 from hypers._learning._decomposition import _data_decomposition, _data_scree
+from hypers._tools._plotting import _data_plotting
+from hypers._tools._types import PreprocessType, ClusterType, DecomposeType
 from hypers._tools._update import (
     _data_access, _data_checks, _data_mean
 )
@@ -49,26 +62,9 @@ class Dataset:
     mean_spectrum : array, shape(n_features)
         Returns the spectrum averaged over all the pixels
 
-
-    Examples
-    --------
-    >>> import numpy as np
-    >>> import hypers as hp
-    >>>
-    >>> test_data = np.random.rand(100, 100, 10, 1024)
-    >>> X = hp.Dataset(test_data, scale=True)
-    >>>
-    >>> X.ndim
-    4
-    >>>
-    >>> X.n_features
-    1024
-    >>>
-    >>> X.n_samples
-    100000
     """
-    def __init__(self, X):
-        self.data = X
+    def __init__(self, data: np.ndarray) -> None:
+        self.data = data
 
         # Data properties
         self.shape = None
@@ -91,14 +87,14 @@ class Dataset:
 
         self.update()
 
-    def __getitem__(self, key):
+    def __getitem__(self, key) -> np.ndarray:
         return self.data[key]
 
-    def __setitem__(self, key, value):
+    def __setitem__(self, key, value) -> None:
         self.data[key] = value
         self.update()
 
-    def __truediv__(self, var):
+    def __truediv__(self, var: Union[int, float, np.ndarray]) -> 'Dataset':
         if type(var) in (int, float):
             for _val in np.ndenumerate(self.data):
                 self.data[_val[0]] /= var
@@ -113,7 +109,7 @@ class Dataset:
         self.update()
         return self
 
-    def __mul__(self, var):
+    def __mul__(self, var: Union[int, float, np.ndarray]) -> 'Dataset':
         if type(var) in (int, float):
             for _val in np.ndenumerate(self.data):
                 self.data[_val[0]] *= var
@@ -128,7 +124,7 @@ class Dataset:
         self.update()
         return self
 
-    def __add__(self, var):
+    def __add__(self, var: Union[int, float, np.ndarray]) -> 'Dataset':
         if type(var) in (int, float):
             for _val in np.ndenumerate(self.data):
                 self.data[_val[0]] += var
@@ -143,7 +139,7 @@ class Dataset:
         self.update()
         return self
 
-    def __sub__(self, var):
+    def __sub__(self, var: Union[int, float, np.ndarray]) -> 'Dataset':
         if type(var) in (int, float):
             for _val in np.ndenumerate(self.data):
                 self.data[_val[0]] -= var
@@ -158,194 +154,45 @@ class Dataset:
         self.update()
         return self
 
-    def update(self):
-        """ Update properties of the hyperspectral array
-
-        This should be called whenever `X.data` is directly modified to update the attributes
-        of the `X` object.
-
-        """
+    def update(self) -> None:
         _data_checks(self)
         _data_mean(self)
         _data_access(self)
 
-    def view(self):
-        """ Hyperspectral viewer
-
-        Opens a hyperspectral viewer with the hyperspectral array loaded (pyqt GUI)
-        """
+    def view(self) -> None:
         hsiPlot(self)
 
-    def smoothen(self, **kwargs):
-        """ Data smoothening
-        
-        Smoothens all spectra in the dataset using one of the following:
-
-        - Savitzky-Golay filter (scipy.signal.savgol_filter)
-        - Gaussian filter (scipy.ndimage.filters.gaussian_filter)
-
-        Savitzky-Golay is chosen by default. To choose the Gaussian filter, 
-        set `smoothing='gaussian_filter'`. e.g.
-
-        >>> import numpy as np
-        >>> import hypers as hp
-        >>> data = np.random.rand(50, 50, 100)
-        >>> X = hp.Dataset(data)
-        >>> X.smoothing
-        'savitzky_golay'
-        >>> X.smoothing = 'gaussian_filter'
-        >>> X.smoothen()
-
-        Parameters
-        ----------
-        **kwargs : Savitsky-Golay or Gaussian filter parameters
-
-        """
+    def smoothen(self, **kwargs) -> None:
         _data_smoothen(self, **kwargs)
         self.update()
 
-    def flatten(self):
-        """Flatten the hyperspectral data
-
-        Flattens the hyperspectral data from 3d/4d to 2d by unravelling the pixel order.
-
-        Returns
-        -------
-        X_flattened : array, shape (x*y*(z), n_features)
-            A flattened version of the hyperspectral array
-
-        """
+    def flatten(self) -> np.ndarray:
         return np.reshape(self.data, (np.prod(self.shape[:-1]), self.shape[-1]))
 
-    def scree(self):
-        """ Scree plot
-        
-        Returns the scree plot by applying PCA. Useful to understand the contribution
-        of each principal component to the total variance in the dataset.
-        
-        Returns
-        -------
-        scree : np.ndarray (n_features,)
-        """
+    def scree(self) -> np.ndarray:
         return _data_scree(self)
 
-    def preprocess(self, mdl, scale_features=True):
-        """ Preprocess stored dataset
-        
-        Preprocess the stored dataset using the following preprocessing classes from 
-        scikit-learn.
+    def preprocess(self, mdl: PreprocessType,
+                   scale_features: bool = True) -> None:
 
-        NOTE:
-        This applies the preprocessing step to the features (i.e. spectra), not to the spatial 
-        components.
-
-        - MaxAbsScaler
-        - MinMaxScaler
-        - PowerTransformer
-        - QuantileTransformer
-        - RobustScaler
-        - StandardScaler
-        
-        Parameters
-        ----------
-        mdl : object
-            scikit-learn preprocessing class
-
-        Examples
-        --------
-        >>> import numpy as np
-        >>> from sklearn.preprocessing import StandardScaler
-        >>> import hypers as hp
-        >>> data = np.random.rand(50, 50, 100)
-        >>> X = hp.Dataset(data)
-        >>> X.preprocess(mdl=StandardScaler())
-        """
         if scale_features:
             _data_scale(self)
         _data_preprocessing(self, mdl)
 
-    def decompose(self, mdl):
-        """ Dimensionality reduction
-        
-        Apply one of the following scikit-learn dimensionality reduction techniques to the
-        stored dataset:
+    def decompose(self, mdl: DecomposeType,
+                  return_arrs: bool = True) -> Tuple[np.ndarray, np.ndarray]:
 
-        - PCA
-        - FastICA
-        - IncrementalPCA
-        - TruncatedSVD
-        - DictionaryLearning
-        - MiniBatchDictionaryLearning
-        - FactorAnalysis
-        - NMF
-        - LatentDirichletAllocation
-        
-        Parameters
-        ----------
-        mdl : object
-            scikit-learn decomposition class
-        
-        Returns
-        -------
-        ims : np.ndarray (n_samples, n_components)
-            Images of the n_components number of principal components
+        return _data_decomposition(self, mdl, return_arrs)
 
-        spcs : np.ndarray (n_features, n_components)
-            Spectra of the n_components number of principal components
+    def cluster(self, mdl: ClusterType,
+                decomposed: bool = False,
+                pca_comps: int = 4,
+                return_arrs: bool = True) -> Tuple[np.ndarray, np.ndarray]:
 
-        Examples
-        --------
-        >>> import numpy as np
-        >>> from sklearn.decomposition import PCA
-        >>> import hypers as hp
-        >>> data = np.random.rand(50, 50, 100)
-        >>> X = hp.Dataset(data)
-        >>> ims, spcs = X.decompose(mdl=PCA(n_components=2))
-        """
-        return _data_decomposition(self, mdl)
+        return _data_cluster(self, mdl, decomposed, pca_comps, return_arrs)
 
-    def cluster(self, mdl, decomposed=False, pca_comps=4):
-        """ Clustering
+    def plot(self, kind: str = 'both',
+             target: str = 'data',
+             figsize: str = None):
 
-        Apply one of the following scikit-learn clustering techniques to the stored dataset:
-
-        - KMeans
-        - SpectralClustering
-        - AgglomerativeClustering
-
-        Parameters
-        ----------
-        mdl : object
-            scikit-learn clustering class
-
-        decomposed : bool
-            If true, clusters on the decomposed components
-
-        pca_comps : int
-            If `decomposed=True`, this specifies the number of principle components to use.
-
-        Returns
-        -------
-        lbls : np.ndarray (x, y, (z))
-            Returns an image array with the pixels labelled according to the cluster assigned
-
-        spcs : np.ndarray (n_clusters, n_features)
-            Returns the spectra of the clusters.
-
-        Examples
-        --------
-        >>> import numpy as np
-        >>> from sklearn.cluster import KMeans
-        >>> import hypers as hp
-        >>> data = np.random.rand(50, 50, 100)
-        >>> X = hp.Dataset(data)
-        >>> lbls, spcs = X.cluster(mdl=KMeans(n_clusters=3))
-        """
-        return _data_cluster(self, mdl, decomposed, pca_comps)
-
-    def mixture(self, mdl):
-        """ Gaussian mixture models
-
-        Gaussian mixture models.
-        """
-        return _data_mixture(self, mdl)
+        return _data_plotting(self, kind=kind, target=target, figsize=figsize)

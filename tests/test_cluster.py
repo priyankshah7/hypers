@@ -51,12 +51,12 @@ class TestCluster:
 
                 assert lbls_3d.shape == (8, 8)
                 assert lbls_4d.shape == (8, 8, 2)
-                assert spcs3d.shape == (2, 32)
-                assert spcs4d.shape == (2, 32)
+                assert spcs3d.shape == (32, 2)
+                assert spcs4d.shape == (32, 2)
                 assert lbls_decomp_3d.shape == (8, 8)
                 assert lbls_decomp_4d.shape == (8, 8, 2)
-                assert spcs_decomp_3d.shape == (2, 32)
-                assert spcs_decomp_4d.shape == (2, 32)
+                assert spcs_decomp_3d.shape == (32, 2)
+                assert spcs_decomp_4d.shape == (32, 2)
 
             elif type(cluster_type()) in (AffinityPropagation, DBSCAN, MeanShift):
                 X_3d.cluster(

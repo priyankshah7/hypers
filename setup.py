@@ -6,7 +6,7 @@ with open('README.md') as f:
 setup(
     name='hypers',
 
-    version='0.0.9',
+    version='0.0.10',
 
     packages=['hypers',
               'hypers._view',
@@ -18,7 +18,7 @@ setup(
 
     url='https://github.com/priyankshah7/hypers',
 
-    download_url='https://github.com/priyankshah7/hypers/archive/v0.0.9.tar.gz',
+    download_url='https://github.com/priyankshah7/hypers/archive/v0.0.10.tar.gz',
 
     license='BSD 3-Clause',
 

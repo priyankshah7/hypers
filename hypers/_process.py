@@ -2,7 +2,7 @@
 Stores data in a custom class and generates attributes for other modules
 """
 import numpy as np
-from typing import Tuple, Union
+from typing import Tuple, Union, List
 
 from hypers._preprocessing import _data_preprocessing, _data_scale, _data_whiten
 from hypers._learning import _data_cluster, _vca, _ucls, _data_decomposition, _data_scree, _data_mixture
@@ -301,11 +301,12 @@ class Dataset:
         spectra: np.ndarray
             An array of the spectra of the components
         """
+
         return _data_mixture(self, mdl, plot=plot, return_arrs=return_arrs)
 
     def vca(self, n_components: int = 4,
             plot: bool = False,
-            return_arrs: bool = True) -> Tuple[np.ndarray, np.ndarray]:
+            return_arrs: bool = True) -> Tuple[np.ndarray, List[int]]:
         """Vertex component analysis
 
         Parameters
@@ -326,7 +327,7 @@ class Dataset:
             An array of the spectra of the pure pixels
 
         coords: np.ndarray
-            An array of the coordinates of the pure pixels
+            A list of tuples of the coordinates of the pure pixels
         """
 
         return _vca(self, n_components=n_components, plot=plot, return_arrs=return_arrs)

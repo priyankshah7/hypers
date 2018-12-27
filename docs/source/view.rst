@@ -19,7 +19,7 @@ visualization and interactivity with the hyperspectral dataset.
 
 The hyperspectral data viewer is a lightweight pyqt gui. Below is an example:
 
-.. figure:: hyperspectral_view.png
+.. figure:: images/hyperspectral_view.png
     :width: 600px
     :align: center
     :alt: Hyperspectral viewer

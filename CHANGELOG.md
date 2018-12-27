@@ -13,7 +13,8 @@
  + Added plotting for cluster, decompose and scree
  + Added vertex component analysis as vca method in Dataset
  + Added unconstrained least-squares spectra fitting in abundance method in Dataset
- 
+ + Added Gaussian mixture models in the mixture method in Dataset
+  
 #### Performance enhancements
 + Looping over dims using ndindex, ndenumerate (speed improvement)
 

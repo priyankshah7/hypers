@@ -6,7 +6,7 @@
 hypers
 ======
 
-.. image:: https://travis-ci.com/priyankshah7/scikit-hyper.svg?branch=master
+.. image:: https://travis-ci.com/priyankshah7/hypers.svg?token=xX99xZvXU9jWErT5D1zh&branch=master
     :target: https://travis-ci.com/priyankshah7/hypers
 
 .. image:: https://readthedocs.org/projects/scikit-hyper/badge/?version=latest
@@ -19,7 +19,7 @@ hypers
 .. image:: https://img.shields.io/badge/Python-3.6-blue.svg
     :target: https://www.python.org/downloads/
 
-.. image:: https://badge.fury.io/py/scikit-hyper.svg
+.. image:: https://badge.fury.io/py/hypers.svg
     :target: https://badge.fury.io/py/hypers
 
 Provides a data structure model for hyperspectral data.

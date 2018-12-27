@@ -4,14 +4,10 @@ Stores data in a custom class and generates attributes for other modules
 import numpy as np
 from typing import Tuple, Union
 
-from hypers._preprocessing import _data_preprocessing, _data_scale
-from hypers._tools._smoothen import _data_smoothen
-from hypers._learning._cluster import _data_cluster
-from hypers._learning._decomposition import _data_decomposition, _data_scree
-from hypers._tools._types import PreprocessType, ClusterType, DecomposeType
-from hypers._tools._update import (
-    _data_access, _data_checks, _data_mean
-)
+from hypers._preprocessing import _data_preprocessing, _data_scale, _data_whiten
+from hypers._learning import _data_cluster, _vca, _ucls, _data_decomposition, _data_scree
+from hypers._tools import _data_smoothen, _data_mean, _data_checks, _data_access
+from hypers._tools import PreprocessType, ClusterType, DecomposeType
 from hypers._view import hsiPlot
 
 

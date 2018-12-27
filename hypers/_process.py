@@ -12,10 +12,15 @@ from hypers._view import hsiPlot
 
 
 class Dataset:
+    """ Dataset data structure
+
+    """
     def __init__(self, data: np.ndarray,
-                 scale: bool = True) -> None:
-        self.data = data
+                 scale: bool = True,
+                 whiten: bool = True) -> None:
+        self.data = np.squeeze(data)
         self.scale = scale
+        self.whiten = whiten
 
         # Data properties
         self.shape = None
@@ -109,6 +114,8 @@ class Dataset:
         _data_checks(self)
         if self.scale:
             _data_scale(self)
+        if self.whiten:
+            _data_whiten(self)
         _data_mean(self)
         _data_access(self)
 
@@ -144,3 +151,14 @@ class Dataset:
 
         return _data_cluster(self, mdl, decomposed=decomposed, pca_comps=pca_comps, plot=plot, return_arrs=return_arrs)
 
+    def vca(self, n_components: int = 4,
+            plot: bool = False,
+            return_arrs: bool = True) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+
+        return _vca(self, n_components=n_components, plot=plot, return_arrs=return_arrs)
+
+    def abundance(self, spectra: np.ndarray,
+                  plot: bool = False,
+                  return_arrs: bool = True) -> np.ndarray:
+
+        return _ucls(self, spectra=spectra, plot=plot, return_arrs=return_arrs)

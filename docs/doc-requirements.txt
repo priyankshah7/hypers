@@ -1,7 +1,0 @@
-matplotlib
-numpy
-numpydoc
-Sphinx
-sphinx-autodoc-typehints
-sphinx-rtd-theme
-sphinxcontrib-websupport

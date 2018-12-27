@@ -38,7 +38,7 @@ ICA, K-means) to be used directly with the object.
     A lightweight pyqt gui that provides an interative interface to view the 
     hyperspectral data.
     
-    <p align="center"><img src="/docs/source/hypview/hyperspectral_view.png" width="400"></p>
+    <p align="center"><img src="/docs/source/images/hyperspectral_view.png" width="400"></p>
     
 **Please note that this package is currently in pre-release. The first general release will 
 be v0.1.0**

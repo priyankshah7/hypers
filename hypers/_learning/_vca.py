@@ -3,12 +3,13 @@ import hypers as hp
 from typing import Tuple
 import matplotlib.pyplot as plt
 
+# FIXME indice needs to be restrucutred to return list of tuples of coordinates
 
 def _vca(X: 'hp.Dataset',
          n_components: int = 4,
          input_snr: float = 0,
          plot: bool = False,
-         return_arrs: bool = True) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+         return_arrs: bool = True) -> Tuple[np.ndarray, np.ndarray]:
 
     Ae, indice, Yp = _calcluate_vca(X.flatten().T, n_components, snr_input=input_snr)
 
@@ -18,7 +19,7 @@ def _vca(X: 'hp.Dataset',
         plt.show()
 
     if return_arrs:
-        return Ae, indice, Yp
+        return Ae, indice
 
 
 def _estimate_snr(Y: np.ndarray,

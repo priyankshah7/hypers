@@ -29,8 +29,8 @@ class TestDecompose:
         self.data_4d = np.abs(np.reshape(data_4d, (8, 8, 2, 32)))
 
     def test_decompose(self):
-        X_3d = hp.Dataset(self.data_3d)
-        X_4d = hp.Dataset(self.data_4d)
+        X_3d = hp.Dataset(self.data_3d, scale=False, whiten=False)
+        X_4d = hp.Dataset(self.data_4d, scale=False, whiten=False)
 
         for decomp_type in DECOMPOSE_TYPES:
             ims_3d, spcs3d = X_3d.decompose(

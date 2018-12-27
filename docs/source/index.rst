@@ -1,5 +1,5 @@
 .. hypers documentation master file, created by
-   sphinx-quickstart on Tue May  8 13:44:23 2018.
+   sphinx-quickstart on Thu Dec 27 00:56:42 2018.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
@@ -40,19 +40,12 @@ Provides a data structure model for hyperspectral data.
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents
+   :caption: Contents:
 
-   source/install
-   source/process/index
-   source/preprocessing
-   source/cluster
-   source/decomposition
-   source/hypview/index
-
-
-.. toctree::
-    :maxdepth: 1
-    :caption: Other
-
-    source/modules
-
+   install
+   dataset
+   api
+   preprocessing
+   decompose
+   cluster
+   view

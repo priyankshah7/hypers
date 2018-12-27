@@ -1,6 +1,6 @@
-======================
-Dataset data structure
-======================
+=========================
+Dataset: An  introduction
+=========================
 
 Processing data
 ===============
@@ -75,5 +75,5 @@ The ``Dataset`` object also supports arithmetic operations in the following mann
     X += spectral_array
     X -= spectral_array
 
-To view the full list of methods and attributes that the Process class contains, see 
+To view the full list of methods and attributes that the Process class contains, see
 :class:`~hypers.Dataset`.

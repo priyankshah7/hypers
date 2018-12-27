@@ -9,7 +9,7 @@ moment, the following clustering classes from ``scikit-learn`` are supported:
 - AgglomerativeClustering
 - SpectralClustering
 
-Clustering can be performed on both the data stored in the Process object itself, or on a 
+Clustering can be performed on both the data stored in the Process object itself, or on a
 set of principal components of the dataset (as demonstrated below).
 
 .. code-block:: python
@@ -17,7 +17,7 @@ set of principal components of the dataset (as demonstrated below).
     import numpy as np
     import hypers as hp
     from sklearn.cluster import KMeans
-    from sklearn.decomposition import PCA 
+    from sklearn.decomposition import PCA
 
     tst_data = np.random.rand(50, 50, 1000)
     X = hp.Dataset(tst_data)

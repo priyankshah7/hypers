@@ -4,7 +4,6 @@
 #### Features
 + Added MeanShift, AffinityPropagation and DBSCAN to the cluster method in Dataset
 + Added Normalizer to preprocess method in Dataset
-+ Added Gaussian mixture models. It is implemented in the mixture method in Dataset
 + Added following magic methods to Dataset:
     + __setitem__
     + __mul__
@@ -12,6 +11,8 @@
     + __add__
     + __sub__
  + Added plotting for cluster, decompose and scree
+ + Added vertex component analysis as vca method in Dataset
+ + Added unconstrained least-squares spectra fitting in abundance method in Dataset
  
 #### Performance enhancements
 + Looping over dims using ndindex, ndenumerate (speed improvement)

@@ -5,9 +5,9 @@ import numpy as np
 from typing import Tuple, Union
 
 from hypers._preprocessing import _data_preprocessing, _data_scale, _data_whiten
-from hypers._learning import _data_cluster, _vca, _ucls, _data_decomposition, _data_scree
+from hypers._learning import _data_cluster, _vca, _ucls, _data_decomposition, _data_scree, _data_mixture
 from hypers._tools import _data_smoothen, _data_mean, _data_checks, _data_access
-from hypers._tools import PreprocessType, ClusterType, DecomposeType
+from hypers._tools import PreprocessType, ClusterType, DecomposeType, MixtureType
 from hypers._view import hsiPlot
 
 
@@ -53,8 +53,8 @@ class Dataset:
 
     """
     def __init__(self, data: np.ndarray,
-                 scale: bool = True,
-                 whiten: bool = True) -> None:
+                 scale: bool = False,
+                 whiten: bool = False) -> None:
         self.data = np.squeeze(data)
         self.scale = scale
         self.whiten = whiten
@@ -76,6 +76,7 @@ class Dataset:
         self.mdl_preprocess = None
         self.mdl_decompose = None
         self.mdl_cluster = None
+        self.mdl_mixture = None
 
         self.update()
 
@@ -275,6 +276,32 @@ class Dataset:
         """
 
         return _data_cluster(self, mdl, decomposed=decomposed, pca_comps=pca_comps, plot=plot, return_arrs=return_arrs)
+
+    def mixture(self, mdl: MixtureType,
+                plot: bool = False,
+                return_arrs: bool = True) -> Tuple[np.ndarray, np.ndarray]:
+        """Gaussian mixture models
+
+        Parameters
+        ----------
+        mdl: MixtureType
+            Accepts a ``scikit-learn`` mixture class
+
+        plot: bool
+            If True, will return a plot of the labels/spectra of the components
+
+        return_arrs: bool
+            If True, will return the arrays of the labels/spectra of the components
+
+        Returns
+        -------
+        labels: np.ndarray
+            An array of the labels
+
+        spectra: np.ndarray
+            An array of the spectra of the components
+        """
+        return _data_mixture(self, mdl, plot=plot, return_arrs=return_arrs)
 
     def vca(self, n_components: int = 4,
             plot: bool = False,

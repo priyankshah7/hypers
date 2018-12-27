@@ -1,4 +1,5 @@
 from typing import Union
+from sklearn.mixture import GaussianMixture, BayesianGaussianMixture
 from sklearn.preprocessing import (
     MaxAbsScaler, MinMaxScaler, PowerTransformer, QuantileTransformer, RobustScaler,
     StandardScaler, Normalizer
@@ -43,6 +44,11 @@ DECOMPOSE_TYPES = (
     LatentDirichletAllocation
 )
 
+MIXTURE_TYPES = (
+    GaussianMixture,
+    BayesianGaussianMixture
+)
+
 
 PreprocessType = Union[
     MaxAbsScaler, MinMaxScaler, PowerTransformer, QuantileTransformer, RobustScaler, StandardScaler, Normalizer
@@ -55,4 +61,8 @@ ClusterType = Union[
 DecomposeType = Union[
     PCA, FastICA, IncrementalPCA, TruncatedSVD, DictionaryLearning, MiniBatchDictionaryLearning, NMF,
     FactorAnalysis, LatentDirichletAllocation
+]
+
+MixtureType = Union[
+    GaussianMixture, BayesianGaussianMixture
 ]

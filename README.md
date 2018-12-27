@@ -12,7 +12,7 @@ Provides an object model for hyperspectral data.
 + Allows for unsupervised machine learning directly on the object (using scikit-learn)
 + More features coming soon...
 
-<p align="center"><img src="/docs/images/hyperspectral_image.png" width="300"></p>
+<p align="center"><img src="/docs/source/images/hyperspectral_image.png" width="300"></p>
 
 ## Contents
 1. [About](#about)

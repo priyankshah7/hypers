@@ -1,3 +1,4 @@
+import pytest
 import numpy as np
 import hypers as hp
 from sklearn.datasets import make_blobs
@@ -36,4 +37,11 @@ class TestPreprocess:
 
             X_4d.preprocess(
                 mdl=preprocess_type()
+            )
+
+    def test_for_fail(self):
+        X_3d = hp.Dataset(self.data_3d)
+        with pytest.raises(TypeError):
+            X_3d.preprocess(
+                mdl=np.zeros(2)
             )

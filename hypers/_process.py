@@ -62,6 +62,9 @@ class Dataset:
         self.n_features = None
         self.n_samples = None
         self.smoothing = 'savitzky_golay'
+        self._scaled = False
+        self._robust_scaled = False
+        self._normalized = False
 
         # Hyperspectral image/spectrum
         self.image = None
@@ -85,6 +88,17 @@ class Dataset:
     def __setitem__(self, key: tuple, value: Union[int, float, np.ndarray]) -> None:
         self.data[key] = value
         self.update()
+
+    def __str__(self) -> str:
+        descr = ('---Dataset class---\n' +
+                 'Size: ' + str(self.ndim) + '-dimensional hyperspectral data\n' +
+                 'Image dimension: ' + str(self.shape[:-1]) + ' | ' +
+                 'Spectral bands: ' + str(self.shape[-1]) + '\n' +
+                 'Scaled: ' + str(self._scaled) + '\n' +
+                 'Scaled (robust): ' + str(self._robust_scaled) + '\n'+
+                 'Normalized: ' + str(self._normalized))
+
+        return descr
 
     def __truediv__(self, var: Union[int, float, np.ndarray]) -> 'Dataset':
         if type(var) in (int, float):
@@ -204,6 +218,7 @@ class Dataset:
             If True, scale the data to unit variance
         """
         self.data = scale(self.flatten(), axis=0, with_mean=with_mean, with_std=with_std).reshape(self.shape)
+        self._scaled = True
         self.update()
 
     def robust_scale(self, with_centering: bool = True,
@@ -224,6 +239,7 @@ class Dataset:
         """
         self.data = robust_scale(self.flatten(), with_centering=with_centering, with_scaling=with_scaling,
                                  quantile_range=quantile_range).reshape(self.shape)
+        self._robust_scaled = True
         self.update()
 
     def normalize(self, norm: str = 'l2') -> None:
@@ -235,6 +251,7 @@ class Dataset:
             The norm to use to normalize each spectrum.
         """
         self.data = normalize(self.flatten(), axis=0, norm=norm).reshape(self.shape)
+        self._normalized = True
         self.update()
 
     def flatten(self) -> np.ndarray:

@@ -3,8 +3,9 @@ Stores data in a custom class and generates attributes for other modules
 """
 import numpy as np
 from typing import Tuple, Union, List
+from sklearn.preprocessing import scale, robust_scale, normalize
 
-from hypers._preprocessing import _data_preprocessing, _data_scale, _data_whiten
+from hypers._preprocessing import _data_preprocessing
 from hypers._learning import _data_cluster, _vca, _ucls, _data_decomposition, _data_scree, _data_mixture
 from hypers._tools import _data_smoothen, _data_mean, _data_checks, _data_access
 from hypers._tools import PreprocessType, ClusterType, DecomposeType, MixtureType
@@ -52,12 +53,8 @@ class Dataset:
         Default is 'savitzky_golay'.
 
     """
-    def __init__(self, data: np.ndarray,
-                 scale: bool = False,
-                 whiten: bool = False) -> None:
+    def __init__(self, data: np.ndarray) -> None:
         self.data = np.squeeze(data)
-        self.scale = scale
-        self.whiten = whiten
 
         # Data properties
         self.shape = None
@@ -65,6 +62,9 @@ class Dataset:
         self.n_features = None
         self.n_samples = None
         self.smoothing = 'savitzky_golay'
+        self._scaled = False
+        self._robust_scaled = False
+        self._normalized = False
 
         # Hyperspectral image/spectrum
         self.image = None
@@ -80,12 +80,25 @@ class Dataset:
 
         self.update()
 
+    # TODO print properties of X magic method
+
     def __getitem__(self, key: tuple) -> np.ndarray:
         return self.data[key]
 
     def __setitem__(self, key: tuple, value: Union[int, float, np.ndarray]) -> None:
         self.data[key] = value
         self.update()
+
+    def __str__(self) -> str:
+        descr = ('---Dataset class---\n' +
+                 'Size: ' + str(self.ndim) + '-dimensional hyperspectral data\n' +
+                 'Image dimension: ' + str(self.shape[:-1]) + ' | ' +
+                 'Spectral bands: ' + str(self.shape[-1]) + '\n' +
+                 'Scaled: ' + str(self._scaled) + '\n' +
+                 'Scaled (robust): ' + str(self._robust_scaled) + '\n'+
+                 'Normalized: ' + str(self._normalized))
+
+        return descr
 
     def __truediv__(self, var: Union[int, float, np.ndarray]) -> 'Dataset':
         if type(var) in (int, float):
@@ -96,8 +109,13 @@ class Dataset:
             for _val in np.ndindex(self.shape[:-1]):
                 self.data[_val] /= var
 
+        elif type(var) == np.ndarray and var.ndim == self.ndim-1 and var.shape == self.shape[:-1]:
+            for _band in range(self.shape[-1]):
+                self.data[..., _band] /= var
+
         else:
-            raise TypeError('Can only divide by an integer, float or spectral array')
+            raise TypeError('Can only divide by an integer, float or spectral array of shape (' + str(self.shape[-1])
+                            + ') or ' + str(self.shape[:-1]))
 
         self.update()
         return self
@@ -111,8 +129,13 @@ class Dataset:
             for _val in np.ndindex(self.shape[:-1]):
                 self.data[_val] *= var
 
+        elif type(var) == np.ndarray and var.ndim == self.ndim-1 and var.shape == self.shape[:-1]:
+            for _band in range(self.shape[-1]):
+                self.data[..., _band] *= var
+
         else:
-            raise TypeError('Can only multiply by an integer, float or spectral array')
+            raise TypeError('Can only multiply by an integer, float or spectral array of shape (' + str(self.shape[-1])
+                            + ') or ' + str(self.shape[:-1]))
 
         self.update()
         return self
@@ -126,8 +149,13 @@ class Dataset:
             for _val in np.ndindex(self.shape[:-1]):
                 self.data[_val] += var
 
+        elif type(var) == np.ndarray and var.ndim == self.ndim-1 and var.shape == self.shape[:-1]:
+            for _band in range(self.shape[-1]):
+                self.data[..., _band] += var
+
         else:
-            raise TypeError('Can only add with an integer, float or spectral array')
+            raise TypeError('Can only add by an integer, float or spectral array of shape (' + str(self.shape[-1])
+                            + ') or ' + str(self.shape[:-1]))
 
         self.update()
         return self
@@ -141,8 +169,13 @@ class Dataset:
             for _val in np.ndindex(self.shape[:-1]):
                 self.data[_val] -= var
 
+        elif type(var) == np.ndarray and var.ndim == self.ndim-1 and var.shape == self.shape[:-1]:
+            for _band in range(self.shape[-1]):
+                self.data[..., _band] -= var
+
         else:
-            raise TypeError('Can only subtract by an integer, float or spectral array')
+            raise TypeError('Can only subtract by an integer, float or spectral array of shape (' + str(self.shape[-1])
+                            + ') or ' + str(self.shape[:-1]))
 
         self.update()
         return self
@@ -150,10 +183,6 @@ class Dataset:
     def update(self) -> None:
         """Update the stored data and class properties"""
         _data_checks(self)
-        if self.scale:
-            _data_scale(self)
-        if self.whiten:
-            _data_whiten(self)
         _data_mean(self)
         _data_access(self)
 
@@ -174,6 +203,55 @@ class Dataset:
             - ``scipy.ndimage.filters.gaussian_filter``
         """
         _data_smoothen(self, **kwargs)
+        self.update()
+
+    def scale(self, with_mean: bool = True,
+              with_std: bool = True) -> None:
+        """Standardize the hyperspectral data
+
+        Parameters
+        ----------
+        with_mean: bool
+            If True, center the data before scaling
+
+        with_std: bool
+            If True, scale the data to unit variance
+        """
+        self.data = scale(self.flatten(), axis=0, with_mean=with_mean, with_std=with_std).reshape(self.shape)
+        self._scaled = True
+        self.update()
+
+    def robust_scale(self, with_centering: bool = True,
+                     with_scaling: bool = True,
+                     quantile_range: tuple = (25.0, 75.0)) -> None:
+        """Standardize the hyperspectral data (robust from outliers)
+
+        Parameters
+        ----------
+        with_centering: bool
+            If True, center the data before scaling
+
+        with_scaling: bool
+            If True, scale the data to unit variance
+
+        quantile_range: tuple
+            Quantile range used.
+        """
+        self.data = robust_scale(self.flatten(), with_centering=with_centering, with_scaling=with_scaling,
+                                 quantile_range=quantile_range).reshape(self.shape)
+        self._robust_scaled = True
+        self.update()
+
+    def normalize(self, norm: str = 'l2') -> None:
+        """Normalize the hyperspectral data
+
+        Parameters
+        ----------
+        norm: str ('l1', 'l2', 'max')
+            The norm to use to normalize each spectrum.
+        """
+        self.data = normalize(self.flatten(), axis=0, norm=norm).reshape(self.shape)
+        self._normalized = True
         self.update()
 
     def flatten(self) -> np.ndarray:
@@ -330,7 +408,8 @@ class Dataset:
             A list of tuples of the coordinates of the pure pixels
         """
 
-        return _vca(self, n_components=n_components, plot=plot, return_arrs=return_arrs)
+        Ae, indices = _vca(self, n_components=n_components, plot=plot, return_arrs=return_arrs)
+        return Ae, indices
 
     def abundance(self, spectra: np.ndarray,
                   plot: bool = False,

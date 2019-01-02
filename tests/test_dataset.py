@@ -11,6 +11,26 @@ class TestDataset:
         self.data_3d = np.abs(np.reshape(data_3d, (8, 8, 32)))
         self.data_4d = np.abs(np.reshape(data_4d, (8, 8, 2, 32)))
 
+    def test_print_dataset(self):
+        X_3d = hp.Dataset(self.data_3d)
+        X_4d = hp.Dataset(self.data_4d)
+        print(X_3d)
+        print(X_4d)
+
+    def test_preprocess_methods(self):
+        X_3d = hp.Dataset(self.data_3d)
+        X_3d.scale()
+        X_3d = hp.Dataset(self.data_3d)
+        X_3d.robust_scale()
+        X_3d = hp.Dataset(self.data_3d)
+        X_3d.normalize()
+        X_4d = hp.Dataset(self.data_4d)
+        X_4d.scale()
+        X_4d = hp.Dataset(self.data_4d)
+        X_4d.robust_scale()
+        X_4d = hp.Dataset(self.data_4d)
+        X_4d.normalize()
+
     def test_smoothing(self):
         X_3d = hp.Dataset(self.data_3d)
         X_3d.smoothing = 'savitzky_golay'

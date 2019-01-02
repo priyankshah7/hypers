@@ -1,5 +1,11 @@
 # hypers changelog
 
+## Version 0.0.11 (pre-release)
+#### Features 
++ Can now multiply, divide, add and subtract image array from data 
+(e.g. (300,300,1000) * (300,300)) directly on Dataset
++ Printing the Dataset instance now prints information about the stored data
+
 ## Version 0.0.10 (pre-release)
 #### Features
 + Added MeanShift, AffinityPropagation and DBSCAN to the cluster method in Dataset
@@ -17,8 +23,6 @@
   
 #### Performance enhancements
 + Looping over dims using ndindex, ndenumerate (speed improvement)
-
-#### Bug fixes
 
 ## Version 0.0.9 (pre-release)
 #### Features

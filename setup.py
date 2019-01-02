@@ -18,7 +18,7 @@ setup(
 
     url='https://github.com/priyankshah7/hypers',
 
-    download_url='https://github.com/priyankshah7/hypers/archive/v0.0.10.tar.gz',
+    download_url='https://github.com/priyankshah7/hypers/archive/v0.0.11.tar.gz',
 
     license='BSD 3-Clause',
 

@@ -80,8 +80,6 @@ class Dataset:
 
         self.update()
 
-    # TODO print properties of X magic method
-
     def __getitem__(self, key: tuple) -> np.ndarray:
         return self.data[key]
 
@@ -90,13 +88,26 @@ class Dataset:
         self.update()
 
     def __str__(self) -> str:
+        str_sklearn = [0] * 4
+        cls_sklearn = [self.mdl_preprocess, self.mdl_decompose, self.mdl_cluster, self.mdl_mixture]
+
+        for sktype in range(4):
+            if type(cls_sklearn[sktype]) is not None.__class__:
+                str_sklearn[sktype] = cls_sklearn[sktype].__class__.__name__
+            else:
+                str_sklearn[sktype] = 'None'
+
         descr = ('---Dataset class---\n' +
-                 'Size: ' + str(self.ndim) + '-dimensional hyperspectral data\n' +
+                 'Type: ' + str(self.ndim) + '-dimensional hyperspectral data\n' +
                  'Image dimension: ' + str(self.shape[:-1]) + ' | ' +
                  'Spectral bands: ' + str(self.shape[-1]) + '\n' +
-                 'Scaled: ' + str(self._scaled) + '\n' +
+                 'Scaled: ' + str(self._scaled) + ' | ' +
                  'Scaled (robust): ' + str(self._robust_scaled) + '\n'+
-                 'Normalized: ' + str(self._normalized))
+                 'Normalized: ' + str(self._normalized) + '\n' +
+                 'Preprocessing (sklearn): ' + str_sklearn[0] + '\n' +
+                 'Decomposition (sklearn): ' + str_sklearn[1] + '\n' +
+                 'Cluster (sklearn): ' + str_sklearn[2] + '\n' +
+                 'Gaussian mixture models (sklearn): ' + str_sklearn[3])
 
         return descr
 

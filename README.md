@@ -75,13 +75,14 @@ Features implemented in ``hypers`` include:
 + [Hyperspectral viewer](http://hypers.readthedocs.io/en/latest/source/hypview/index.html)
 + Vertex component analysis
 + Gaussian mixture models
-+ Least-squares spectral fitting
 
+A full list of features can be found [here](http://hypers.readthedocs.io/en/latest/).
 	
 ## Examples
 
 ### Hyperspectral dimensionality reduction and clustering
-Below is a quick example of using some of the features of the package on a randomized hyperspectral array. For an example using the IndianPines dataset, see the Jupyter notebook in the examples/ directory.
+Below is a quick example of using some of the features of the package on a randomized hyperspectral array. 
+For an example using the IndianPines dataset, see the Jupyter notebook in the [examples](/examples/indian_pines.ipynb) directory.
 
 ```python
 import numpy as np

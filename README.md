@@ -43,22 +43,13 @@ ICA, K-means) to be used directly with the object.
     
     <p align="center"><img src="/docs/source/images/hyperspectral_view.png" width="400"></p>
     
-#### Hyperspectral data
-Whilst this package is designed to work with any type of hyperspectral data, of the form of either of the following: 
-
-<img src="https://latex.codecogs.com/gif.latex?X&space;=&space;\left[x,&space;y,&space;spectrum&space;\right&space;]" title="X = \left[x, y, spectrum \right ]" /> ,
-<img src="https://latex.codecogs.com/gif.latex?X&space;=&space;\left[x,&space;y,&space;z,&space;spectrum&space;\right&space;]" title="X = \left[x, y, z, spectrum \right ]" />
-
-some of the features are particularly useful for vibrational-scattering related hyperspectral data (e.g. Raman micro-spectroscopy), e.g. the spectral component of the hyperspectral viewer (see figure above).
-
-
 ## Installation
 To install using `pip`:
 ```
 pip install hypers
 ```
 
-The following packages are required:
+The following packages will also be installed:
 
 + numpy
 + matplotlib
@@ -70,9 +61,9 @@ The following packages are required:
 ## Features
 Features implemented in ``hypers`` include:
 
-+ [Clustering](http://hypers.readthedocs.io/en/latest/source/cluster/index.html) (e.g. KMeans, Spectral clustering, Hierarchical clustering)
-+ [Decomposition](http://hypers.readthedocs.io/en/latest/source/decomposition/index.html) (e.g. PCA, ICA, NMF)
-+ [Hyperspectral viewer](http://hypers.readthedocs.io/en/latest/source/hypview/index.html)
++ Clustering (e.g. KMeans, Spectral clustering, Hierarchical clustering)
++ Decomposition (e.g. PCA, ICA, NMF)
++ Hyperspectral viewer
 + Vertex component analysis
 + Gaussian mixture models
 

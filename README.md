@@ -5,14 +5,17 @@
 [![Python Version 3.6](https://img.shields.io/badge/Python-3.6-blue.svg)](https://www.python.org/downloads/)
 [![PyPI version](https://badge.fury.io/py/hypers.svg)](https://badge.fury.io/py/hypers)
 
-Provides an object model for hyperspectral data.
+hypers provides a data structure in python for hyperspectral data. The data structure includes:
 
-+ Simple tools for exploratory analysis of hyperspectral data
++ Tools for processing and exploratory analysis of hyperspectral data
 + Interactive hyperspectral viewer built into the object
 + Allows for unsupervised machine learning directly on the object (using scikit-learn)
-+ More features coming soon...
++ Vertex component analysis
 
 <p align="center"><img src="/docs/source/images/hyperspectral_image.png" width="300"></p>
+
+**Please note that this package is currently in pre-release. It can still be used, however there is likely to be 
+significant changes to the API. The first public release will be v0.1.0.**
 
 ## Contents
 1. [About](#about)
@@ -40,9 +43,6 @@ ICA, K-means) to be used directly with the object.
     
     <p align="center"><img src="/docs/source/images/hyperspectral_view.png" width="400"></p>
     
-**Please note that this package is currently in pre-release. The first general release will 
-be v0.1.0**
-
 #### Hyperspectral data
 Whilst this package is designed to work with any type of hyperspectral data, of the form of either of the following: 
 
@@ -73,6 +73,9 @@ Features implemented in ``hypers`` include:
 + [Clustering](http://hypers.readthedocs.io/en/latest/source/cluster/index.html) (e.g. KMeans, Spectral clustering, Hierarchical clustering)
 + [Decomposition](http://hypers.readthedocs.io/en/latest/source/decomposition/index.html) (e.g. PCA, ICA, NMF)
 + [Hyperspectral viewer](http://hypers.readthedocs.io/en/latest/source/hypview/index.html)
++ Vertex component analysis
++ Gaussian mixture models
++ Least-squares spectral fitting
 
 	
 ## Examples
@@ -90,25 +93,32 @@ from sklearn.cluster import KMeans
 # The test dataset here has spatial dimensions (x=200, y=200, z=10) and spectral dimension (s=1024)
 test_data = np.random.rand(200, 200, 10, 1024)
 X = hp.Dataset(test_data)
+X.scale()
 
 # Using Principal Components Analysis to reduce to first 5 components
 # The variables ims, spcs are arrays of the first 5 principal components for the images, spectra respectively
 ims, spcs = X.decompose(
-    mdl=PCA(n_components=5)
+    mdl=PCA(n_components=5),
+    plot=False,
+    return_arrs=True
 )
 
 # Clustering using K-means (with and without applying PCA first)
 # The cluster method will return the labeled image array and the spectrum for each cluster
 lbls_nodecompose, spcs_nodecompose = X.cluster(
     mdl=KMeans(n_clusters=3),
-    decomposed=False
+    decomposed=False,
+    plot=False,
+    return_arrs=True
 )
 
 # Clustering on only the first 5 principal components
 lbls_decomposed, spcs_decomposed = X.cluster(
     mdl=KMeans(n_clusters=3),
     decomposed=True,
-    pca_comps=5
+    pca_comps=5,
+    plot=False,
+    return_arrs=True
 )
 ```
 

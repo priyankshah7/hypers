@@ -7,9 +7,11 @@ from sklearn.preprocessing import scale, robust_scale, normalize
 
 from hypers._preprocessing import _data_preprocessing
 from hypers._learning import _data_cluster, _vca, _ucls, _data_decomposition, _data_scree, _data_mixture
-from hypers._tools import _data_smoothen, _data_mean, _data_checks, _data_access
+from hypers._tools import _data_smoothen, _data_mean, _data_checks, _data_access, null
 from hypers._tools import PreprocessType, ClusterType, DecomposeType, MixtureType
 from hypers._view import hsiPlot
+
+from hypers._learning._pca import _pca
 
 
 class Dataset:
@@ -77,6 +79,13 @@ class Dataset:
         self.mdl_decompose = None
         self.mdl_cluster = None
         self.mdl_mixture = None
+
+        # attrs
+        self.decompose = null()
+        self.decompose.pca = _pca(self)
+        self.decompose.vca = None
+        self.decompose.ica = None
+        self.decompose.sklearn = None
 
         self.update()
 
@@ -190,6 +199,9 @@ class Dataset:
 
         self.update()
         return self
+
+    def __array__(self) -> np.ndarray:
+        return self.data
 
     def update(self) -> None:
         """Update the stored data and class properties"""
@@ -364,6 +376,7 @@ class Dataset:
             An array of spectra (size: spectra, n_clusters)
         """
 
+        # FIXME For plotting, print legend and have them match clusters in the image
         return _data_cluster(self, mdl, decomposed=decomposed, pca_comps=pca_comps, plot=plot, return_arrs=return_arrs)
 
     def mixture(self, mdl: MixtureType,
@@ -395,6 +408,7 @@ class Dataset:
 
     def vca(self, n_components: int = 4,
             plot: bool = False,
+            figsize: tuple = None,
             return_arrs: bool = True) -> Tuple[np.ndarray, List[int]]:
         """Vertex component analysis
 
@@ -419,11 +433,12 @@ class Dataset:
             A list of tuples of the coordinates of the pure pixels
         """
 
-        Ae, indices = _vca(self, n_components=n_components, plot=plot, return_arrs=return_arrs)
+        Ae, indices = _vca(self, n_components=n_components, plot=plot, figsize=figsize, return_arrs=return_arrs)
         return Ae, indices
 
     def abundance(self, spectra: np.ndarray,
                   plot: bool = False,
+                  figsize: tuple = None,
                   return_arrs: bool = True) -> np.ndarray:
         """Abundance map with least-squares fitting
 

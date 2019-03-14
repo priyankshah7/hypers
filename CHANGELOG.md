@@ -1,5 +1,9 @@
 # hypers changelog
 
+## Version 0.0.12 (pre-release)
+#### Features
++ Added figsize argument to relevant methods in Dataset
+
 ## Version 0.0.11 (pre-release)
 #### Features 
 + Can now multiply, divide, add and subtract image array from data 

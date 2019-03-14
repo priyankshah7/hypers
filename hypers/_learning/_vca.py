@@ -8,6 +8,7 @@ def _vca(X: 'hp.Dataset',
          n_components: int = 4,
          input_snr: float = 0,
          plot: bool = False,
+         figsize: tuple = None,
          return_arrs: bool = True) -> Tuple[np.ndarray, List[int]]:
 
     Ae, indice, Yp = _calcluate_vca(X.flatten().T, n_components, snr_input=input_snr)
@@ -16,6 +17,8 @@ def _vca(X: 'hp.Dataset',
         index[component] = np.unravel_index(indice[component], X.shape[:-1])
 
     if plot:
+        if figsize is not None:
+            plt.figure(figsize=figsize)
         for component in range(n_components):
             plt.plot(Ae[:, component])
         plt.show()

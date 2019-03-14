@@ -7,8 +7,9 @@ from hypers._tools._types import MixtureType, MIXTURE_TYPES
 
 def _data_mixture(X: 'hp.Dataset',
                   mdl: MixtureType,
-                  plot: bool,
-                  return_arrs: bool) -> Tuple[np.ndarray, np.ndarray]:
+                  plot: bool = False,
+                  figsize: tuple = None,
+                  return_arrs: bool = True) -> Tuple[np.ndarray, np.ndarray]:
 
     if type(mdl) not in MIXTURE_TYPES:
         raise TypeError('Must pass a sklearn mixture class. Refer to documentation.')
@@ -19,6 +20,8 @@ def _data_mixture(X: 'hp.Dataset',
     spectra = X.mdl_mixture.means_.T
 
     if plot:
+        if figsize is not None:
+            plt.figure(figsize=figsize)
         plt.subplot(121)
         if X.ndim == 3:
             plt.imshow(lbls)

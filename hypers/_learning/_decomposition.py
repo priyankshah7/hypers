@@ -8,8 +8,9 @@ from hypers._tools._types import DecomposeType, DECOMPOSE_TYPES
 
 def _data_decomposition(X: 'hp.Dataset',
                         mdl: DecomposeType,
-                        plot: bool,
-                        return_arrs: bool) -> Tuple[np.ndarray, np.ndarray]:
+                        plot: bool = False,
+                        figsize: tuple = None,
+                        return_arrs: bool = True) -> Tuple[np.ndarray, np.ndarray]:
 
     if type(mdl) not in DECOMPOSE_TYPES:
         raise TypeError('Must pass a sklearn decomposition class. Refer to documentation.')
@@ -20,6 +21,8 @@ def _data_decomposition(X: 'hp.Dataset',
     specs = X.mdl_decompose.components_.transpose()
 
     if plot:
+        if figsize is not None:
+            plt.figure(figsize=figsize)
         for component in range(n_components):
             plt.subplot(n_components, 2, 2*component + 1)
             if X.ndim == 3:
@@ -36,8 +39,9 @@ def _data_decomposition(X: 'hp.Dataset',
 
 
 def _data_scree(X: 'hp.Dataset',
-                plot: bool,
-                return_arrs: bool) -> np.ndarray:
+                plot: bool = False,
+                figsize: tuple = None,
+                return_arrs: bool = True) -> np.ndarray:
 
     mdl = PCA()
     mdl.fit_transform(X.flatten())
@@ -46,6 +50,8 @@ def _data_scree(X: 'hp.Dataset',
     X._scree = scree
 
     if plot:
+        if figsize is not None:
+            plt.figure(figsize=figsize)
         plt.plot(scree)
         plt.xlabel('Principal components')
         plt.ylabel('Variance ratio')

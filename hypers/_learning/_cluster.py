@@ -30,10 +30,11 @@ def _n_clusters(X: 'hp.Dataset',
 
 def _data_cluster(X: 'hp.Dataset',
                   mdl: ClusterType,
-                  decomposed: bool,
-                  pca_comps: int,
-                  plot: bool,
-                  return_arrs: bool) -> Tuple[np.ndarray, np.ndarray]:
+                  decomposed: bool = False,
+                  pca_comps: int = 10,
+                  plot: bool = False,
+                  figsize: tuple = None,
+                  return_arrs: bool = True) -> Tuple[np.ndarray, np.ndarray]:
 
     if type(mdl) not in CLUSTER_TYPES:
         raise TypeError('Must pass a sklearn cluster class. Refer to documentation.')
@@ -80,6 +81,8 @@ def _data_cluster(X: 'hp.Dataset',
     specs = specs.T
 
     if plot:
+        if figsize is not None:
+            plt.figure(figsize=figsize)
         plt.subplot(121)
         if X.ndim == 3:
             plt.imshow(labels)

@@ -6,7 +6,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QMainWindow, QApplication, QStyleFactory
 
 import hypers as hp
-from hypers._view._form import mainwindow
+from hypers.view._form import mainwindow
 
 
 class HSIDialog(QMainWindow, mainwindow.Ui_MainWindow):

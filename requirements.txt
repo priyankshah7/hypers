@@ -19,6 +19,7 @@ more-itertools==4.3.0
 numpy==1.15.4
 numpydoc==0.8.0
 packaging==18.0
+pandas==0.24.2
 pkginfo==1.4.2
 pluggy==0.8.0
 py==1.7.0
@@ -35,6 +36,7 @@ requests==2.21.0
 requests-toolbelt==0.8.0
 scikit-learn==0.20.2
 scipy==1.2.0
+seaborn==0.9.0
 six==1.12.0
 snowballstemmer==1.2.1
 Sphinx==1.8.3

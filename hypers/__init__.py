@@ -1,1 +1,1 @@
-from hypers._process import Dataset
+from hypers.core import hparray

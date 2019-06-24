@@ -95,3 +95,8 @@ class TestArray:
         assert self.h3.smoothen(method='savgol', window_length=3, polyorder=1).shape == self.h3.shape
         assert self.h4.smoothen(method='savgol', window_length=3, polyorder=1).shape == self.h4.shape
         assert self.h5.smoothen(method='savgol', window_length=3, polyorder=1).shape == self.h5.shape
+
+    def test_plot(self):
+        # pyqt backend
+        with pytest.raises(DimensionError): self.h1.plot()
+        with pytest.raises(DimensionError): self.h2.plot()

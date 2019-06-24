@@ -9,6 +9,8 @@ from hypers.core.accessor import CachedAccessor
 from hypers.exceptions import DimensionError
 from hypers.learning.decomposition import decompose
 from hypers.learning.cluster import cluster
+from hypers.learning.mixture import mixture_models
+from hypers.learning.abundance import abundance
 from hypers.plotting.view import hsiPlot
 
 
@@ -78,8 +80,8 @@ class hparray(np.ndarray):
         if self.ndim > 2:
             self.decompose = decompose(self)
             self.cluster = cluster(self)
-            self.mixture = None
-            self.abundance = None
+            self.mixture = mixture_models(self)
+            self.abundance_map = abundance(self)
 
     def _data_access(self):
         self.image = _AccessImage(self)
@@ -145,7 +147,10 @@ class hparray(np.ndarray):
 
     def plot(self, backend: str='pyqt'):
         if backend == 'pyqt':
-            hsiPlot(self)
+            if self.ndim > 2:
+                hsiPlot(self)
+            else:
+                raise DimensionError('Number of total dimensions must be 3 or greater.')
 
 
 class _AccessImage:

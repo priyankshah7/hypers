@@ -18,6 +18,8 @@ class ucls:
         self.map = None
 
     def calculate(self, x_fit: np.ndarray) -> np.ndarray:
+        if x_fit.ndim == 1:
+            x_fit = x_fit.reshape(x_fit.shape[0], 1)
         x_inverse = np.linalg.pinv(x_fit)
         self.map = np.dot(x_inverse, self.X.collapse().T).T.reshape(self.X.shape[:-1] + (x_fit.shape[-1],))
 
@@ -30,6 +32,8 @@ class nnls:
         self.map = None
 
     def calculate(self, x_fit: np.ndarray) -> np.ndarray:
+        if x_fit.ndim == 1:
+            x_fit = x_fit.reshape(x_fit.shape[0], 1)
         M = self.X.collapse()
 
         N, p1 = M.shape
@@ -50,6 +54,8 @@ class fcls:
         self.map = None
 
     def calculate(self, x_fit: np.ndarray) -> np.ndarray:
+        if x_fit.ndim == 1:
+            x_fit = x_fit.reshape(x_fit.shape[0], 1)
         solvers.options['show_progress'] = False
 
         M = self.X.collapse()

@@ -11,11 +11,11 @@ class TestArray:
         self.n4 = np.random.rand(10, 10, 10, 30)
         self.n5 = np.random.rand(10, 10, 10, 2, 30)
 
-        self.h1 = hp.hparray(self.n1)
-        self.h2 = hp.hparray(self.n2)
-        self.h3 = hp.hparray(self.n3)
-        self.h4 = hp.hparray(self.n4)
-        self.h5 = hp.hparray(self.n5)
+        self.h1 = hp.array(self.n1)
+        self.h2 = hp.array(self.n2)
+        self.h3 = hp.array(self.n3)
+        self.h4 = hp.array(self.n4)
+        self.h5 = hp.array(self.n5)
 
         self.array_shapes = [
             (30,),

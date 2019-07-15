@@ -1,6 +1,6 @@
 import numpy as np
 from typing import Union
-from hypers.core.hparray import hparray
+from hypers.core.array import hparray
 
 # types that can be used for arrays
 ListOrArray = Union[list, np.ndarray, hparray]

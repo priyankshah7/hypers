@@ -1,1 +1,1 @@
-from hypers.core.hparray import hparray
+from hypers.core.array import hparray

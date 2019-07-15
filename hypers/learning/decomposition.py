@@ -61,7 +61,7 @@ class pca:
             n_components = self.X.shape[-1]
 
         mdl = PCA(n_components=n_components, **kwargs)
-        self.ims = mdl.fit_transform(self.X.flatten()).reshape(self.X.data.shape[:-1] + (n_components,))
+        self.ims = mdl.fit_transform(self.X.collapse()).reshape(self.X.data.shape[:-1] + (n_components,))
         self.spcs = mdl.components_.transpose()
 
         return self.ims, self.spcs
@@ -87,7 +87,7 @@ class ica:
             n_components = self.X.shape[-1]
 
         mdl = FastICA(n_components=n_components, **kwargs)
-        self.ims = mdl.fit_transform(self.X.flatten()).reshape(self.X.data.shape[:-1] + (n_components,))
+        self.ims = mdl.fit_transform(self.X.collapse()).reshape(self.X.data.shape[:-1] + (n_components,))
         self.spcs = mdl.components_.transpose()
 
         return self.ims, self.spcs
@@ -113,7 +113,7 @@ class nmf:
             n_components = self.X.shape[-1]
 
         mdl = NMF(n_components=n_components, **kwargs)
-        self.ims = mdl.fit_transform(self.X.flatten()).reshape(self.X.data.shape[:-1] + (n_components,))
+        self.ims = mdl.fit_transform(self.X.collapse()).reshape(self.X.data.shape[:-1] + (n_components,))
         self.spcs = mdl.components_.transpose()
 
         return self.ims, self.spcs
@@ -139,7 +139,7 @@ class vca:
                   input_snr: float = 0) -> Tuple[np.ndarray, List[int]]:
 
         self.n_components = n_components
-        Ae, indice, Yp = self._calcluate_vca(self.X.flatten().T, n_components, snr_input=input_snr)
+        Ae, indice, Yp = self._calcluate_vca(self.X.collapse().T, n_components, snr_input=input_snr)
         index = [0] * n_components
         for component in range(n_components):
             index[component] = np.unravel_index(indice[component], self.X.shape[:-1])

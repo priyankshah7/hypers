@@ -5,7 +5,6 @@ import numpy as np
 from typing import Union
 from scipy.signal import savgol_filter
 
-from hypers.core.accessor import CachedAccessor
 from hypers.exceptions import DimensionError
 from hypers.learning.decomposition import decompose
 from hypers.learning.cluster import cluster
@@ -81,7 +80,7 @@ class hparray(np.ndarray):
             self.decompose = decompose(self)
             self.cluster = cluster(self)
             self.mixture = mixture_models(self)
-            self.abundance_map = abundance(self)
+            self.abundance = abundance(self)
 
     def _data_access(self):
         self.image = _AccessImage(self)

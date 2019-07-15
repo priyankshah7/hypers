@@ -28,7 +28,7 @@ class kmeans:
         if decomposed:
             print('Clustering with the first', str(pca_comps), ' PCA components')
             mdl_pca = PCA(n_components=pca_comps)
-            comps = mdl_pca.fit_transform(self.X.flatten())
+            comps = mdl_pca.fit_transform(self.X.collapse())
             mdl_cluster.fit(comps)
             spcs = mdl_pca.inverse_transform(mdl_cluster.cluster_centers_)
 

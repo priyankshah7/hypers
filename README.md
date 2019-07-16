@@ -9,8 +9,10 @@ hypers provides a data structure in python for hyperspectral data. The data stru
 
 + Tools for processing and exploratory analysis of hyperspectral data
 + Interactive hyperspectral viewer built into the object
-+ Allows for unsupervised machine learning directly on the object (using scikit-learn)
-+ Vertex component analysis
++ Allows for unsupervised machine learning directly on the object
+
+The data structure is built on top of the numpy `ndarray`, this package simply adds additional functionality that 
+allows for quick analysis of hyperspectral data.
 
 <p align="center"><img src="/docs/source/images/hyperspectral_image.png" width="300"></p>
 

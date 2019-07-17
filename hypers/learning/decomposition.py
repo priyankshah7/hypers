@@ -38,6 +38,7 @@ class pca:
         self.X = X
         self.ims = None
         self.spcs = None
+        self._mdl = None
 
     def scree(self):
         mdl = PCA()
@@ -56,15 +57,26 @@ class pca:
         plt.tight_layout()
         plt.show()
 
-    def calculate(self, n_components: int = None, **kwargs) -> Tuple[np.ndarray, np.ndarray]:
+    def calculate(self, n_components: int=None, **kwargs) -> Tuple[np.ndarray, np.ndarray]:
         if n_components is None:
             n_components = self.X.shape[-1]
 
-        mdl = PCA(n_components=n_components, **kwargs)
-        self.ims = mdl.fit_transform(self.X.collapse()).reshape(self.X.data.shape[:-1] + (n_components,))
-        self.spcs = mdl.components_.transpose()
+        self._mdl = PCA(n_components=n_components, **kwargs)
+        self.ims = self._mdl.fit_transform(self.X.collapse()).reshape(self.X.data.shape[:-1] + (n_components,))
+        self.spcs = self._mdl.components_.transpose()
 
         return self.ims, self.spcs
+
+    def reduce(self, n_components: int=None):
+        if self._mdl is None:
+            _, _ = self.calculate(n_components=n_components)
+
+        if n_components is None:
+            n_components = self.ims.shape[-1]
+
+        ims = self.ims.reshape(np.prod(self.ims.shape[:-1]), self.ims.shape[-1])
+        inversed = self._mdl.inverse_transform(ims[..., :n_components])
+        return inversed.reshape(self.ims.shape[:-1] + (self.spcs.shape[0],))
 
     def plot_image(self, n_components: Union[int, Tuple] = 1):
         _plot_image(n_components=n_components, ims=self.ims)

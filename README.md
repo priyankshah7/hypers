@@ -99,3 +99,9 @@ The docs are hosted [here](http://hypers.readthedocs.io/en/latest/?badge=latest)
 
 ## License
 hypers is licensed under the OSI approved BSD 3-Clause License.
+
+## References
+1. VCA algorithm  
+J. M. P. Nascimento and J. M. B. Dias, "Vertex component analysis: a fast algorithm to unmix hyperspectral data," 
+in IEEE Transactions on Geoscience and Remote Sensing, 2005  
+Adapted from [repo](https://github.com/Laadr/VCA).

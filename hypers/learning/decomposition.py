@@ -89,7 +89,7 @@ class pca:
 
 
 class ica:
-    def __init__(self, X: 'hp.Dataset'):
+    def __init__(self, X: 'hp.hparray'):
         self.X = X
         self.ims = None
         self.spcs = None
@@ -115,7 +115,7 @@ class ica:
 
 
 class nmf:
-    def __init__(self, X: 'hp.Dataset'):
+    def __init__(self, X: 'hp.hparray'):
         self.X = X
         self.ims = None
         self.spcs = None
@@ -141,7 +141,7 @@ class nmf:
 
 
 class vca:
-    def __init__(self, X: 'hp.Dataset'):
+    def __init__(self, X: 'hp.hparray'):
         self.X = X
         self.n_components = None
         self.spcs = None

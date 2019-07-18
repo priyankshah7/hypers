@@ -33,6 +33,7 @@ class TestLearning:
                 assert dmethod.spcs.shape == (array.shape[-1], 4)
 
             assert array.decompose.pca.scree().shape[0] == array.shape[-1]
+            assert array.decompose.pca.reduce(n_components=10).shape == array.shape
 
             # Testing vca method
             assert array.decompose.vca.spcs is None

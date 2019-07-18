@@ -2,5 +2,5 @@
 Dataset: Reference
 ==================
 
-.. automodule:: hypers._process
+.. automodule:: hypers.core.array
     :members:

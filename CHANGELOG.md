@@ -1,5 +1,11 @@
 # hypers changelog
 
+## Version 0.0.12 (pre-release)
+#### Features
++ `Dataset` object has been removed in favour of subclassing the numpy array object `numpy.ndarray` 
+and extending its functionality for hyperspectral data. This forms the main data type for hypers and 
+is `hypers.hparray`.
+
 ## Version 0.0.11 (pre-release)
 #### Features 
 + Can now multiply, divide, add and subtract image array from data 

@@ -147,6 +147,19 @@ class hparray(np.ndarray):
         return smooth_array
 
     def plot(self, backend: str='pyqt'):
+        """
+        Interactive plotting to interact with hyperspectral data
+
+        Note that at the moment only the 'pyqt' backend has been implemented. This means that
+        PyQt is required to be installed and when this method is called, a separate window generated
+        by PyQt will pop up. It is still possible to use this in a Jupyter environment, however the
+        cell that calls this method will remain frozen until the window is closed.
+
+        Parameters
+        ----------
+        backend: str
+            Backend to use. Default is 'pyqt'.
+        """
         if backend == 'pyqt':
             if self.ndim > 2:
                 hsiPlot(self)

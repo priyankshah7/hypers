@@ -39,7 +39,7 @@ Provides a data structure model for hyperspectral data.
     Extracting class components from hyperspectral data.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: Contents:
 
    install

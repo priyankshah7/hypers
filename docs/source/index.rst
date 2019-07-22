@@ -45,7 +45,5 @@ Provides a data structure model for hyperspectral data.
    install
    dataset
    api
-   preprocessing
-   decompose
-   cluster
+   unsupervised
    view

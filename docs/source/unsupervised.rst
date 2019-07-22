@@ -2,7 +2,7 @@
 Unsupervised learning
 =====================
 
-The `hparray` object has built in methods that allows you to perform several unsupervised learning
+The ``hparray`` object has built in methods that allows you to perform several unsupervised learning
 techniques on the stored data. The techniques are split into the following categories:
 
 - Dimensionality reduction
@@ -10,7 +10,7 @@ techniques on the stored data. The techniques are split into the following categ
 - Mixture models
 - Abundance mapping
 
-These are all available as methods on the `hparray` object.
+These are all available as methods on the ``hparray`` object.
 
 .. code-block:: python
 
@@ -50,14 +50,14 @@ The following techniques are available:
 
 Principal component analysis
 ----------------------------
-This is implemented using scikit-learn's `PCA` and thus requires scikit-learn to be installed.
+This is implemented using scikit-learn's ``PCA`` and thus requires scikit-learn to be installed.
 
 .. automodule:: hypers.learning.decomposition.pca
     :members:
 
 Independent component analysis
 ------------------------------
-This is implemented using scikit-learn's `FastICA` and thus requires scikit-learn to be installed.
+This is implemented using scikit-learn's ``FastICA`` and thus requires scikit-learn to be installed.
 
 .. automodule:: hypers.learning.decomposition.ica
     :members:

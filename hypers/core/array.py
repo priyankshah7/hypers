@@ -168,6 +168,14 @@ class hparray(np.ndarray):
 
     @property
     def nsamples(self):
+        """
+        Returns the number of samples (total number of spatial pixels) in the dataset
+
+        Returns
+        -------
+        int:
+            Total number of samples
+        """
         if self.ndim > 1:
             return np.prod(self.shape[:-1])
         else:
@@ -175,6 +183,14 @@ class hparray(np.ndarray):
 
     @property
     def nspatial(self):
+        """
+        Returns the shape of the spatial dimensions
+
+        Returns
+        -------
+        tuple:
+            Tuple of the shape of the spatial dimensions
+        """
         if self.ndim > 1:
             return self.shape[:-1]
         else:
@@ -182,6 +198,14 @@ class hparray(np.ndarray):
 
     @property
     def nfeatures(self):
+        """
+        Returns the number of features (size of the spectral dimension) in the dataset
+
+        Returns
+        -------
+        int:
+            Size of the spectral dimension
+        """
         if self.ndim > 1:
             return self.shape[-1]
         else:

@@ -41,12 +41,28 @@ class pca:
         self._mdl = None
 
     def scree(self):
+        """
+        Calculated scree
+
+        Returns an array which assigns the amount of variance contributed by each principal
+        component for the dataset.
+
+        Returns
+        -------
+        np.ndarray
+            PCA scree
+        """
         mdl = PCA()
         mdl.fit_transform(self.X.collapse())
 
         return mdl.explained_variance_ratio_
 
     def plot_scree(self):
+        """
+        Scree plot
+
+        Calculates and returns a scree plot for the dataset
+        """
         mdl = PCA()
         mdl.fit_transform(self.X.collapse())
 
@@ -58,6 +74,29 @@ class pca:
         plt.show()
 
     def calculate(self, n_components: int=None, **kwargs) -> Tuple[np.ndarray, np.ndarray]:
+        """
+        Calculate principal components
+
+        Parameters
+        ----------
+        n_components: int
+            The number of components to calculate. This should be less than or equal to the size
+            of the spectral dimension.
+
+        kwargs:
+            Keyword arguments can be supplied for scikit-learn's PCA class.
+            https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html
+
+        Returns
+        -------
+        np.ndarray:
+            Images of the first n_components number of principal components. The shape of the array will
+            be (nspatial, n_components).
+
+        np.ndarray:
+            Spectra of the first n_components number of principal components. The shape of the array will
+            be (nfeatures, n_components).
+        """
         if n_components is None:
             n_components = self.X.shape[-1]
 

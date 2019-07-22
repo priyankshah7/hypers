@@ -1,6 +1,14 @@
 =========================
-Dataset: An  introduction
+hparray: An  introduction
 =========================
+
+Motivation
+==========
+The motivation behind the creation of this package was performing common tasks on a numpy `ndarray` for
+hyperspectral data which could be better served by extending the `ndarray` type with added functionality for
+hyperspectral data. This package provides just that, a `hparray` type that subclasses `ndarray` and adds further
+functionality. An advantage over other packages is that it the `hparray` object can still be used as a normal
+numpy array for other tasks.
 
 Processing data
 ===============
@@ -29,8 +37,8 @@ Below is an example of instantiating a ``hp.hparray`` object with a 4d random nu
     test_data = np.random.rand(40, 40, 4, 512)
     X = hp.array(test_data)
 
-Dataset properties
-==================
+Properties
+==========
 The ``hp.hparray`` object has several useful attributes and methods for immediate analysis:
 
 .. note::
@@ -59,8 +67,8 @@ The ``hp.hparray`` object has several useful attributes and methods for immediat
     X.decompose.pca.plot_scree()
 
     # To view and interact with the data:
-    X.view()                           # Opens a hyperspectral viewer
+    X.plot(backend='pyqt')                           # Opens a hyperspectral viewer
 
 
 To view the full list of methods and attributes that the Process class contains, see
-:class:`~hypers.Dataset`.
+:class:`~hypers.hparray`.

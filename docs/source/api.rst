@@ -1,5 +1,5 @@
 ==================
-Dataset: Reference
+hparray: Reference
 ==================
 
 .. automodule:: hypers.core.array

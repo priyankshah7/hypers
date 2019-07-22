@@ -86,6 +86,9 @@ class hparray(np.ndarray):
         self.image = _AccessImage(self)
         self.spectrum = _AccessSpectrum(self)
 
+    def _dimension_error(self):
+        raise DimensionError('Number of dimensions must be greater than 2')
+
     def collapse(self) -> np.ndarray:
         """
         Collapse the array into a 2d array
@@ -112,8 +115,7 @@ class hparray(np.ndarray):
         if self.ndim > 1:
             return np.asarray(np.reshape(self, (np.prod(self.shape[:-1]), self.shape[-1])))
         else:
-            raise DimensionError('To collapse an array, the number of dimensions '
-                                 'must be 2 or greater.')
+            self._dimension_error()
 
     def smoothen(self, method: str='savgol', **kwargs) -> 'hparray':
         """
@@ -149,7 +151,28 @@ class hparray(np.ndarray):
             if self.ndim > 2:
                 hsiPlot(self)
             else:
-                raise DimensionError('Number of total dimensions must be 3 or greater.')
+                self._dimension_error()
+
+    @property
+    def nsamples(self):
+        if self.ndim > 1:
+            return np.prod(self.shape[:-1])
+        else:
+            self._dimension_error()
+
+    @property
+    def nspatial(self):
+        if self.ndim > 1:
+            return self.shape[:-1]
+        else:
+            self._dimension_error()
+
+    @property
+    def nfeatures(self):
+        if self.ndim > 1:
+            return self.shape[-1]
+        else:
+            self._dimension_error()
 
 
 class _AccessImage:

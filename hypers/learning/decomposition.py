@@ -7,6 +7,8 @@ from sklearn.decomposition import PCA, FastICA, NMF
 
 sns.set()
 
+__all__ = ['decompose', 'pca', 'ica', 'nmf', 'vca']
+
 
 class decompose:
     """ Provides instances of decomposition classes """
@@ -19,12 +21,7 @@ class decompose:
 
 class pca:
     """
-    Principal components analysis
-
-    Parameters
-    ----------
-    X: hp.hparray
-        The hyperspectral array.
+    Principal component analysis
 
     Attributes
     ----------
@@ -42,7 +39,7 @@ class pca:
 
     def scree(self):
         """
-        Calculated scree
+        Calculate scree
 
         Returns an array which assigns the amount of variance contributed by each principal
         component for the dataset.
@@ -107,6 +104,22 @@ class pca:
         return self.ims, self.spcs
 
     def reduce(self, n_components: int=None):
+        """
+        Transform to original space with reduced number of PCs.
+
+        Useful to reduce noise by removing components which do not contain any useful signal
+        and only contribute noise.
+
+        Parameters
+        ----------
+        n_components: int or None
+            Number of principal components to keep. If None, all components are kept.
+
+        Returns
+        -------
+        hp.hparray
+            The transformed data with the same shape as the original hparray
+        """
         if self._mdl is None:
             _, _ = self.calculate(n_components=n_components)
 
@@ -115,7 +128,7 @@ class pca:
 
         ims = self.ims.reshape(np.prod(self.ims.shape[:-1]), self.ims.shape[-1])
         inversed = self._mdl.inverse_transform(ims[..., :n_components])
-        return inversed.reshape(self.ims.shape[:-1] + (self.spcs.shape[0],))
+        return hp.array(inversed.reshape(self.ims.shape[:-1] + (self.spcs.shape[0],)))
 
     def plot_image(self, n_components: Union[int, Tuple] = 1):
         _plot_image(n_components=n_components, ims=self.ims)

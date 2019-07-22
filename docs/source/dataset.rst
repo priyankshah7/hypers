@@ -6,13 +6,13 @@ Motivation
 ==========
 The motivation behind the creation of this package was performing common tasks on a numpy ``ndarray`` for
 hyperspectral data which could be better served by extending the ``ndarray`` type with added functionality for
-hyperspectral data. This package provides just that, a ``hparray`` type that subclasses ``ndarray`` and adds further
-functionality. An advantage over other packages is that it the ``hparray`` object can still be used as a normal
-numpy array for other tasks.
+hyperspectral data. This package provides just that, a :class:`~hypers.core.array.hparray` type that subclasses
+``ndarray`` and adds further functionality. An advantage over other packages is that it the
+:class:`~hypers.core.array.hparray` object can still be used as a normal numpy array for other tasks.
 
 Processing data
 ===============
-The hyperspectral data is stored and processed using :class:`~hypers.hparray`.
+The hyperspectral data is stored and processed using :class:`~hypers.core.array.hparray`.
 
 .. note::
 
@@ -27,7 +27,7 @@ The hyperspectral data is stored and processed using :class:`~hypers.hparray`.
     `(10, 10, 10, 100)`
 
 
-Below is an example of instantiating a ``hp.hparray`` object with a 4d random numpy array.
+Below is an example of instantiating a :class:`~hypers.core.array.hparray` object with a 4d random numpy array.
 
 .. code-block:: python
 
@@ -39,12 +39,12 @@ Below is an example of instantiating a ``hp.hparray`` object with a 4d random nu
 
 Properties
 ==========
-The ``hp.hparray`` object has several useful attributes and methods for immediate analysis:
+The :class:`~hypers.core.array.hparray` object has several useful attributes and methods for immediate analysis:
 
 .. note::
 
-    Note that as ``hp.hparray`` subclasses numpy's ``ndarray``, all the usual methods and attributes
-    in a numpy array can also be used here.
+    Note that as :class:`~hypers.core.array.hparray` subclasses numpy's ``ndarray``, all the usual methods
+    and attributes in a numpy array can also be used here.
 
 .. code-block:: python
 
@@ -71,4 +71,4 @@ The ``hp.hparray`` object has several useful attributes and methods for immediat
 
 
 To view the full list of methods and attributes that the Process class contains, see
-:class:`~hypers.hparray`.
+:class:`~hypers.core.array.hparray`.

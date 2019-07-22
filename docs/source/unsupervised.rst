@@ -6,7 +6,7 @@ The ``hparray`` object has built in methods that allows you to perform several u
 techniques on the stored data. The techniques are split into the following categories:
 
 - Dimensionality reduction
-- Clustering
+- Cluster analysis
 - Mixture models
 - Abundance mapping
 
@@ -52,12 +52,114 @@ Principal component analysis
 ----------------------------
 This is implemented using scikit-learn's ``PCA`` and thus requires scikit-learn to be installed.
 
-.. automodule:: hypers.learning.decomposition.pca
+.. autoclass:: hypers.learning.decomposition.pca
     :members:
 
 Independent component analysis
 ------------------------------
 This is implemented using scikit-learn's ``FastICA`` and thus requires scikit-learn to be installed.
 
-.. automodule:: hypers.learning.decomposition.ica
+.. autoclass:: hypers.learning.decomposition.ica
     :members:
+
+Non-negative matrix factorization
+---------------------------------
+This is implemented using scikit-learn's ``NMF`` and thus requires scikit-learn to be installed.
+
+.. autoclass:: hypers.learning.decomposition.nmf
+    :members:
+
+Vertex component analysis
+-------------------------
+This is implemented with [1]_.
+
+.. autoclass:: hypers.learning.decomposition.vca
+    :members:
+
+------------
+
+Cluster analysis
+================
+Clustering refers to grouping objects into a set number of clusters whilst ensuring that the objects in
+each cluster are as similar as possible to the other objects in the cluster. The notion of "similarity" is where
+the different clustering techniques differ.
+
+The following techniques are available:
+
+- K-means
+
+K-means
+-------
+This is implemented using scikit-learn's ``KMeans`` and thus requires scikit-learn to be installed.
+
+.. autoclass:: hypers.learning.cluster.kmeans
+    :members:
+
+------------
+
+Mixture models
+==============
+Mixture models are probabilistic models that assume that every point in a dataset is generated from a
+mixture of finite number of probability distributions with unknown parameters.
+
+The following techniques are available:
+
+- Gaussian mixture model
+
+Gaussian mixture model
+----------------------
+This is implemented using scikit-learn's ``GaussianMixture`` and thus requires scikit-learn to be installed.
+
+.. autoclass:: hypers.learning.mixture.gaussian_mixture
+    :members:
+
+------------
+
+Abundance mapping
+=================
+Abundance maps are used to determine how much of a given spectrum is present at each pixel in a hyperspectral
+image. They can be useful for determining percentages after the spectra have been retrieved from some clustering
+or unmixing technique or if the spectra are already at hand.
+
+The following techniques are available:
+
+- Unconstrained least-squares
+- Non-negative constrained least-squares
+- Fully-constrained least-squares
+
+Unconstrained least-squares
+---------------------------
+This is implemented with [2]_.
+
+.. autoclass:: hypers.learning.abundance.ucls
+    :members:
+
+Non-negative constrained least-squares
+--------------------------------------
+This is implemented with [2]_.
+
+.. autoclass:: hypers.learning.abundance.nnls
+    :members:
+
+Fully-constrained least-squares
+-------------------------------
+This is implemented with [2]_.
+
+.. autoclass:: hypers.learning.abundance.fcls
+    :members:
+
+------------
+
+**References**
+
+.. [1] VCA algorithm.
+    J. M. P. Nascimento and J. M. B. Dias, "Vertex component analysis: a fast algorithm to unmix hyperspectral data,"
+    in IEEE Transactions on Geoscience and Remote Sensing, 2005.
+    Adapted from repo_.
+
+.. [2] Abundance mapping.
+    Adapted from PySptools_.
+
+.. _PySptools: https://github.com/ctherien/pysptools
+.. _repo: https://github.com/Laadr/VCA
+

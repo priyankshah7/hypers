@@ -34,3 +34,30 @@ These are all available as methods on the `hparray` object.
     amap = X.abundance.ucls.calculate(spectra)
 
 
+Dimensionality reduction
+========================
+Dimensionality reduction refers to techniques that obtain a set of principal components that explain
+the data in some pre-defined way. The class of techniques are particularly useful for hyperspectral data as
+the data can often be described using only a very small subset of the generated principal components and thus
+serve as a way of "reducing" dimensionality.
+
+The following techniques are available:
+
+- Principal components analysis
+- Independant components analysis
+- Non-negative matrix factorization
+- Vertex component analysis
+
+Principal component analysis
+----------------------------
+This is implemented using scikit-learn's `PCA` and thus requires scikit-learn to be installed.
+
+.. automodule:: hypers.learning.decomposition.pca
+    :members:
+
+Independent component analysis
+------------------------------
+This is implemented using scikit-learn's `FastICA` and thus requires scikit-learn to be installed.
+
+.. automodule:: hypers.learning.decomposition.ica
+    :members:

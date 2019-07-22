@@ -4,10 +4,10 @@ hparray: An  introduction
 
 Motivation
 ==========
-The motivation behind the creation of this package was performing common tasks on a numpy `ndarray` for
-hyperspectral data which could be better served by extending the `ndarray` type with added functionality for
-hyperspectral data. This package provides just that, a `hparray` type that subclasses `ndarray` and adds further
-functionality. An advantage over other packages is that it the `hparray` object can still be used as a normal
+The motivation behind the creation of this package was performing common tasks on a numpy ``ndarray`` for
+hyperspectral data which could be better served by extending the ``ndarray`` type with added functionality for
+hyperspectral data. This package provides just that, a ``hparray`` type that subclasses ``ndarray`` and adds further
+functionality. An advantage over other packages is that it the ``hparray`` object can still be used as a normal
 numpy array for other tasks.
 
 Processing data

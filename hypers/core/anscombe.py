@@ -1,20 +1,24 @@
 import os
 import numpy as np
+from typing import Union
 from scipy.io import loadmat
 from scipy.interpolate import InterpolatedUnivariateSpline, interp2d
-from hypers.types import MixedArray, ListOrArray, convert_nparray
+
+import hypers as hp
+
+__all__ = ['anscombe_transformation', 'inverse_anscombe_transformation']
 
 resource_dir = os.path.join(os.path.abspath(os.path.dirname(__file__)))
 
 
-def anscombe_transformation(signal: ListOrArray, gauss_std: float, gauss_mean: float=0,
-                            poisson_multi: float=1):
+def anscombe_transformation(signal: Union[list, np.ndarray, 'hp.hparray'],
+                            gauss_std: float, gauss_mean: float=0, poisson_multi: float=1):
     """
     Anscombe transformation
 
     Parameters
     ----------
-    signal: ListOrArray
+    signal: Union[list, np.ndarray, hp.hparray]
         The array to perform the transformation on.
 
     gauss_std: float
@@ -28,12 +32,12 @@ def anscombe_transformation(signal: ListOrArray, gauss_std: float, gauss_mean: f
 
     Returns
     -------
-    MixedArray
+    Union[np.ndarray, hp.hparray]
         The transformed signal.
     """
     SMALL_VAL = 0
     if isinstance(signal, list):
-        signal = convert_nparray(signal)
+        signal = np.array(signal)
 
     fsignal = 2 / poisson_multi * np.sqrt(np.fmax(SMALL_VAL, poisson_multi * signal +
                                                   (3 / 8) * poisson_multi ** 2 +
@@ -42,14 +46,14 @@ def anscombe_transformation(signal: ListOrArray, gauss_std: float, gauss_mean: f
     return fsignal
 
 
-def inverse_anscombe_transformation(fsignal: ListOrArray, gauss_std: float,
-                                    gauss_mean: float=0, poisson_multi: float=1):
+def inverse_anscombe_transformation(fsignal: Union[list, np.ndarray, 'hp.hparray'],
+                                    gauss_std: float, gauss_mean: float=0, poisson_multi: float=1):
     """
     Inverse Anscombe transformation
 
     Parameters
     ----------
-    fsignal: ListOrArray
+    fsignal: Union[list, np.ndarray, hp.hparray]
         The array to perform the transformation on.
 
     gauss_std: float
@@ -63,11 +67,11 @@ def inverse_anscombe_transformation(fsignal: ListOrArray, gauss_std: float,
 
     Returns
     -------
-    MixedArray
+    Union[np.ndarray, hp.hparray]
         The transformed signal.
     """
     if isinstance(fsignal, list):
-        fsignal = convert_nparray(fsignal)
+        fsignal = np.array(fsignal)
 
     mat_dict = loadmat(os.path.join(resource_dir, 'gen_anscombe_vectors.mat'))
     Efzmatrix = np.squeeze(mat_dict['Efzmatrix'])
@@ -114,22 +118,22 @@ def inverse_anscombe_transformation(fsignal: ListOrArray, gauss_std: float,
     return exact_inverse
 
 
-def _anscombe_inverse_exact_unbiased(fsignal: ListOrArray):
+def _anscombe_inverse_exact_unbiased(fsignal: Union[list, np.ndarray, 'hp.hparray']):
     """
     Calculate exact inverse Anscombe transformation
 
     Parameters
     ----------
-    fsignal : ListOrArray
+    fsignal : Union[list, np.ndarray, hp.hparray]
         Forward Anscombe-transformed noisy signal
 
     Returns
     -------
-    signal : MixedArray
+    signal : Union[np.ndarray, hp.hparray]
         Inverse Anscombe-transformed signal
     """
     if isinstance(fsignal, list):
-        fsignal = convert_nparray(fsignal)
+        fsignal = np.array(fsignal)
 
     mat_dict = loadmat(os.path.join(resource_dir, 'anscombe_vectors.mat'))
     Efz = mat_dict['Efz']

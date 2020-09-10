@@ -1,5 +1,5 @@
 =========================
-hparray: An  introduction
+hparray: An introduction
 =========================
 
 Motivation
@@ -51,7 +51,7 @@ The :class:`~hypers.core.array.hparray` object has several useful attributes and
     # Data properties:
     X.shape                            # Shape of the hyperspectral array
     X.ndim                             # Number of dimensions
-    X.nfeatures                        # Size of the spectral dimension/channels
+    X.nspectral                        # Size of the spectral dimension/channels
     X.nsamples                         # Total number of pixels (samples)
     X.nspatial                         # Shape of the spatial dimensions
 

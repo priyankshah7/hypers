@@ -3,13 +3,11 @@ Extends functionality of np.ndarray for hyperspectral data
 """
 import numpy as np
 from typing import Union
+from pathlib import Path
 from scipy.signal import savgol_filter
 
 from hypers.exceptions import DimensionError
-from hypers.learning.decomposition import decompose
-from hypers.learning.cluster import cluster
-from hypers.learning.mixture import mixture_models
-from hypers.learning.abundance import abundance
+from hypers.core.abundance import ucls, nnls
 from hypers.plotting.view import hsiPlot
 
 
@@ -41,53 +39,70 @@ class hparray(np.ndarray):
         (100, 100, 512), then the image dimension shape is (100, 100)
         and the spectral dimension shape is (512,). So the mean
         spectrum will be an array of shape (512,).
-
-    decompose: hp.learning.decomposition.decompose
-        Provides access to instances of some decomposition techniques,
-        including PCA, ICA, VCA, NMF.
-
-    cluster: hp.learning.cluster.cluster
-        Provides access to an instance of the K-means clustering
-        class.
     """
-    def __new__(cls, input_array: Union[list, np.ndarray, 'hparray']):
-        obj = np.asarray(input_array).view(cls)
-        return obj
+    def __new__(cls, input_array: Union[np.ndarray, 'hparray']):
+        obj = np.asarray(input_array)#.view(cls)
+        if obj.ndim > 1:
+            return obj.view(cls)
+        else:
+            return obj
+        # return obj
 
     def __array_finalize__(self, obj):
         if obj is None:
             return
         else:
             if self.ndim > 1:
-                self._data_mean()
-                self._data_learning()
                 self._data_access()
+            # else:
+            #     self._dimension_error()
 
     def __array_wrap__(self, output_array, context=None):
-        return np.ndarray.__array_wrap__(self, output_array, context)
-
-    def _data_mean(self):
-        """
-        Generates `mean_image` and `mean_spectrum` attributes if the
-        number of dimensions of the array is greater than 1.
-        """
-        if self.ndim > 1:
-            self.mean_image = np.asarray(np.squeeze(np.mean(self, self.ndim - 1)))
-            self.mean_spectrum = np.asarray(np.squeeze(np.mean(self, tuple(range(self.ndim - 1)))))
-
-    def _data_learning(self):
-        if self.ndim > 2:
-            self.decompose = decompose(self)
-            self.cluster = cluster(self)
-            self.mixture = mixture_models(self)
-            self.abundance = abundance(self)
+        return np.ndarray.__array_wrap__(self, output_array)
 
     def _data_access(self):
         self.image = _AccessImage(self)
         self.spectrum = _AccessSpectrum(self)
 
-    def _dimension_error(self):
-        raise DimensionError('Number of dimensions must be greater than 2')
+    @staticmethod
+    def _dimension_error(error: str = None):
+        if error is None:
+            error = 'Number of dimensions must be greater than 2'
+        raise DimensionError(error)
+
+    def abundance(self, x_fit: np.ndarray, method: str = 'nnls') -> np.ndarray:
+        """
+        Abundance mapping using a least-squares fitting routine.
+
+        Parameters
+        ----------
+        x_fit: np.ndarray
+            Array of spectra to fit to the hyperspectral data. Must be of
+            size (nspectral, n_fit) where n_fit is the number of spectra
+            provided to fit.
+        method: str
+            Type of least-squares fitting to use. Can be either 'ucls'
+            (unconstrained least-squares) or 'nnls' (non-negative
+            least squares).
+
+        Returns
+        -------
+        np.ndarray
+            Array of images with an image per spectrum to fit. Array has
+            size of (nspatial, n_fit).
+        """
+        if x_fit.ndim == 1:
+            x_fit = x_fit.reshape(x_fit.shape[0], 1)
+
+        assert x_fit.shape[0] == self.nspectral
+
+        if method == 'nnls':
+            return nnls(self, x_fit)
+        elif method == 'ucls':
+            return ucls(self, x_fit)
+        else:
+            raise ValueError('method argument for the abundance method must '
+                             'be either "ucls" or "nnls"')
 
     def collapse(self) -> np.ndarray:
         """
@@ -112,12 +127,9 @@ class hparray(np.ndarray):
         >>> collapsed.shape
         (1200, 1000)
         """
-        if self.ndim > 1:
-            return np.asarray(np.reshape(self, (np.prod(self.shape[:-1]), self.shape[-1])))
-        else:
-            self._dimension_error()
+        return np.asarray(np.reshape(self, (np.prod(self.shape[:-1]), self.shape[-1])))
 
-    def smoothen(self, method: str='savgol', **kwargs) -> 'hparray':
+    def smoothen(self, method: str = 'savgol', **kwargs) -> 'hparray':
         """
         Returns smoothened hp.hparray
 
@@ -146,7 +158,7 @@ class hparray(np.ndarray):
                 raise ValueError
         return smooth_array
 
-    def plot(self, backend: str='pyqt'):
+    def plot(self) -> None:
         """
         Interactive plotting to interact with hyperspectral data
 
@@ -154,35 +166,59 @@ class hparray(np.ndarray):
         PyQt is required to be installed and when this method is called, a separate window generated
         by PyQt will pop up. It is still possible to use this in a Jupyter environment, however the
         cell that calls this method will remain frozen until the window is closed.
+        """
+        hsiPlot(self)
+
+    def save(self, filename: Union[str, Path]) -> None:
+        """
+        Save hyperspectral data to file using numpy's save function.
 
         Parameters
         ----------
-        backend: str
-            Backend to use. Default is 'pyqt'.
+        filename: str or pathlib.Path
+            Filename with extension of desired file format. If no extension is given then it will
+            automatically be saved to the npy file format.
         """
-        if backend == 'pyqt':
-            if self.ndim > 2:
-                hsiPlot(self)
-            else:
-                self._dimension_error()
+        np.save(filename, self)
 
     @property
-    def nsamples(self):
+    def mean_image(self) -> np.ndarray:
         """
-        Returns the number of samples (total number of spatial pixels) in the dataset
+        Returns the mean image of the hyperspectral array
+
+        Returns
+        -------
+        np.ndarray:
+            Mean image of the hyperspectral array
+        """
+        return np.array(np.squeeze(np.mean(self, self.ndim - 1)))
+
+    @property
+    def mean_spectrum(self) -> np.ndarray:
+        """
+        Returns the mean spectrum of the hyperspectral array
+
+        Returns
+        -------
+        np.ndarray:
+            Mean spectrum of the hyperspectral array
+        """
+        return np.array(np.squeeze(np.mean(self, tuple(range(self.ndim - 1)))))
+
+    @property
+    def nsamples(self) -> int:
+        """
+        Returns the number of samples (total number of spatial pixels) in the datasets
 
         Returns
         -------
         int:
             Total number of samples
         """
-        if self.ndim > 1:
-            return np.prod(self.shape[:-1])
-        else:
-            self._dimension_error()
+        return int(np.prod(self.shape[:-1]))
 
     @property
-    def nspatial(self):
+    def nspatial(self) -> tuple:
         """
         Returns the shape of the spatial dimensions
 
@@ -191,52 +227,46 @@ class hparray(np.ndarray):
         tuple:
             Tuple of the shape of the spatial dimensions
         """
-        if self.ndim > 1:
-            return self.shape[:-1]
-        else:
-            self._dimension_error()
+        return self.shape[:-1]
 
     @property
-    def nfeatures(self):
+    def nspectral(self) -> int:
         """
-        Returns the number of features (size of the spectral dimension) in the dataset
+        Returns the number of spectral bands in the datasets
 
         Returns
         -------
         int:
             Size of the spectral dimension
         """
-        if self.ndim > 1:
-            return self.shape[-1]
-        else:
-            self._dimension_error()
+        return self.shape[-1]
 
 
 class _AccessImage:
     def __init__(self, X):
-        self.data = X
+        self.X = X
 
     def __getitem__(self, item):
         if isinstance(item, tuple):
             raise IndexError('Can only pass in 1 index (same as number of spectral dimension)')
 
         if isinstance(item, int):
-            return np.squeeze(self.data[..., item])
+            return np.array(np.squeeze(self.X.data[..., item]))
         elif isinstance(item, slice):
-            return np.squeeze(np.mean(self.data[..., item], self.data.ndim - 1))
+            return np.array(np.squeeze(np.mean(self.X.data[..., item], self.X.ndim - 1)))
 
 
 class _AccessSpectrum:
     def __init__(self, X):
-        self.data = X
+        self.X = X
 
     def __getitem__(self, item):
         if isinstance(item, (int, slice)):
             item = (item,)
-        elif not len(item) == self.data.ndim - 1:
+        elif not len(item) == self.X.ndim - 1:
             raise IndexError('Must pass in the same number of indicies as number of image dimensions')
 
         if isinstance(item, tuple) and all(isinstance(nitem, int) for nitem in item):
-            return np.squeeze(self.data[item])
+            return np.array(np.squeeze(self.X.data[item]))
         elif isinstance(item, tuple) and all(isinstance(nitem, slice) for nitem in item):
-            return np.squeeze(np.mean(self.data[item], tuple(range(self.data.ndim - 1))))
+            return np.array(np.squeeze(np.mean(self.X.data[item], tuple(range(self.X.ndim - 1)))))

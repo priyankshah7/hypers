@@ -1,6 +1,7 @@
 import numpy as np
 from typing import Union
-from hypers.core import hparray
+from hypers.core.array import hparray
+from hypers.core import denoise
 
 
 def array(input_array: Union[list, np.ndarray, hparray]) -> hparray:

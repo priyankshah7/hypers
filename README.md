@@ -26,6 +26,7 @@ significant changes to the API. The first public release will be v0.1.0.**
 3. [Examples](#examples)
 4. [Documentation](#documentation)
 5. [License](#license)
+6. [References](#references)
    
 ## Installation
 To install using `pip`:
@@ -63,8 +64,8 @@ For an example using the IndianPines dataset, see the Jupyter notebook in the [e
 import numpy as np
 import hypers as hp
 
-# Generating a random 4-d dataset and creating a Dataset instance
-# The test dataset here has spatial dimensions (x=200, y=200, z=10) and spectral dimension (s=1024)
+# Generating a random 4-d datasets and creating a Dataset instance
+# The test datasets here has spatial dimensions (x=200, y=200, z=10) and spectral dimension (s=1024)
 test_data = np.random.rand(200, 200, 10, 1024)
 X = hp.array(test_data)
 

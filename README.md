@@ -35,9 +35,7 @@ pip install hypers
 The following packages will also be installed:
 
 + numpy
-+ matplotlib
 + scipy
-+ scikit-learn
 + PyQt5
 + pyqtgraph
 

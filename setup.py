@@ -33,17 +33,20 @@ setup(
 
     long_description_content_type='text/markdown',
 
-    keywords=['hyperspectral',
-              'data-analysis',
-              'clustering',
-              'matrix-decompositions',
-              'hyperspectral-analysis',
-              'machine learning'],
+    keywords=[
+        'hyperspectral',
+        'data-analysis',
+        'clustering',
+        'matrix-decompositions',
+        'hyperspectral-analysis',
+        'machine learning'
+    ],
 
-    install_requires=['numpy>=1.14.2',
-                      'matplotlib',
-                      'scipy>=1.1.0',
-                      'pyqt5>=5.10.1',
-                      'pyqtgraph>=0.10.0',
-                      'scikit-learn>=0.20.1']
+    install_requires=[
+        'numpy',
+        'scipy',
+        'pyqt5',
+        'pyqtgraph',
+        'cvxopt'
+    ]
 )

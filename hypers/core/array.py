@@ -7,7 +7,7 @@ from scipy.signal import savgol_filter
 
 from hypers.exceptions import DimensionError
 from hypers.learning.abundance import abundance
-from hypers.learning.decomposition import vca
+from hypers.learning.decomposition import decompose as unmix
 from hypers.plotting.view import hsiPlot
 
 
@@ -68,7 +68,7 @@ class hparray(np.ndarray):
     def _data_learning(self):
         if self.ndim > 2:
             self.abundance = abundance(self)
-            self.unmix = vca(self)
+            self.unmix = unmix(self)
 
     def _data_access(self):
         self.image = _AccessImage(self)

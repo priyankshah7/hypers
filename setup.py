@@ -6,14 +6,17 @@ with open('README.md') as f:
 setup(
     name='hypers',
 
-    version='0.0.12',
+    version='0.1.1',
 
-    packages=['hypers',
-              'hypers.core',
-              'hypers.plotting.view',
-              'hypers.plotting.view._form',
-              'hypers.signal',
-              'hypers.learning'],
+    packages=[
+        'hypers',
+        'hypers.core',
+        'hypers.plotting.view',
+        'hypers.plotting.view._form',
+        'hypers.signal',
+        'hypers.learning',
+        'hypers.exceptions'
+    ],
 
     python_requires='>=3.5.0',
 

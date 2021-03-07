@@ -16,3 +16,5 @@ pytest
 scipy
 toml
 numpydoc
+sphinx-autodoc-typehints
+sphinx_rtd_theme

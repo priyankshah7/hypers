@@ -44,47 +44,13 @@ The following packages will also be installed:
 ## Features
 Features implemented in ``hypers`` include:
 
-+ Clustering
-+ Decomposition (e.g. PCA, ICA, NMF)
 + Hyperspectral viewer
 + Vertex component analysis
-+ Gaussian mixture models
++ Abundance mapping
 
 A full list of features can be found [here](http://hypers.readthedocs.io/en/latest/).
 	
 ## Examples
-
-### Hyperspectral dimensionality reduction and clustering
-Below is a quick example of using some of the features of the package on a randomized hyperspectral array. 
-For an example using the IndianPines dataset, see the Jupyter notebook in the [examples](/examples/indian_pines.ipynb) directory.
-
-```python
-import numpy as np
-import hypers as hp
-
-# Generating a random 4-d dataset and creating a Dataset instance
-# The test dataset here has spatial dimensions (x=200, y=200, z=10) and spectral dimension (s=1024)
-test_data = np.random.rand(200, 200, 10, 1024)
-X = hp.array(test_data)
-
-# Using Principal Components Analysis to reduce to first 5 components
-# The variables ims, spcs are arrays of the first 5 principal components for the images, spectra respectively
-ims, spcs = X.decompose.pca.calculate(n_components=5)
-
-# Clustering using K-means (with and without applying PCA first)
-# The cluster method will return the labeled image array and the spectrum for each cluster
-lbls_nodecompose, spcs_nodecompose = X.cluster.kmeans.calculate(
-    n_clusters=3,
-    decomposed=False
-)
-
-# Clustering on only the first 5 principal components
-lbls_decomposed, spcs_decomposed = X.cluster.kmeans.calculate(
-    n_clusters=3,
-    decomposed=True,
-    pca_comps=5
-)
-```
 
 ### Interactive viewer
 The interactive viewer can be particularly helpful for exploring a completely new dataset for the first time to get 

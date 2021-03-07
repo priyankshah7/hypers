@@ -6,10 +6,8 @@ from typing import Union
 from scipy.signal import savgol_filter
 
 from hypers.exceptions import DimensionError
-from hypers.learning.decomposition import decompose
-from hypers.learning.cluster import cluster
-from hypers.learning.mixture import mixture_models
 from hypers.learning.abundance import abundance
+from hypers.learning.decomposition import vca
 from hypers.plotting.view import hsiPlot
 
 
@@ -41,14 +39,6 @@ class hparray(np.ndarray):
         (100, 100, 512), then the image dimension shape is (100, 100)
         and the spectral dimension shape is (512,). So the mean
         spectrum will be an array of shape (512,).
-
-    decompose: hp.learning.decomposition.decompose
-        Provides access to instances of some decomposition techniques,
-        including PCA, ICA, VCA, NMF.
-
-    cluster: hp.learning.cluster.cluster
-        Provides access to an instance of the K-means clustering
-        class.
     """
     def __new__(cls, input_array: Union[list, np.ndarray, 'hparray']):
         obj = np.asarray(input_array).view(cls)
@@ -77,10 +67,8 @@ class hparray(np.ndarray):
 
     def _data_learning(self):
         if self.ndim > 2:
-            self.decompose = decompose(self)
-            self.cluster = cluster(self)
-            self.mixture = mixture_models(self)
             self.abundance = abundance(self)
+            self.unmix = vca(self)
 
     def _data_access(self):
         self.image = _AccessImage(self)
@@ -117,7 +105,7 @@ class hparray(np.ndarray):
         else:
             self._dimension_error()
 
-    def smoothen(self, method: str='savgol', **kwargs) -> 'hparray':
+    def smoothen(self, method: str = 'savgol', **kwargs) -> 'hparray':
         """
         Returns smoothened hp.hparray
 
@@ -146,7 +134,7 @@ class hparray(np.ndarray):
                 raise ValueError
         return smooth_array
 
-    def plot(self, backend: str='pyqt'):
+    def plot(self, backend: str = 'pyqt'):
         """
         Interactive plotting to interact with hyperspectral data
 

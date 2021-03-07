@@ -1,8 +1,7 @@
 # hypers
 [![Build Status](https://travis-ci.com/priyankshah7/hypers.svg?token=xX99xZvXU9jWErT5D1zh&branch=master)](https://travis-ci.com/priyankshah7/hypers)
 [![Documentation Status](https://readthedocs.org/projects/hypers/badge/?version=latest)](http://hypers.readthedocs.io/en/latest/?badge=latest)
-[![Python Version 3.5](https://img.shields.io/badge/Python-3.5-blue.svg)](https://www.python.org/downloads/)
-[![Python Version 3.6](https://img.shields.io/badge/Python-3.6-blue.svg)](https://www.python.org/downloads/)
+[![Python Version 3.5+](https://img.shields.io/badge/Python-3.5%2B-blue)](https://www.python.org/downloads/)
 [![PyPI version](https://badge.fury.io/py/hypers.svg)](https://badge.fury.io/py/hypers)
 
 hypers provides a data structure in python for hyperspectral data. The data structure includes:
@@ -15,7 +14,7 @@ The data structure is built on top of the numpy `ndarray`, and this package simp
 allows for quick analysis of hyperspectral data. Importantly, this means that the object can still be used as a 
 normal numpy array.
 
-<p align="center"><img src="/docs/source/images/hyperspectral_image.png" width="300"></p>
+[//]: <> (<p align="center"><img src="/docs/source/images/hyperspectral_image.png" width="300"></p>)
 
 **Please note that this package is currently in pre-release. It can still be used, however there is likely to be 
 significant changes to the API. The first public release will be v0.1.0.**

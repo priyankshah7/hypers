@@ -13,9 +13,9 @@ visualization and interactivity with the hyperspectral dataset.
         import hypers as hp
 
         test_data = np.random.rand(100, 100, 5, 512)
-        X = hp.Dataset(test_data)
+        X = hp.array(test_data)
 
-        X.view()
+        X.plot()
 
 The hyperspectral data viewer is a lightweight pyqt gui. Below is an example:
 

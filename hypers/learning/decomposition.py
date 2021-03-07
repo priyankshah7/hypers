@@ -1,195 +1,14 @@
 import numpy as np
 import hypers as hp
-from typing import Tuple, Union, List
-import matplotlib.pyplot as plt
-import seaborn as sns
-from sklearn.decomposition import PCA, FastICA, NMF
+from typing import Tuple, List
 
-sns.set()
-
-__all__ = ['decompose', 'pca', 'ica', 'nmf', 'vca']
+__all__ = ['decompose', 'vca']
 
 
 class decompose:
     """ Provides instances of decomposition classes """
     def __init__(self, X: 'hp.hparray'):
-        self.pca = pca(X)
-        self.ica = ica(X)
-        self.nmf = nmf(X)
         self.vca = vca(X)
-
-
-class pca:
-    """
-    Principal component analysis
-
-    Attributes
-    ----------
-    ims: np.ndarray
-        Images of the principal components
-
-    spcs: np.ndarray
-        Spectra of the principal components
-    """
-    def __init__(self, X: 'hp.hparray'):
-        self.X = X
-        self.ims = None
-        self.spcs = None
-        self._mdl = None
-
-    def scree(self):
-        """
-        Calculate scree
-
-        Returns an array which assigns the amount of variance contributed by each principal
-        component for the dataset.
-
-        Returns
-        -------
-        np.ndarray
-            PCA scree
-        """
-        mdl = PCA()
-        mdl.fit_transform(self.X.collapse())
-
-        return mdl.explained_variance_ratio_
-
-    def plot_scree(self):
-        """
-        Scree plot
-
-        Calculates and returns a scree plot for the dataset
-        """
-        mdl = PCA()
-        mdl.fit_transform(self.X.collapse())
-
-        plt.plot(mdl.explained_variance_ratio_)
-        plt.xlabel('Principal components')
-        plt.ylabel('Variance ratio')
-        plt.title('Scree plot')
-        plt.tight_layout()
-        plt.show()
-
-    def calculate(self, n_components: int=None, **kwargs) -> Tuple[np.ndarray, np.ndarray]:
-        """
-        Calculate principal components
-
-        Parameters
-        ----------
-        n_components: int
-            The number of components to calculate. This should be less than or equal to the size
-            of the spectral dimension.
-
-        kwargs:
-            Keyword arguments can be supplied for scikit-learn's PCA class.
-            https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html
-
-        Returns
-        -------
-        np.ndarray:
-            Images of the first n_components number of principal components. The shape of the array will
-            be (nspatial, n_components).
-
-        np.ndarray:
-            Spectra of the first n_components number of principal components. The shape of the array will
-            be (nfeatures, n_components).
-        """
-        if n_components is None:
-            n_components = self.X.shape[-1]
-
-        self._mdl = PCA(n_components=n_components, **kwargs)
-        self.ims = self._mdl.fit_transform(self.X.collapse()).reshape(self.X.data.shape[:-1] + (n_components,))
-        self.spcs = self._mdl.components_.transpose()
-
-        return self.ims, self.spcs
-
-    def reduce(self, n_components: int=None):
-        """
-        Transform to original space with reduced number of PCs.
-
-        Useful to reduce noise by removing components which do not contain any useful signal
-        and only contribute noise.
-
-        Parameters
-        ----------
-        n_components: int or None
-            Number of principal components to keep. If None, all components are kept.
-
-        Returns
-        -------
-        hp.hparray
-            The transformed data with the same shape as the original hparray
-        """
-        if self._mdl is None:
-            _, _ = self.calculate(n_components=n_components)
-
-        if n_components is None:
-            n_components = self.ims.shape[-1]
-
-        ims = self.ims.reshape(np.prod(self.ims.shape[:-1]), self.ims.shape[-1])
-        inversed = self._mdl.inverse_transform(ims[..., :n_components])
-        return hp.array(inversed.reshape(self.ims.shape[:-1] + (self.spcs.shape[0],)))
-
-    def plot_image(self, n_components: Union[int, Tuple] = 1):
-        _plot_image(n_components=n_components, ims=self.ims)
-
-    def plot_spectrum(self, n_components: Union[int, Tuple] = 1):
-        _plot_spectrum(n_components=n_components, spcs=self.spcs)
-
-    def plot_grid(self, n_components: Union[int, Tuple] = 1):
-        _plot_grid(n_components=n_components, ims=self.ims, spcs=self.spcs)
-
-
-class ica:
-    def __init__(self, X: 'hp.hparray'):
-        self.X = X
-        self.ims = None
-        self.spcs = None
-
-    def calculate(self, n_components: int = 4, **kwargs) -> Tuple[np.ndarray, np.ndarray]:
-        if n_components is None:
-            n_components = self.X.shape[-1]
-
-        mdl = FastICA(n_components=n_components, **kwargs)
-        self.ims = mdl.fit_transform(self.X.collapse()).reshape(self.X.data.shape[:-1] + (n_components,))
-        self.spcs = mdl.components_.transpose()
-
-        return self.ims, self.spcs
-
-    def plot_image(self, n_components: Union[int, Tuple] = 1):
-        _plot_image(n_components=n_components, ims=self.ims)
-
-    def plot_spectrum(self, n_components: Union[int, Tuple] = 1):
-        _plot_spectrum(n_components=n_components, spcs=self.spcs)
-
-    def plot_grid(self, n_components: Union[int, Tuple] = 1):
-        _plot_grid(n_components=n_components, ims=self.ims, spcs=self.spcs)
-
-
-class nmf:
-    def __init__(self, X: 'hp.hparray'):
-        self.X = X
-        self.ims = None
-        self.spcs = None
-
-    def calculate(self, n_components: int = 4, **kwargs) -> Tuple[np.ndarray, np.ndarray]:
-        if n_components is None:
-            n_components = self.X.shape[-1]
-
-        mdl = NMF(n_components=n_components, **kwargs)
-        self.ims = mdl.fit_transform(self.X.collapse()).reshape(self.X.data.shape[:-1] + (n_components,))
-        self.spcs = mdl.components_.transpose()
-
-        return self.ims, self.spcs
-
-    def plot_image(self, n_components: Union[int, Tuple] = 1):
-        _plot_image(n_components=n_components, ims=self.ims)
-
-    def plot_spectrum(self, n_components: Union[int, Tuple] = 1):
-        _plot_spectrum(n_components=n_components, spcs=self.spcs)
-
-    def plot_grid(self, n_components: Union[int, Tuple] = 1):
-        _plot_grid(n_components=n_components, ims=self.ims, spcs=self.spcs)
 
 
 class vca:
@@ -212,22 +31,6 @@ class vca:
         self.coords = index
 
         return Ae, index
-
-    def plot_spectrum(self, n_components: Union[int, Tuple] = None):
-        if n_components is None:
-            n_components = self.n_components
-
-        if type(n_components) is int:
-            for component in range(n_components):
-                plt.plot(self.spcs[:, component], label='Comp. ' + str(component + 1))
-            plt.tight_layout()
-            plt.show()
-
-        elif type(n_components) is tuple and len(n_components) == 2:
-            pass
-
-        else:
-            raise ValueError('n_components must either be an integer or a tuple of 2 values')
 
     @staticmethod
     def _estimate_snr(Y: np.ndarray,
@@ -353,7 +156,7 @@ class vca:
         # VCA algorithm
         #############################################
 
-        indice = np.zeros((R), dtype=int)
+        indice = np.zeros(R, dtype=int)
         A = np.zeros((R, R))
         A[-1, 0] = 1
 
@@ -370,97 +173,3 @@ class vca:
         Ae = Yp[:, indice]
 
         return Ae, indice, Yp
-
-
-def _plot_spectrum(n_components: Union[int, Tuple],
-                   spcs: np.ndarray):
-    if spcs is None:
-        raise ValueError('The calculate method must be called prior to plotting')
-
-    if type(n_components) is int:
-        plt.plot(spcs[..., n_components - 1], label='Comp. ' + str(n_components))
-        plt.legend()
-        plt.tight_layout()
-        plt.show()
-
-    elif type(n_components) is tuple and len(n_components) == 2:
-        for _comp in range(n_components[0], n_components[1]):
-            plt.plot(spcs[..., _comp - 1], label='Comp. ' + str(_comp))
-        plt.legend()
-        plt.tight_layout()
-        plt.show()
-
-    else:
-        raise ValueError('n_components must either be an integer or a tuple of 2 values')
-
-
-def _plot_image(n_components: Union[int, Tuple],
-                ims: np.ndarray):
-    if ims is None:
-        raise ValueError('The calculate method must be called prior to plotting')
-
-    if type(n_components) is int:
-        if ims.ndim == 3:
-            plt.imshow(np.squeeze(ims[..., n_components - 1]))
-
-        elif ims.ndim == 4:
-            plt.imshow(np.squeeze(np.mean(ims[..., n_components - 1], 2)))
-        plt.title('Comp. ' + str(n_components))
-        plt.tight_layout()
-        plt.show()
-
-    elif type(n_components) is tuple and len(n_components) == 2:
-        _rows_total = ((n_components[1] - n_components[0]) // 4) + 1
-
-        for _comp in range(n_components[0], n_components[1]):
-            plt.subplot(_rows_total, 4, (_comp - n_components[0]) + 1)
-            if ims.ndim == 3:
-                plt.imshow(np.squeeze(ims[..., _comp - 1]))
-
-            elif ims.ndim == 4:
-                plt.imshow(np.squeeze(np.mean(ims[..., _comp - 1], 2)))
-            plt.title('Comp. ' + str(_comp))
-        plt.tight_layout()
-        plt.show()
-
-    else:
-        raise ValueError('n_components must either be an integer or a tuple of 2 values')
-
-
-def _plot_grid(n_components: Union[int, Tuple],
-               ims: np.ndarray,
-               spcs: np.ndarray):
-    if ims is None:
-        raise ValueError('The calculate method must be called prior to plotting')
-
-    if type(n_components) is int:
-        plt.subplot(121)
-        if ims.ndim == 3:
-            plt.imshow(np.squeeze(ims[..., n_components - 1]))
-
-        elif ims.ndim == 4:
-            plt.imshow(np.squeeze(np.mean(ims[..., n_components - 1], 2)))
-
-        plt.subplot(122)
-        plt.plot(spcs[..., n_components - 1], label='Comp. ' + str(n_components))
-        plt.legend()
-        plt.tight_layout()
-        plt.show()
-
-    elif type(n_components) is tuple and len(n_components) == 2:
-        _comp_total = n_components[1] - n_components[0]
-
-        for _comp in range(n_components[0], n_components[1]):
-            plt.subplot(_comp_total, 2, 2 * (_comp - n_components[0]) + 1)
-            if ims.ndim == 3:
-                plt.imshow(np.squeeze(ims[..., _comp - 1]))
-
-            elif ims.ndim == 4:
-                plt.imshow(np.squeeze(np.mean(ims[..., _comp - 1], 2)))
-            plt.title('Comp. ' + str(_comp))
-
-            plt.subplot(_comp_total, 2, 2 * (_comp - n_components[0]) + 2)
-            plt.plot(spcs[..., _comp - 1], label='Comp. ' + str(_comp))
-
-        plt.tight_layout()
-        plt.show()

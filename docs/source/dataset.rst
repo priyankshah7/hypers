@@ -63,9 +63,6 @@ The :class:`~hypers.core.array.hparray` object has several useful attributes and
     X.spectrum[10:20, 10:20, :, :]     # Returns spectrum within chosen pixel range
     X.image[..., 100:200]              # Returns image averaged between spectral bands
 
-    # To access the scree plot that explains the variance contribution of the principal components:
-    X.decompose.pca.plot_scree()
-
     # To view and interact with the data:
     X.plot(backend='pyqt')                           # Opens a hyperspectral viewer
 

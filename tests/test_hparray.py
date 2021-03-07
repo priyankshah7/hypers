@@ -3,6 +3,7 @@ import numpy as np
 import hypers as hp
 from hypers.exceptions import DimensionError
 
+
 class TestArray:
     def setup(self):
         self.n1 = np.random.rand(30)
